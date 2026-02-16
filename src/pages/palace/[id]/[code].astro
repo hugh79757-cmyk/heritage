@@ -1,0 +1,100 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import '../../../styles/global.css';
+import { PALACES, getLang, getPalaceName, fetchBuildingDetail, type Lang } from '../../../lib/api';
+
+const lang = getLang(Astro.url);
+const htmlLang = lang === 'kr' ? 'ko' : lang;
+const palaceId = Number(Astro.params.id);
+const detailCode = Number(Astro.params.code);
+const serialNumber = Number(Astro.url.searchParams.get('sn') || '0');
+
+const palace = PALACES.find((p) => p.id === palaceId);
+if (!palace) return Astro.redirect('/');
+
+const detail = await fetchBuildingDetail(palaceId, serialNumber, detailCode);
+if (!detail) return Astro.redirect(`/palace/${palaceId}?lang=${lang}`);
+
+const palaceName = getPalaceName(palace, lang);
+
+function getName(lang: Lang) {
+  const map: Record<Lang, string> = { kr: detail!.nameKr, en: detail!.nameEn, ja: detail!.nameJa, zh: detail!.nameZh };
+  return map[lang] || detail!.nameKr;
+}
+function getExplanation(lang: Lang) {
+  const map: Record<Lang, string> = { kr: detail!.explanationKr, en: detail!.explanationEn, ja: detail!.explanationJa, zh: detail!.explanationZh };
+  return map[lang] || detail!.explanationKr;
+}
+function getVideoUrl(v: typeof detail.videos[0], lang: Lang) {
+  const map: Record<Lang, string> = { kr: v.urlKr, en: v.urlEn, ja: v.urlJa, zh: v.urlZh };
+  return map[lang] || v.urlKr;
+}
+
+const buildingName = getName(lang);
+const explanation = getExplanation(lang);
+const title = `${buildingName} — ${palaceName} — K-Heritage Guide`;
+const description = explanation.slice(0, 160);
+
+const labels: Record<string, { photos: string; videos: string }> = {
+  kr: { photos: '사진 갤러리', videos: '동영상' },
+  en: { photos: 'Photo Gallery', videos: 'Videos' },
+  ja: { photos: '写真ギャラリー', videos: '動画' },
+  zh: { photos: '照片集', videos: '视频' },
+};
+---
+<Layout title={title} description={description} image={detail.mainImage} lang={htmlLang}>
+  <style>
+    @import '../../../styles/global.css';
+  </style>
+
+  <div class="container">
+    <nav class="breadcrumb">
+      <a href={`/?lang=${lang}`}>Home</a> &rsaquo;
+      <a href={`/palace/${palaceId}?lang=${lang}`}>{palaceName}</a> &rsaquo;
+      {buildingName}
+    </nav>
+
+    <div class="detail-header">
+      <h2>{buildingName}</h2>
+    </div>
+
+    {detail.mainImage && (
+      <img class="detail-image" src={detail.mainImage} alt={buildingName} width="960" height="480" />
+    )}
+
+    <div class="description">{explanation}</div>
+
+    {detail.images.length > 0 && (
+      <>
+        <h3 class="section-title">{labels[lang].photos}</h3>
+        <div class="gallery">
+          {detail.images.map((img) => (
+            <img src={img.url} alt={lang === 'en' ? img.descEn : img.descKr} loading="lazy" width="300" height="200" />
+          ))}
+        </div>
+      </>
+    )}
+
+    {detail.videos.length > 0 && (
+      <>
+        <h3 class="section-title">{labels[lang].videos}</h3>
+        <div class="video-grid">
+          {detail.videos.map((v) => (
+            <video controls preload="none" poster={detail.mainImage}>
+              <source src={getVideoUrl(v, lang)} type="video/mp4" />
+            </video>
+          ))}
+        </div>
+      </>
+    )}
+
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "LandmarksOrHistoricalBuildings",
+      "name": buildingName,
+      "description": description,
+      "image": detail.mainImage,
+      "isPartOf": { "@type": "LandmarksOrHistoricalBuildings", "name": palaceName },
+    })} />
+  </div>
+</Layout>

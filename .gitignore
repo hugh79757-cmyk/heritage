@@ -22,3 +22,8 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# backup files
+backup*.txt
+backup*.py
+.DS_Store

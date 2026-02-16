@@ -1,0 +1,618 @@
+---
+import { LANDMARKS } from '../lib/landmarks';
+
+const lang = Astro.url.searchParams.get('lang') || 'ko';
+
+const labels: Record<string, Record<string, string>> = {
+  ko: { title: '내 주변 문화유산', find: '내 위치 찾기', finding: '위치 확인 중...', nearbyCount: '개 발견', km: 'km', m: 'm', away: '떨어짐', noResults: '주변에 문화유산이 없습니다', expandRadius: '반경을 넓혀보세요', palace: '궁궐', treasure: '보물', historic: '사적', scenic: '명승', farAway: '해외에 계시네요!', nearest: '가장 가까운 문화유산', goToSeoul: '서울 궁궐 보기', detail: '자세히 보기', radius: '반경' },
+  en: { title: 'Heritage Near Me', find: 'Find My Location', finding: 'Locating...', nearbyCount: ' found', km: 'km', m: 'm', away: 'away', noResults: 'No heritage sites nearby', expandRadius: 'Try expanding the radius', palace: 'Palace', treasure: 'Treasure', historic: 'Historic', scenic: 'Scenic', farAway: "You're outside Korea!", nearest: 'Nearest heritage site', goToSeoul: 'View Seoul Palaces', detail: 'View Details', radius: 'Radius' },
+  ja: { title: '周辺の文化遺産', find: '現在地を探す', finding: '位置確認中...', nearbyCount: '件発見', km: 'km', m: 'm', away: '離れ', noResults: '周辺に文化遺産がありません', expandRadius: '範囲を広げてみてください', palace: '宮殿', treasure: '宝物', historic: '史跡', scenic: '名勝', farAway: '海外にいらっしゃいますね！', nearest: '最寄りの文化遺産', goToSeoul: 'ソウルの宮殿を見る', detail: '詳細を見る', radius: '半径' },
+  zh: { title: '我附近的文化遗产', find: '查找我的位置', finding: '定位中...', nearbyCount: '个发现', km: 'km', m: 'm', away: '距离', noResults: '附近没有文化遗产', expandRadius: '请尝试扩大范围', palace: '宫殿', treasure: '宝物', historic: '史迹', scenic: '名胜', farAway: '您在韩国境外！', nearest: '最近的文化遗产', goToSeoul: '查看首尔宫殿', detail: '查看详情', radius: '半径' }
+};
+
+const L = labels[lang] || labels['ko'];
+const landmarkData = JSON.stringify(LANDMARKS);
+---
+
+<section class="map-section" id="map-section">
+  <div class="map-header">
+    <h2>{L.title}</h2>
+    <button class="locate-btn" id="locateBtn">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v4m0 12v4M2 12h4m12 0h4"/></svg>
+      {L.find}
+    </button>
+  </div>
+
+  <!-- Far away banner -->
+  <div class="far-banner" id="farBanner" style="display:none;">
+    <span class="far-text" id="farText"></span>
+    <button class="go-seoul-btn" id="goSeoulBtn">{L.goToSeoul}</button>
+  </div>
+
+  <!-- Radius controls -->
+  <div class="radius-controls" id="radiusControls" style="display:none;">
+    <span>{L.radius}:</span>
+    <button class="radius-btn active" data-r="1">1km</button>
+    <button class="radius-btn" data-r="3">3km</button>
+    <button class="radius-btn" data-r="5">5km</button>
+    <button class="radius-btn" data-r="10">10km</button>
+  </div>
+
+  <div class="map-wrap">
+    <div id="map"></div>
+    <!-- Bottom sheet for marker detail -->
+    <div class="bottom-sheet" id="bottomSheet">
+      <div class="sheet-handle"></div>
+      <div class="sheet-content" id="sheetContent"></div>
+    </div>
+  </div>
+
+  <!-- Nearby list -->
+  <div class="nearby-list" id="nearbyList" style="display:none;"></div>
+</section>
+
+<link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" />
+
+<style>
+  .map-section {
+    padding: 0;
+    background: var(--bg-primary);
+  }
+  .map-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 20px 12px;
+  }
+  .map-header h2 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin: 0;
+    color: var(--text-primary);
+  }
+  .locate-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border: none;
+    border-radius: 20px;
+    background: var(--accent);
+    color: #fff;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .locate-btn svg { flex-shrink: 0; }
+
+  .far-banner {
+    margin: 0 20px 10px;
+    padding: 12px 16px;
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .far-text { font-size: 0.85rem; color: var(--text-secondary); }
+  .go-seoul-btn {
+    padding: 6px 14px;
+    border: none;
+    border-radius: 16px;
+    background: var(--accent);
+    color: #fff;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+  .radius-controls {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0 20px 10px;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+  }
+  .radius-btn {
+    padding: 4px 12px;
+    border: 1.5px solid var(--border);
+    border-radius: 14px;
+    background: transparent;
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+    cursor: pointer;
+  }
+  .radius-btn.active {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+  }
+
+  .map-wrap {
+    position: relative;
+    margin: 0 12px;
+    border-radius: 16px;
+    overflow: hidden;
+    height: 55vh;
+    min-height: 320px;
+    max-height: 500px;
+  }
+  #map { width: 100%; height: 100%; }
+
+  /* ===== Bottom Sheet ===== */
+  .bottom-sheet {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    background: var(--bg-primary);
+    border-radius: 16px 16px 0 0;
+    box-shadow: 0 -4px 20px rgba(0,0,0,0.15);
+    transform: translateY(100%);
+    transition: transform 0.3s ease;
+    z-index: 10;
+    max-height: 45%;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .bottom-sheet.open { transform: translateY(0); }
+  .sheet-handle {
+    width: 36px; height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    margin: 10px auto 0;
+  }
+  .sheet-content { padding: 12px 16px 20px; }
+  .sheet-content .sheet-row {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .sheet-content .sheet-img {
+    width: 72px; height: 72px;
+    border-radius: 10px;
+    object-fit: cover;
+    flex-shrink: 0;
+    background: var(--bg-secondary);
+  }
+  .sheet-content .sheet-info { flex: 1; min-width: 0; }
+  .sheet-content .sheet-type {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 8px;
+    margin-bottom: 4px;
+  }
+  .sheet-content .sheet-name {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 2px 0 4px;
+    line-height: 1.3;
+  }
+  .sheet-content .sheet-desc {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .sheet-content .sheet-link {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 8px 20px;
+    background: var(--accent);
+    color: #fff;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  /* ===== Custom Marker - NO transitions/transforms that cause flying ===== */
+  .marker-icon {
+    cursor: pointer;
+    display: block;
+    /* Absolutely no transition or transform here */
+  }
+  .marker-icon * {
+    pointer-events: none;
+  }
+
+  /* ===== Nearby horizontal list ===== */
+  .nearby-list {
+    display: flex;
+    gap: 12px;
+    padding: 16px 20px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+  }
+  .nearby-list::-webkit-scrollbar { display: none; }
+  .nearby-card {
+    flex-shrink: 0;
+    width: 160px;
+    scroll-snap-align: start;
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+  }
+  .nearby-card img {
+    width: 100%; height: 90px;
+    object-fit: cover;
+    background: var(--border);
+  }
+  .nearby-card .card-body { padding: 8px 10px 10px; }
+  .nearby-card .card-name {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .nearby-card .card-dist {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    margin-top: 2px;
+  }
+
+  /* Remove MapLibre default marker styles that might interfere */
+  :global(.maplibregl-popup) { display: none !important; }
+</style>
+
+<script define:vars={{ landmarkData, lang, labelsAll: labels }}>
+(function() {
+  const LANDMARKS = JSON.parse(landmarkData);
+  const L = labelsAll[lang] || labelsAll['ko'];
+  const SEOUL = { lat: 37.5796, lng: 126.977 };
+
+  const typeColors = {
+    palace: '#B8860B',
+    treasure: '#C0392B',
+    historic: '#2E86C1',
+    scenic: '#27AE60'
+  };
+
+  const typeLabels = {
+    palace: L.palace,
+    treasure: L.treasure,
+    historic: L.historic,
+    scenic: L.scenic
+  };
+
+  // ===== Korean Palace SVG Marker (한국 궁궐 지붕 모양) =====
+  function createPalaceMarkerSVG(type) {
+    const color = typeColors[type] || '#B8860B';
+    // Traditional Korean palace roof (기와지붕) silhouette
+    const svg = `
+      <svg xmlns="http://www.w3.org/2000/svg" width="40" height="48" viewBox="0 0 40 48" fill="none">
+        <!-- Pin shadow -->
+        <ellipse cx="20" cy="46" rx="6" ry="2" fill="rgba(0,0,0,0.2)"/>
+        <!-- Pin body -->
+        <path d="M20 44 L20 30" stroke="${color}" stroke-width="2.5" stroke-linecap="round"/>
+        <!-- Palace roof base circle -->
+        <circle cx="20" cy="18" r="16" fill="${color}" opacity="0.12"/>
+        <!-- Traditional roof (기와지붕) -->
+        <path d="
+          M4 22
+          C4 22 8 18 10 16
+          L12 14
+          C14 10 16 8 20 6
+          C24 8 26 10 28 14
+          L30 16
+          C32 18 36 22 36 22
+          C36 22 34 24 32 24
+          L28 22
+          C26 20 24 18 20 16
+          C16 18 14 20 12 22
+          L8 24
+          C6 24 4 22 4 22Z
+        " fill="${color}"/>
+        <!-- Roof ridge line -->
+        <path d="M10 16 Q20 8 30 16" stroke="#fff" stroke-width="0.8" fill="none" opacity="0.5"/>
+        <!-- 추녀 (eave tips) curves -->
+        <path d="M4 22 C3 21 3 20 5 19" stroke="${color}" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+        <path d="M36 22 C37 21 37 20 35 19" stroke="${color}" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+        <!-- Building body -->
+        <rect x="11" y="22" width="18" height="8" rx="1" fill="${color}" opacity="0.85"/>
+        <!-- Pillars (기둥) -->
+        <line x1="14" y1="22" x2="14" y2="30" stroke="#fff" stroke-width="1" opacity="0.4"/>
+        <line x1="20" y1="22" x2="20" y2="30" stroke="#fff" stroke-width="1" opacity="0.4"/>
+        <line x1="26" y1="22" x2="26" y2="30" stroke="#fff" stroke-width="1" opacity="0.4"/>
+        <!-- Door (문) -->
+        <rect x="17" y="25" width="6" height="5" rx="0.5" fill="#fff" opacity="0.3"/>
+        <!-- Small decorative top (용마루) -->
+        <path d="M18 8 L20 5 L22 8" stroke="${color}" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+      </svg>
+    `;
+    return svg;
+  }
+
+  // ===== Create treasure/historic/scenic marker (보물/사적/명승) =====
+  function createHeritageMarkerSVG(type) {
+    const color = typeColors[type] || '#2E86C1';
+    let icon = '';
+    if (type === 'treasure') {
+      // Traditional bell shape (범종)
+      icon = `
+        <path d="M15 10 C15 7 25 7 25 10 L26 22 C26 24 14 24 14 22 Z" fill="#fff" opacity="0.9"/>
+        <circle cx="20" cy="16" r="2" fill="${color}" opacity="0.5"/>
+        <line x1="20" y1="7" x2="20" y2="10" stroke="#fff" stroke-width="1.5"/>
+        <rect x="14" y="23" width="12" height="2" rx="1" fill="#fff" opacity="0.7"/>
+      `;
+    } else if (type === 'historic') {
+      // Stone pagoda (석탑)
+      icon = `
+        <rect x="16" y="22" width="8" height="3" rx="0.5" fill="#fff" opacity="0.9"/>
+        <rect x="17" y="18" width="6" height="4" rx="0.5" fill="#fff" opacity="0.85"/>
+        <rect x="18" y="14" width="4" height="4" rx="0.5" fill="#fff" opacity="0.8"/>
+        <path d="M17 14 L20 10 L23 14" fill="#fff" opacity="0.75"/>
+        <line x1="20" y1="8" x2="20" y2="10" stroke="#fff" stroke-width="1"/>
+      `;
+    } else {
+      // Mountain/scenic (산/명승)
+      icon = `
+        <path d="M10 25 L17 13 L21 18 L26 11 L32 25 Z" fill="#fff" opacity="0.85"/>
+        <circle cx="27" cy="12" r="3" fill="#fff" opacity="0.6"/>
+      `;
+    }
+
+    const svg = `
+      <svg xmlns="http://www.w3.org/2000/svg" width="36" height="44" viewBox="0 0 36 44" fill="none">
+        <ellipse cx="18" cy="42" rx="5" ry="2" fill="rgba(0,0,0,0.2)"/>
+        <path d="M18 40 L18 30" stroke="${color}" stroke-width="2" stroke-linecap="round"/>
+        <circle cx="18" cy="17" r="14" fill="${color}"/>
+        <circle cx="18" cy="17" r="12.5" fill="none" stroke="#fff" stroke-width="0.5" opacity="0.3"/>
+        ${icon}
+      </svg>
+    `;
+    return svg;
+  }
+
+  function getMarkerSVG(type) {
+    if (type === 'palace') return createPalaceMarkerSVG(type);
+    return createHeritageMarkerSVG(type);
+  }
+
+  function haversine(lat1, lon1, lat2, lon2) {
+    const R = 6371;
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLon = (lon2 - lon1) * Math.PI / 180;
+    const a = Math.sin(dLat/2)**2 + Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)**2;
+    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  }
+
+  function formatDist(km) {
+    if (km < 1) return Math.round(km * 1000) + L.m;
+    return km.toFixed(1) + L.km;
+  }
+
+  function pickLang(lm) {
+    const key = lang === 'ko' ? 'ko' : lang === 'en' ? 'en' : lang === 'ja' ? 'ja' : 'zh';
+    return lm['name_' + key] || lm.name_ko;
+  }
+
+  function pickDesc(lm) {
+    const key = lang === 'ko' ? 'ko' : lang === 'en' ? 'en' : lang === 'ja' ? 'ja' : 'zh';
+    return lm['desc_' + key] || lm.desc_ko || '';
+  }
+
+  // ===== Init Map =====
+  const script = document.createElement('script');
+  script.src = 'https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js';
+  script.onload = initMap;
+  document.head.appendChild(script);
+
+  let map, markers = [], userMarker = null, userLat = null, userLng = null, currentRadius = 3;
+
+  function initMap() {
+    map = new maplibregl.Map({
+      container: 'map',
+      style: 'https://tiles.openfreemap.org/styles/liberty',
+      center: [SEOUL.lng, SEOUL.lat],
+      zoom: 11.5,
+      attributionControl: false
+    });
+
+    map.addControl(new maplibregl.AttributionControl({ compact: true }), 'bottom-right');
+
+    map.on('load', () => {
+      addMarkers(LANDMARKS);
+    });
+
+    // Close bottom sheet when tapping map (not a marker)
+    map.on('click', (e) => {
+      // Small delay to let marker click fire first
+      setTimeout(() => {
+        if (!markerClicked) closeSheet();
+        markerClicked = false;
+      }, 50);
+    });
+  }
+
+  let markerClicked = false;
+  const bottomSheet = document.getElementById('bottomSheet');
+  const sheetContent = document.getElementById('sheetContent');
+
+  function closeSheet() {
+    bottomSheet.classList.remove('open');
+  }
+
+  function openSheet(lm) {
+    const name = pickLang(lm);
+    const desc = pickDesc(lm);
+    const type = lm.type || 'palace';
+    const color = typeColors[type] || '#B8860B';
+    const tLabel = typeLabels[type] || type;
+    const dist = (userLat != null) ? formatDist(haversine(userLat, userLng, lm.lat, lm.lng)) : '';
+    const link = lm.link || '#';
+    const imgSrc = lm.image || '';
+
+    sheetContent.innerHTML = `
+      <div class="sheet-row">
+        ${imgSrc ? `<img class="sheet-img" src="${imgSrc}" alt="${name}" onerror="this.style.display='none'"/>` : ''}
+        <div class="sheet-info">
+          <span class="sheet-type" style="background:${color}22;color:${color}">${tLabel}</span>
+          ${dist ? `<span style="font-size:0.7rem;color:var(--text-muted);margin-left:6px">${dist} ${L.away}</span>` : ''}
+          <div class="sheet-name">${name}</div>
+          <div class="sheet-desc">${desc}</div>
+        </div>
+      </div>
+      ${link !== '#' ? `<a class="sheet-link" href="${link}?lang=${lang}">${L.detail}</a>` : ''}
+    `;
+    bottomSheet.classList.add('open');
+  }
+
+  function addMarkers(landmarks) {
+    // Clear old
+    markers.forEach(m => m.remove());
+    markers = [];
+
+    landmarks.forEach(lm => {
+      const type = lm.type || 'palace';
+      const svgStr = getMarkerSVG(type);
+
+      const el = document.createElement('div');
+      el.className = 'marker-icon';
+      el.innerHTML = svgStr;
+      el.style.width = type === 'palace' ? '40px' : '36px';
+      el.style.height = type === 'palace' ? '48px' : '44px';
+      // Prevent ALL transitions/transforms/animations
+      el.style.transition = 'none';
+      el.style.transform = 'none';
+      el.style.animation = 'none';
+      el.style.willChange = 'auto';
+
+      el.addEventListener('click', (e) => {
+        e.stopPropagation();
+        markerClicked = true;
+        // Center map on marker smoothly
+        map.easeTo({
+          center: [lm.lng, lm.lat],
+          offset: [0, -60], // offset up so marker isn't hidden by sheet
+          duration: 300
+        });
+        openSheet(lm);
+      });
+
+      // Prevent any touch-related movement
+      el.addEventListener('touchstart', (e) => { e.stopPropagation(); }, { passive: true });
+
+      const marker = new maplibregl.Marker({
+        element: el,
+        anchor: 'bottom',
+        offset: [0, 0]
+      })
+      .setLngLat([lm.lng, lm.lat])
+      .addTo(map);
+
+      markers.push(marker);
+    });
+  }
+
+  // ===== Locate Button =====
+  const locateBtn = document.getElementById('locateBtn');
+  const radiusControls = document.getElementById('radiusControls');
+  const farBanner = document.getElementById('farBanner');
+  const farText = document.getElementById('farText');
+  const goSeoulBtn = document.getElementById('goSeoulBtn');
+  const nearbyList = document.getElementById('nearbyList');
+
+  locateBtn.addEventListener('click', () => {
+    locateBtn.textContent = L.finding;
+    locateBtn.disabled = true;
+
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        userLat = pos.coords.latitude;
+        userLng = pos.coords.longitude;
+        locateBtn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v4m0 12v4M2 12h4m12 0h4"/></svg> ${L.find}`;
+        locateBtn.disabled = false;
+
+        // Add user marker
+        if (userMarker) userMarker.remove();
+        const userEl = document.createElement('div');
+        userEl.style.cssText = 'width:16px;height:16px;background:#4285F4;border:3px solid #fff;border-radius:50%;box-shadow:0 0 8px rgba(66,133,244,0.5);';
+        userMarker = new maplibregl.Marker({ element: userEl })
+          .setLngLat([userLng, userLat])
+          .addTo(map);
+
+        // Check distance to Seoul
+        const distToSeoul = haversine(userLat, userLng, SEOUL.lat, SEOUL.lng);
+        if (distToSeoul > 200) {
+          // Outside Korea
+          farBanner.style.display = 'flex';
+          const nearest = [...LANDMARKS].sort((a, b) =>
+            haversine(userLat, userLng, a.lat, a.lng) - haversine(userLat, userLng, b.lat, b.lng)
+          )[0];
+          const nd = formatDist(haversine(userLat, userLng, nearest.lat, nearest.lng));
+          farText.textContent = `✈️ ${L.farAway} ${L.nearest}: ${pickLang(nearest)} — ${nd}`;
+          map.flyTo({ center: [userLng, userLat], zoom: 5, duration: 1000 });
+        } else {
+          farBanner.style.display = 'none';
+          radiusControls.style.display = 'flex';
+          map.flyTo({ center: [userLng, userLat], zoom: 14, duration: 1000 });
+          updateNearby();
+        }
+      },
+      (err) => {
+        locateBtn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v4m0 12v4M2 12h4m12 0h4"/></svg> ${L.find}`;
+        locateBtn.disabled = false;
+        alert('Location access denied');
+      },
+      { enableHighAccuracy: true, timeout: 10000 }
+    );
+  });
+
+  // Go to Seoul button
+  goSeoulBtn?.addEventListener('click', () => {
+    map.flyTo({ center: [SEOUL.lng, SEOUL.lat], zoom: 11.5, duration: 1500 });
+    farBanner.style.display = 'none';
+  });
+
+  // Radius buttons
+  document.querySelectorAll('.radius-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.radius-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentRadius = parseInt(btn.dataset.r);
+      const zoomMap = { 1: 15, 3: 13.5, 5: 12.5, 10: 11.5 };
+      map.easeTo({ zoom: zoomMap[currentRadius] || 13, duration: 500 });
+      updateNearby();
+    });
+  });
+
+  function updateNearby() {
+    if (userLat == null) return;
+    const nearby = LANDMARKS
+      .map(lm => ({ ...lm, dist: haversine(userLat, userLng, lm.lat, lm.lng) }))
+      .filter(lm => lm.dist <= currentRadius)
+      .sort((a, b) => a.dist - b.dist);
+
+    nearbyList.style.display = 'flex';
+    if (nearby.length === 0) {
+      nearbyList.innerHTML = `<div style="padding:20px;text-align:center;width:100%;color:var(--text-muted);font-size:0.85rem">${L.noResults}<br><small>${L.expandRadius}</small></div>`;
+      return;
+    }
+
+    nearbyList.innerHTML = nearby.map(lm => `
+      <a class="nearby-card" href="${lm.link || '#'}?lang=${lang}">
+        ${lm.image ? `<img src="${lm.image}" alt="${pickLang(lm)}" onerror="this.style.background='var(--border)';this.src='';" loading="lazy"/>` : '<div style="width:100%;height:90px;background:var(--border)"></div>'}
+        <div class="card-body">
+          <div class="card-name">${pickLang(lm)}</div>
+          <div class="card-dist">${formatDist(lm.dist)} ${L.away}</div>
+        </div>
+      </a>
+    `).join('');
+  }
+})();
+</script>

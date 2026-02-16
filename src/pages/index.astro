@@ -1,17 +1,137 @@
 ---
+import Layout from '../layouts/Layout.astro';
+import MapExplore from '../components/MapExplore.astro';
+import '../styles/global.css';
+import { PALACES, getLang, getPalaceName, getPalaceDesc } from '../lib/api';
 
+const lang = getLang(Astro.url);
+const htmlLang = lang === 'kr' ? 'ko' : lang;
+
+const titles: Record<string, string> = {
+  kr: '한국 궁궐·종묘 가이드 — K-Heritage Guide',
+  en: 'Korean Palace & Shrine Guide — K-Heritage Guide',
+  ja: '韓国宮殿・宗廟ガイド — K-Heritage Guide',
+  zh: '韩国宫殿·宗庙指南 — K-Heritage Guide',
+};
+const descs: Record<string, string> = {
+  kr: '경복궁, 창덕궁, 창경궁, 덕수궁, 종묘 — 4개 언어 해설과 사진으로 만나는 한국의 궁궐',
+  en: 'Explore Gyeongbokgung, Changdeokgung, Changgyeonggung, Deoksugung & Jongmyo with multilingual guides',
+  ja: '景福宮、昌德宮、昌慶宮、徳寿宮、宗廟 — 多言語ガイドで韓国の宮殿を探訪',
+  zh: '景福宫、昌德宫、昌庆宫、德寿宫、宗庙 — 多语言导览韩国宫殿',
+};
+
+const hero = {
+  kr: {
+    badge: '한국 문화유산 가이드',
+    title: '600년 역사의\n궁궐을 만나다',
+    subtitle: '경복궁부터 종묘까지 — 4개 언어 해설, 사진, 동영상과 함께\n한국의 궁궐과 왕실 문화를 깊이 있게 탐험하세요.',
+    cta1: '내 주변 탐색',
+    cta2: '궁궐 둘러보기',
+  },
+  en: {
+    badge: 'Korean Heritage Guide',
+    title: 'Discover 600 Years\nof Royal History',
+    subtitle: 'From Gyeongbokgung to Jongmyo — explore Korean palaces\nwith guides in 4 languages, photos, and videos.',
+    cta1: 'Explore Nearby',
+    cta2: 'Browse Palaces',
+  },
+  ja: {
+    badge: '韓国文化遺産ガイド',
+    title: '600年の歴史\n宮殿に出会う',
+    subtitle: '景福宮から宗廟まで — 4言語の解説、写真、動画で\n韓国の宮殿と王室文化を深く探訪しましょう。',
+    cta1: '周辺を探す',
+    cta2: '宮殿を見る',
+  },
+  zh: {
+    badge: '韩国文化遗产指南',
+    title: '邂逅600年\n皇家历史',
+    subtitle: '从景福宫到宗庙 — 通过4种语言的讲解、照片和视频\n深入探索韩国的宫殿与王室文化。',
+    cta1: '探索附近',
+    cta2: '浏览宫殿',
+  },
+};
+const h = hero[lang];
+
+const sec: Record<string, { h2: string; p: string }> = {
+  kr: { h2: '5대 궁궐·종묘', p: '각 궁궐을 선택하면 건축물별 상세 해설을 볼 수 있습니다' },
+  en: { h2: 'Five Grand Palaces & Jongmyo', p: 'Select a palace to explore detailed guides for each building' },
+  ja: { h2: '五大宮殿・宗廟', p: '宮殿を選ぶと建築物ごとの詳細解説をご覧いただけます' },
+  zh: { h2: '五大宫殿与宗庙', p: '选择宫殿，查看每座建筑的详细讲解' },
+};
+const s = sec[lang];
 ---
+<Layout title={titles[lang]} description={descs[lang]} lang={htmlLang}>
+  <style>
+    @import '../styles/global.css';
+  </style>
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+  <!-- ═══ HERO ═══ -->
+  <section class="hero-full">
+    <div class="hero-bg">
+      <img
+        src="https://www.heritage.go.kr/gung/gogung1/images/ic-e21.jpg"
+        alt="Gyeongbokgung Geunjeongjeon"
+        fetchpriority="high"
+      />
+    </div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <span class="hero-badge">{h.badge}</span>
+      <h1 class="hero-title" set:html={h.title.replace(/\n/g, '<br/>')} />
+      <p class="hero-subtitle" set:html={h.subtitle.replace(/\n/g, '<br/>')} />
+      <div class="hero-cta">
+        <a href="#map-section" class="btn btn-primary">{h.cta1} &darr;</a>
+        <a href="#palaces" class="btn btn-outline">{h.cta2}</a>
+      </div>
+    </div>
+    <div class="hero-scroll">
+      SCROLL
+      <div class="hero-scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- ═══ MAP ═══ -->
+  <div class="container">
+    <MapExplore lang={lang} />
+  </div>
+
+  <!-- ═══ PALACE CARDS ═══ -->
+  <section id="palaces">
+    <div class="container">
+      <div class="section-header">
+        <h2>{s.h2}</h2>
+        <p>{s.p}</p>
+      </div>
+      <div class="card-grid">
+        {PALACES.map((p) => (
+          <a href={`/palace/${p.id}?lang=${lang}`} class="card">
+            <div class="card-img-wrap">
+              <img
+                src={p.image}
+                alt={getPalaceName(p, lang)}
+                loading="lazy"
+                width="400"
+                height="220"
+              />
+              <div class="card-img-overlay"></div>
+            </div>
+            <div class="card-body">
+              <h3>{getPalaceName(p, lang)}</h3>
+              <p>{getPalaceDesc(p, lang)}</p>
+            </div>
+            <div class="card-arrow">&rarr;</div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "K-Heritage Guide",
+    "url": "https://k-heritage.pages.dev",
+    "description": descs['en'],
+    "inLanguage": ["ko","en","ja","zh"],
+  })} />
+</Layout>

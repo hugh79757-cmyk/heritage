@@ -1,0 +1,40 @@
+#!/bin/bash
+set -e
+echo "[1/37] batch_000.sql" && npx wrangler d1 execute heritage-db --remote --file=scripts/data/sql/batch_000.sql && \
+echo "[2/37] batch_001.sql" && npx wrangler d1 execute heritage-db --remote --file=scripts/data/sql/batch_001.sql && \
+echo "[3/37] batch_002.sql" && npx wrangler d1 execute heritage-db --remote --file=scripts/data/sql/batch_002.sql && \
+echo "[4/37] batch_003.sql" && npx wrangler d1 execute heritage-db --remote --file=scripts/data/sql/batch_003.sql && \
+echo "[5/37] batch_004.sql" && npx wrangler d1 execute heritage-db --remote --file=scripts/data/sql/batch_004.sql && \
+echo "[6/37] batch_005.sql" && npx wrangler d1 execute heritage-db --remote --file=scripts/data/sql/batch_005.sql && \
+echo "[7/37] batch_006.sql" && npx wrangler d1 execute heritage-db --remote --file=scripts/data/sql/batch_006.sql && \
+echo "[8/37] batch_007.sql" && npx wrangler d1 execute heritage-db --remote --file=scripts/data/sql/batch_007.sql && \
+echo "[9/37] batch_008.sql" && npx wrangler d1 execute heritage-db --remote --file=scripts/data/sql/batch_008.sql && \
+echo "[10/37] batch_009.sql" && npx wrangler d1 execute heritage-db --remote --file=scripts/data/sql/batch_009.sql && \
+echo "[11/37] batch_010.sql" && npx wrangler d1 execute heritage-db --remote --file=scripts/data/sql/batch_010.sql && \
+echo "[12/37] batch_011.sql" && npx wrangler d1 execute heritage-db --remote --file=scripts/data/sql/batch_011.sql && \
+echo "[13/37] batch_012.sql" && npx wrangler d1 execute heritage-db --remote --file=scripts/data/sql/batch_012.sql && \
+echo "[14/37] batch_013.sql" && npx wrangler d1 execute heritage-db --remote --file=scripts/data/sql/batch_013.sql && \
+echo "[15/37] batch_014.sql" && npx wrangler d1 execute heritage-db --remote --file=scripts/data/sql/batch_014.sql && \
+echo "[16/37] batch_015.sql" && npx wrangler d1 execute heritage-db --remote --file=scripts/data/sql/batch_015.sql && \
+echo "[17/37] batch_016.sql" && npx wrangler d1 execute heritage-db --remote --file=scripts/data/sql/batch_016.sql && \
+echo "[18/37] batch_017.sql" && npx wrangler d1 execute heritage-db --remote --file=scripts/data/sql/batch_017.sql && \
+echo "[19/37] batch_018.sql" && npx wrangler d1 execute heritage-db --remote --file=scripts/data/sql/batch_018.sql && \
+echo "[20/37] batch_019.sql" && npx wrangler d1 execute heritage-db --remote --file=scripts/data/sql/batch_019.sql && \
+echo "[21/37] batch_020.sql" && npx wrangler d1 execute heritage-db --remote --file=scripts/data/sql/batch_020.sql && \
+echo "[22/37] batch_021.sql" && npx wrangler d1 execute heritage-db --remote --file=scripts/data/sql/batch_021.sql && \
+echo "[23/37] batch_022.sql" && npx wrangler d1 execute heritage-db --remote --file=scripts/data/sql/batch_022.sql && \
+echo "[24/37] batch_023.sql" && npx wrangler d1 execute heritage-db --remote --file=scripts/data/sql/batch_023.sql && \
+echo "[25/37] batch_024.sql" && npx wrangler d1 execute heritage-db --remote --file=scripts/data/sql/batch_024.sql && \
+echo "[26/37] batch_025.sql" && npx wrangler d1 execute heritage-db --remote --file=scripts/data/sql/batch_025.sql && \
+echo "[27/37] batch_026.sql" && npx wrangler d1 execute heritage-db --remote --file=scripts/data/sql/batch_026.sql && \
+echo "[28/37] batch_027.sql" && npx wrangler d1 execute heritage-db --remote --file=scripts/data/sql/batch_027.sql && \
+echo "[29/37] batch_028.sql" && npx wrangler d1 execute heritage-db --remote --file=scripts/data/sql/batch_028.sql && \
+echo "[30/37] batch_029.sql" && npx wrangler d1 execute heritage-db --remote --file=scripts/data/sql/batch_029.sql && \
+echo "[31/37] batch_030.sql" && npx wrangler d1 execute heritage-db --remote --file=scripts/data/sql/batch_030.sql && \
+echo "[32/37] batch_031.sql" && npx wrangler d1 execute heritage-db --remote --file=scripts/data/sql/batch_031.sql && \
+echo "[33/37] batch_032.sql" && npx wrangler d1 execute heritage-db --remote --file=scripts/data/sql/batch_032.sql && \
+echo "[34/37] batch_033.sql" && npx wrangler d1 execute heritage-db --remote --file=scripts/data/sql/batch_033.sql && \
+echo "[35/37] batch_034.sql" && npx wrangler d1 execute heritage-db --remote --file=scripts/data/sql/batch_034.sql && \
+echo "[36/37] batch_035.sql" && npx wrangler d1 execute heritage-db --remote --file=scripts/data/sql/batch_035.sql && \
+echo "[37/37] batch_036.sql" && npx wrangler d1 execute heritage-db --remote --file=scripts/data/sql/batch_036.sql
+echo "\n✅ 시딩 완료!"

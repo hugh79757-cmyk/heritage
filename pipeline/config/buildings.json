@@ -1,0 +1,108 @@
+{
+  "buildings": [
+    {
+      "id": "gyeonghoeru",
+      "name_ko": "경회루",
+      "name_en": "Gyeonghoeru Pavilion",
+      "zone": "gyeonghoeru",
+      "lat": 37.5789,
+      "lng": 126.9753,
+      "source": "datagokr",
+      "data_id": "15115251",
+      "format": "FBX",
+      "license": "kogl_type1",
+      "priority": 1
+    },
+    {
+      "id": "sajeongjeon",
+      "name_ko": "사정전",
+      "name_en": "Sajeongjeon Hall",
+      "zone": "pyeonjeon",
+      "lat": 37.5791,
+      "lng": 126.9769,
+      "source": "datagokr",
+      "data_id": "15115294",
+      "format": "OBJ",
+      "license": "kogl_type1",
+      "priority": 1
+    },
+    {
+      "id": "gangnyeongjeon",
+      "name_ko": "강녕전",
+      "name_en": "Gangnyeongjeon Hall",
+      "zone": "chimjeon",
+      "lat": 37.5797,
+      "lng": 126.9769,
+      "source": "datagokr",
+      "data_id": "15115247",
+      "format": "FBX",
+      "license": "kogl_type1",
+      "priority": 1
+    },
+    {
+      "id": "geunjeongjeon_throne",
+      "name_ko": "근정전 어탑",
+      "name_en": "Geunjeongjeon Throne",
+      "zone": "jeongjeon",
+      "lat": 37.5786,
+      "lng": 126.9769,
+      "source": "sketchfab",
+      "sketchfab_uid": "64a6c6fe0c5946ed8e4917d4ebef3be3",
+      "format": "GLB",
+      "license": "CC-BY",
+      "priority": 1
+    },
+    {
+      "id": "geunjeongjeon_chair",
+      "name_ko": "근정전 어좌",
+      "name_en": "Geunjeongjeon Throne Chair",
+      "zone": "jeongjeon",
+      "lat": 37.5786,
+      "lng": 126.9769,
+      "source": "sketchfab",
+      "sketchfab_uid": "8f98988a27334967bf24eead1375101c",
+      "format": "GLB",
+      "license": "CC-BY",
+      "priority": 1
+    },
+    {
+      "id": "geunjeongjeon_ilwolobongdo",
+      "name_ko": "근정전 일월오봉도",
+      "name_en": "Geunjeongjeon Ilwolobongdo",
+      "zone": "jeongjeon",
+      "lat": 37.5786,
+      "lng": 126.9769,
+      "source": "sketchfab",
+      "sketchfab_uid": "2253262e248045abbf30ed1fbef9197d",
+      "format": "GLB",
+      "license": "CC-BY",
+      "priority": 1
+    },
+    {
+      "id": "sajeongjeon_chair",
+      "name_ko": "사정전 어좌",
+      "name_en": "Sajeongjeon King Chair",
+      "zone": "pyeonjeon",
+      "lat": 37.5791,
+      "lng": 126.9769,
+      "source": "sketchfab",
+      "sketchfab_uid": "d737c1135c29419481a24281f0edfdf0",
+      "format": "GLB",
+      "license": "CC-BY",
+      "priority": 2
+    },
+    {
+      "id": "manchunjeon_foldingscreen",
+      "name_ko": "만춘전 병풍",
+      "name_en": "Manchunjeon Foldingscreen",
+      "zone": "pyeonjeon",
+      "lat": 37.5791,
+      "lng": 126.9775,
+      "source": "sketchfab",
+      "sketchfab_uid": "71ac56e30aed44128d5046fe9d5568e9",
+      "format": "GLB",
+      "license": "CC-BY",
+      "priority": 2
+    }
+  ]
+}

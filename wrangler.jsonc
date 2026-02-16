@@ -1,16 +1,23 @@
 {
-	"main": "dist/_worker.js/index.js",
-	"name": "heritage",
+  "main": "dist/_worker.js/index.js",
+  "name": "heritage",
   "compatibility_date": "2026-02-16",
   "compatibility_flags": [
     "nodejs_compat",
     "global_fetch_strictly_public"
   ],
-	"assets": {
-		"binding": "ASSETS",
-		"directory": "./dist"
-	},
-	"observability": {
+  "assets": {
+    "binding": "ASSETS",
+    "directory": "./dist"
+  },
+  "observability": {
     "enabled": true
-  }
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "heritage-db",
+      "database_id": "b4f2264e-d032-442b-a260-48b7ffd99414"
+    }
+  ]
 }

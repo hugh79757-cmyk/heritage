@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Palace Guide - Gyeongbokgung</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,'Pretendard',sans-serif;background:#0a0a0a;color:#fff;padding-bottom:80px}
+
+.header{padding:14px 20px;position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,10,10,.92);backdrop-filter:blur(20px);display:flex;align-items:center;justify-content:space-between}
+.header h1{font-size:17px;font-weight:700}
+.lang-toggle{display:flex;gap:4px}
+.lang-btn{padding:4px 10px;border-radius:8px;border:1px solid rgba(255,255,255,.2);background:transparent;color:rgba(255,255,255,.5);font-size:11px;cursor:pointer}
+.lang-btn.active{background:#FFBA08;color:#000;border-color:#FFBA08;font-weight:600}
+
+.building-nav{display:flex;gap:8px;padding:64px 16px 12px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.bnav{flex:0 0 auto;padding:8px 16px;border-radius:20px;background:rgba(255,255,255,.08);font-size:13px;cursor:pointer;white-space:nowrap;border:1.5px solid transparent;transition:.2s}
+.bnav.active{background:rgba(255,186,8,.15);border-color:#FFBA08;font-weight:600}
+
+.hero{margin:8px 16px;border-radius:16px;overflow:hidden;position:relative;background:#111}
+.hero img{width:100%;height:200px;object-fit:cover;display:block}
+.hero-overlay{position:absolute;bottom:0;left:0;right:0;padding:16px;background:linear-gradient(transparent,rgba(0,0,0,.85))}
+.hero-overlay h2{font-size:20px;font-weight:700}
+.hero-overlay p{font-size:12px;color:rgba(255,255,255,.6);margin-top:4px}
+
+.section{padding:16px 20px}
+.section-title{font-size:15px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:6px}
+
+.story-card{background:rgba(255,255,255,.06);border-radius:14px;margin-bottom:10px;overflow:hidden;cursor:pointer;transition:.2s;border-left:3px solid #FFBA08}
+.story-card:active{background:rgba(255,186,8,.1)}
+.story-head{padding:14px 16px}
+.story-head .st{font-size:14px;font-weight:600}
+.story-head .sp{font-size:12px;color:rgba(255,255,255,.5);margin-top:4px;line-height:1.4}
+.story-body{display:none;padding:0 16px 14px}
+.story-body img{width:100%;border-radius:10px;margin-bottom:10px;background:#1a1a1a}
+.story-body .caption{font-size:11px;color:rgba(255,255,255,.4);text-align:center;margin-top:-6px;margin-bottom:10px}
+.story-body .text{font-size:13px;color:rgba(255,255,255,.8);line-height:1.7}
+.story-card.open .story-body{display:block}
+
+.drawing-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.drawing-item{border-radius:10px;overflow:hidden;background:#111;cursor:pointer;position:relative}
+.drawing-item img{width:100%;height:120px;object-fit:cover;display:block;transition:.2s}
+.drawing-item:active img{transform:scale(1.03)}
+.drawing-label{position:absolute;bottom:0;left:0;right:0;padding:6px 8px;background:linear-gradient(transparent,rgba(0,0,0,.8));font-size:10px;color:rgba(255,255,255,.7)}
+
+.fullscreen-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;z-index:200;background:rgba(0,0,0,.95);align-items:center;justify-content:center;flex-direction:column}
+.fullscreen-overlay.show{display:flex}
+.fullscreen-overlay img{max-width:95%;max-height:80vh;object-fit:contain;border-radius:8px}
+.fullscreen-overlay .close{position:absolute;top:16px;right:16px;width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.15);border:0;color:#fff;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.fullscreen-overlay .img-title{margin-top:12px;font-size:13px;color:rgba(255,255,255,.7);text-align:center;padding:0 20px}
+.pinch-hint{font-size:11px;color:rgba(255,255,255,.3);margin-top:6px}
+
+.info-row{display:flex;gap:12px;margin-bottom:8px}
+.info-tag{background:rgba(255,255,255,.08);padding:6px 12px;border-radius:10px;font-size:12px;color:rgba(255,255,255,.6)}
+
+.tab{display:flex;position:fixed;bottom:0;left:0;right:0;background:rgba(10,10,10,.95);backdrop-filter:blur(20px);padding:6px 0 max(6px,env(safe-area-inset-bottom));z-index:100}
+.tab>div{flex:1;text-align:center;font-size:10px;color:rgba(255,255,255,.35);padding:4px 0;cursor:pointer}
+.tab>div.active{color:#FFBA08}
+.tab .ti{font-size:18px;display:block;margin-bottom:1px}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Gyeongbokgung Palace</h1>
+  <div class="lang-toggle">
+    <button class="lang-btn active">EN</button>
+    <button class="lang-btn">한국어</button>
+    <button class="lang-btn">日本語</button>
+    <button class="lang-btn">中文</button>
+  </div>
+</div>
+
+<div class="building-nav">
+  <div class="bnav active">Geunjeongjeon</div>
+  <div class="bnav">Gyeonghoeru</div>
+  <div class="bnav">Sajeongjeon</div>
+  <div class="bnav">Gangnyeongjeon</div>
+  <div class="bnav">Gyotaejeon</div>
+  <div class="bnav">Gwanghwamun</div>
+</div>
+
+<div class="hero">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Gyeongbokgung-GessanjeongjeonFrontView.jpg/1280px-Gyeongbokgung-GeunjeongJeonFrontView.jpg" 
+       alt="Geunjeongjeon"
+       onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/%EA%B2%BD%EB%B3%B5%EA%B6%81_%EA%B7%BC%EC%A0%95%EC%A0%84_%EC%A0%84%EA%B2%BD.jpg/1280px-%EA%B2%BD%EB%B3%B5%EA%B6%81_%EA%B7%BC%EC%A0%95%EC%A0%84_%EC%A0%84%EA%B2%BD.jpg'">
+  <div class="hero-overlay">
+    <h2>Geunjeongjeon Hall</h2>
+    <p>National Treasure · Main Throne Hall · Built 1395, Rebuilt 1867</p>
+  </div>
+</div>
+
+<div class="section">
+  <div class="info-row">
+    <span class="info-tag">5×5 Bays</span>
+    <span class="info-tag">Double Eaves</span>
+    <span class="info-tag">7,592 m²</span>
+    <span class="info-tag">Multi-Bracket</span>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">📖 Hidden Stories</div>
+
+  <div class="story-card" onclick="this.classList.toggle('open')">
+    <div class="story-head">
+      <div class="st">① Why is the floor black?</div>
+      <div class="sp">The dark floor represents the cosmos — the king sat upon the night sky itself.</div>
+    </div>
+    <div class="story-body">
+      <img src="https://www.heritage.go.kr/heri/cul/chartImgHeritage.do?file_seq=2839160" 
+           alt="Floor plan"
+           onerror="this.style.height='160px';this.style.background='#1a1a2e'">
+      <div class="caption">Geunjeongjeon floor detail — precision survey drawing</div>
+      <div class="text">
+        The black stone floor of Geunjeongjeon is not just stone — it represents <b>Jamiwon (紫微垣)</b>, the Purple Forbidden Enclosure in East Asian astronomy. This constellation zone surrounds the North Star, where the Heavenly Emperor resides.<br><br>
+        The Joseon king, as the Son of Heaven on earth, literally sat above the night sky. The dark floor beneath the golden throne created a cosmic hierarchy: stars below, the king above. The entire hall is a model of the universe.
+      </div>
+    </div>
+  </div>
+
+  <div class="story-card" onclick="this.classList.toggle('open')">
+    <div class="story-head">
+      <div class="st">② The dragons have 7 claws</div>
+      <div class="sp">Look up — the ceiling dragons encode an astronomical secret in their claws.</div>
+    </div>
+    <div class="story-body">
+      <img src="https://www.heritage.go.kr/heri/cul/chartImgHeritage.do?file_seq=2839602"
+           alt="Ceiling detail"
+           onerror="this.style.height='160px';this.style.background='#1a1a2e'">
+      <div class="caption">Ceiling bracket detail — survey drawing</div>
+      <div class="text">
+        Two golden dragons are carved on the ceiling, each with <b>7 claws</b>. The Chinese emperor's dragon has 5. Why 7?<br><br>
+        7 × 4 legs = <b>28</b>, representing the 28 Mansions (二十八宿) — the 28 divisions of the sky in East Asian astronomy. Each claw is a constellation. Joseon embedded its own cosmic authority in the dragon's grip, distinct from China's system.
+      </div>
+    </div>
+  </div>
+
+  <div class="story-card" onclick="this.classList.toggle('open')">
+    <div class="story-head">
+      <div class="st">③ 36 guardian animals on the terrace</div>
+      <div class="sp">Count the stone animals on the moon terrace — each one faces a specific direction.</div>
+    </div>
+    <div class="story-body">
+      <img src="https://www.heritage.go.kr/heri/cul/chartImgHeritage.do?file_seq=2839160"
+           alt="Moon terrace"
+           onerror="this.style.height='160px';this.style.background='#1a1a2e'">
+      <div class="caption">Moon terrace layout drawing</div>
+      <div class="text">
+        The raised stone platform (月臺, <i>woldae</i>) surrounding Geunjeongjeon has <b>36 stone animals</b> on its railings. The upper level has the Four Guardians — Azure Dragon (East), White Tiger (West), Vermilion Bird (South), Black Tortoise (North).<br><br>
+        The lower level has 10 of the 12 zodiac animals. Two are missing: the dog and the pig. Why? The exact reason is debated, but one theory suggests they were considered too common for a royal space.
+      </div>
+    </div>
+  </div>
+
+  <div class="story-card" onclick="this.classList.toggle('open')">
+    <div class="story-head">
+      <div class="st">④ Journey to the West on the roof</div>
+      <div class="sp">The tiny figurines on the roof corners are characters from a Chinese novel.</div>
+    </div>
+    <div class="story-body">
+      <div class="text">
+        The small clay figurines (잡상, <i>japsang</i>) perched on roof ridges are characters from <b>Journey to the West</b>: the Tripitaka Master, Sun Wukong (Monkey King), and others.<br><br>
+        They serve as guardians against fire and evil spirits. Geunjeongjeon, as the most important building, has the maximum number: <b>11 figurines</b>. Lesser buildings have fewer — you can rank a building's importance by counting its roof figurines.
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">📐 Architecture Drawings</div>
+  <p style="font-size:12px;color:rgba(255,255,255,.4);margin-bottom:12px">
+    Precision survey drawings by Korea Heritage Service. Tap to zoom.
+  </p>
+  <div class="drawing-grid">
+    <div class="drawing-item" onclick="openDrawing(this)">
+      <img src="https://www.heritage.go.kr/heri/cul/chartImgHeritage.do?file_seq=2839160" alt="Floor plan"
+           onerror="this.parentElement.style.display='none'">
+      <div class="drawing-label">Floor Plan (1F)</div>
+    </div>
+    <div class="drawing-item" onclick="openDrawing(this)">
+      <img src="https://www.heritage.go.kr/heri/cul/chartImgHeritage.do?file_seq=2839602" alt="Bracket detail"
+           onerror="this.parentElement.style.display='none'">
+      <div class="drawing-label">Bracket Detail</div>
+    </div>
+    <div class="drawing-item" onclick="openDrawing(this)">
+      <img src="https://www.heritage.go.kr/heri/cul/chartImgHeritage.do?file_seq=2840132" alt="Elevation"
+           onerror="this.parentElement.style.display='none'">
+      <div class="drawing-label">Elevation View</div>
+    </div>
+    <div class="drawing-item" onclick="openDrawing(this)">
+      <img src="https://www.heritage.go.kr/heri/cul/chartImgHeritage.do?file_seq=2839160" alt="Cross section"
+           onerror="this.parentElement.style.display='none'">
+      <div class="drawing-label">Cross Section</div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">🕐 Timeline</div>
+  <div style="font-size:13px;line-height:2;color:rgba(255,255,255,.7)">
+    <b style="color:#FFBA08">1395</b> — Founded by King Taejo<br>
+    <b style="color:#FFBA08">1592</b> — Destroyed in Japanese invasion<br>
+    <b style="color:#FFBA08">1867</b> — Rebuilt by Heungseon Daewongun<br>
+    <b style="color:#FFBA08">1910</b> — Japanese colonial damage begins<br>
+    <b style="color:#FFBA08">1990s</b> — Restoration project starts<br>
+    <b style="color:#FFBA08">Today</b> — Ongoing preservation
+  </div>
+</div>
+
+<!-- 도면 전체화면 -->
+<div class="fullscreen-overlay" id="fullscreen" onclick="this.classList.remove('show')">
+  <button class="close" onclick="document.getElementById('fullscreen').classList.remove('show')">✕</button>
+  <img id="fs-img" src="" alt="">
+  <div class="img-title" id="fs-title"></div>
+  <div class="pinch-hint">Pinch to zoom · Tap to close</div>
+</div>
+
+<div class="tab">
+  <div class="active"><span class="ti">📖</span>Stories</div>
+  <div><span class="ti">📐</span>Drawings</div>
+  <div><span class="ti">🕐</span>Timeline</div>
+  <div><span class="ti">🗺</span>Map</div>
+</div>
+
+<script>
+function openDrawing(el){
+  const img=el.querySelector('img');
+  const label=el.querySelector('.drawing-label');
+  if(!img) return;
+  document.getElementById('fs-img').src=img.src;
+  document.getElementById('fs-title').textContent=label?label.textContent:'';
+  document.getElementById('fullscreen').classList.add('show');
+}
+</script>
+</body>
+</html>

@@ -13,6 +13,8 @@ export interface Landmark {
   link: string;
   descKr: string;
   descEn: string;
+  descJa: string;
+  descZh: string;
 }
 
 export const LANDMARKS: Landmark[] = [
@@ -26,6 +28,7 @@ export const LANDMARKS: Landmark[] = [
     image: 'https://www.heritage.go.kr/gung/gogung1/images/ic-c1.jpg',
     link: '/palace/1',
     descKr: '조선왕조 제일의 법궁', descEn: 'The primary royal palace of the Joseon dynasty',
+    descJa: '朝鮮王朝第一の法宮', descZh: '朝鲜王朝第一法宫',
   },
   {
     id: 'palace-2',
@@ -36,6 +39,7 @@ export const LANDMARKS: Landmark[] = [
     image: 'https://www.heritage.go.kr/gung/gogung2/images/img_changdeok_story_bg_00_00.jpg',
     link: '/palace/2',
     descKr: 'UNESCO 세계유산', descEn: 'UNESCO World Heritage Site',
+    descJa: 'UNESCO世界遺産', descZh: 'UNESCO世界遗产',
   },
   {
     id: 'palace-3',
@@ -46,6 +50,7 @@ export const LANDMARKS: Landmark[] = [
     image: 'https://www.heritage.go.kr/gung/gogung3/images/img_changgyeong_story_bg_00_00.jpg',
     link: '/palace/3',
     descKr: '생활 궁궐로서의 역사', descEn: 'History as a residential palace',
+    descJa: '生活宮殿としての歴史', descZh: '作为生活宫殿的历史',
   },
   {
     id: 'palace-4',
@@ -56,6 +61,7 @@ export const LANDMARKS: Landmark[] = [
     image: 'https://www.heritage.go.kr/gung/gogung4/images/mode_general_00_01.jpg',
     link: '/palace/4',
     descKr: '근대와 전통이 공존', descEn: 'Modern and traditional coexist',
+    descJa: '近代と伝統が共存', descZh: '现代与传统共存',
   },
   {
     id: 'palace-5',
@@ -66,6 +72,7 @@ export const LANDMARKS: Landmark[] = [
     image: 'https://www.heritage.go.kr/gung/gogung5/images/img_jongmyo_story_bg_00_00.jpg',
     link: '/palace/5',
     descKr: 'UNESCO 세계유산, 왕실 사당', descEn: 'UNESCO World Heritage, royal shrine',
+    descJa: 'UNESCO世界遺産、王室の祠堂', descZh: 'UNESCO世界遗产，王室祠堂',
   },
   /* ── 서울 주요 문화유산 ── */
   {
@@ -77,6 +84,7 @@ export const LANDMARKS: Landmark[] = [
     image: 'http://www.khs.go.kr/unisearch/images/national_treasure/2685609.jpg',
     link: '#',
     descKr: '서울 숭례문 (남대문)', descEn: 'Sungnyemun, the Great South Gate',
+    descJa: 'ソウル崇礼門（南大門）', descZh: '首尔崇礼门（南大门）',
   },
   {
     id: 'nt-2',
@@ -87,6 +95,7 @@ export const LANDMARKS: Landmark[] = [
     image: 'http://www.khs.go.kr/unisearch/images/treasure/1633002.jpg',
     link: '#',
     descKr: '한양도성 동대문', descEn: 'East Gate of Seoul Fortress',
+    descJa: '漢陽都城の東大門', descZh: '汉阳都城东大门',
   },
   {
     id: 'hs-1',
@@ -97,6 +106,7 @@ export const LANDMARKS: Landmark[] = [
     image: 'http://www.khs.go.kr/unisearch/images/historic_site/1712208.jpg',
     link: '#',
     descKr: '조선시대 도성 성곽', descEn: 'Joseon Dynasty city wall',
+    descJa: '朝鮮時代の都城城郭', descZh: '朝鲜时代都城城郭',
   },
   {
     id: 'hs-2',
@@ -107,6 +117,7 @@ export const LANDMARKS: Landmark[] = [
     image: 'https://www.heritage.go.kr/gung/gogung5/images/img_jongmyo_story_bg_00_00.jpg',
     link: '/palace/5',
     descKr: '종묘 앞 공원', descEn: 'Park in front of Jongmyo',
+    descJa: '宗廟前の公園', descZh: '宗庙前公园',
   },
   {
     id: 'hs-3',
@@ -117,6 +128,7 @@ export const LANDMARKS: Landmark[] = [
     image: '',
     link: '#',
     descKr: '전통 한옥이 밀집한 마을', descEn: 'Traditional Korean village with hanok houses',
+    descJa: '伝統韓屋が密集する村', descZh: '传统韩屋密集的村庄',
   },
   {
     id: 'hs-4',
@@ -127,6 +139,7 @@ export const LANDMARKS: Landmark[] = [
     image: '',
     link: '#',
     descKr: '탑골공원 내 국보 제2호', descEn: 'National Treasure No. 2 in Tapgol Park',
+    descJa: 'タプコル公園内の国宝第2号', descZh: '塔谷公园内国宝第2号',
   },
   {
     id: 'hs-5',
@@ -137,6 +150,7 @@ export const LANDMARKS: Landmark[] = [
     image: '',
     link: '#',
     descKr: '세종대왕·이순신 동상', descEn: 'Statues of King Sejong & Admiral Yi Sun-sin',
+    descJa: '世宗大王・李舜臣像', descZh: '世宗大王·李舜臣铜像',
   },
   {
     id: 'hs-6',
@@ -147,6 +161,7 @@ export const LANDMARKS: Landmark[] = [
     image: '',
     link: '#',
     descKr: '토지신과 곡식신에게 제사 지내던 곳', descEn: 'Altar for gods of earth and grain',
+    descJa: '土地神と穀物神に祭祀を行った場所', descZh: '祭祀土地神和谷物神的地方',
   },
   {
     id: 'hs-7',
@@ -157,6 +172,7 @@ export const LANDMARKS: Landmark[] = [
     image: '',
     link: '#',
     descKr: '관우를 모신 사당', descEn: 'Shrine dedicated to Guan Yu',
+    descJa: '関羽を祀る祠堂', descZh: '供奉关羽的祠堂',
   },
   {
     id: 'hs-8',
@@ -167,6 +183,7 @@ export const LANDMARKS: Landmark[] = [
     image: '',
     link: '#',
     descKr: '성곽길 산책로', descEn: 'Walkable fortress wall trail',
+    descJa: '城郭路の散歩道', descZh: '城郭路散步道',
   },
 ];
 

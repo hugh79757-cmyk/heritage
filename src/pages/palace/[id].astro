@@ -65,4 +65,28 @@ const description = `${palaceName} ${countLabel[lang]}`;
       ))}
     </ul>
   </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const list = document.querySelector('.building-list');
+      if (!list) return;
+      const items = list.querySelectorAll(':scope > li');
+      if (items.length < 6) return;
+      
+      const adPositions = items.length >= 12 ? [5, 11] : [Math.floor(items.length / 2)];
+      
+      adPositions.forEach(pos => {
+        if (pos >= items.length) return;
+        const adLi = document.createElement('li');
+        adLi.className = 'ad-unit-heritage';
+        adLi.style.cssText = 'list-style:none;padding:1rem 0;';
+        adLi.innerHTML = `<div style="text-align:center;">` +
+          `<ins class="adsbygoogle" style="display:block;text-align:center" ` +
+          `data-ad-layout="in-article" data-ad-format="fluid" ` +
+          `data-ad-client="ca-pub-5938862195544185" data-ad-slot="4797390169"></ins>`;
+        items[pos].insertAdjacentElement('afterend', adLi);
+        try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch(e) {}
+      });
+    });
+  </script>
 </Layout>

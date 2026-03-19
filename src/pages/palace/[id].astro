@@ -89,4 +89,20 @@ const description = `${palaceName} ${countLabel[lang]}`;
       });
     });
   </script>
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "TouristAttraction",
+    "name": palaceName,
+    "description": description,
+    "image": palace.image,
+    "url": `https://heritage.aikorea24.kr/palace/${palace.id}?lang=${lang}`,
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Seoul",
+      "addressCountry": "KR"
+    },
+    "isAccessibleForFree": false,
+    "availableLanguage": ["ko", "en", "ja", "zh"]
+  })} />
 </Layout>

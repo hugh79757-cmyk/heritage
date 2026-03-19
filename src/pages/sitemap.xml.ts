@@ -2,7 +2,7 @@ import type { APIRoute } from 'astro';
 import { PALACES, fetchPalaceList } from '../lib/api';
 
 export const GET: APIRoute = async () => {
-  const site = 'https://k-heritage.pages.dev';
+  const site = 'https://heritage.aikorea24.kr';
   const langs = ['kr', 'en', 'ja', 'zh'];
   let urls = '';
 

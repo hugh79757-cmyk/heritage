@@ -1,0 +1,68 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import '../../styles/global.css';
+import { PALACES, getLang, getPalaceName, fetchPalaceList, type Lang } from '../../lib/api';
+
+const lang = getLang(Astro.url);
+const htmlLang = lang === 'kr' ? 'ko' : lang;
+const palaceId = Number(Astro.params.id);
+const palace = PALACES.find((p) => p.id === palaceId);
+
+if (!palace) return Astro.redirect('/');
+
+const buildings = await fetchPalaceList(palaceId);
+const palaceName = getPalaceName(palace, lang);
+
+function getBuildingName(b: typeof buildings[0], lang: Lang) {
+  const map: Record<Lang, string> = { kr: b.nameKr, en: b.nameEn, ja: b.nameJa, zh: b.nameZh };
+  return map[lang] || b.nameKr;
+}
+
+const countLabel: Record<string, string> = {
+  kr: `${buildings.length}개 건축물·유적`,
+  en: `${buildings.length} buildings & sites`,
+  ja: `${buildings.length}件の建築物・遺跡`,
+  zh: `${buildings.length}处建筑与遗址`,
+};
+
+const title = `${palaceName} — K-Heritage Guide`;
+const description = `${palaceName} ${countLabel[lang]}`;
+---
+<Layout title={title} description={description} image={palace.image} lang={htmlLang}>
+  <style>
+    @import '../../styles/global.css';
+  </style>
+
+  <div class="container">
+    <nav class="breadcrumb">
+      <a href={`/?lang=${lang}`}>Home</a> &rsaquo; {palaceName}
+    </nav>
+
+    <div class="detail-header">
+      <h2>{palaceName}</h2>
+      <p style="color:var(--color-text-light);">{countLabel[lang]}</p>
+    </div>
+
+    <ul class="building-list">
+      {buildings.map((b) => (
+        <li>
+          <a href={`/palace/${palaceId}/${b.detailCode}?sn=${b.serialNumber}&lang=${lang}`}>
+            {b.imageUrl && (
+              <img
+                src={b.imageUrl}
+                alt={getBuildingName(b, lang)}
+                loading="lazy"
+                width="90"
+                height="65"
+              />
+            )}
+            <div class="info">
+              <h3>{getBuildingName(b, lang)}</h3>
+              <p>{b.explanationKr.slice(0, 80)}…</p>
+            </div>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</Layout>

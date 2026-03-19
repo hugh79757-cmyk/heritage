@@ -4,5 +4,5 @@ import cloudflare from '@astrojs/cloudflare';
 export default defineConfig({
   output: 'server',
   adapter: cloudflare(),
-  site: 'https://k-heritage.pages.dev',
+  site: 'https://heritage.aikorea24.kr',
 });

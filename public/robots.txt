@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /api/
 
-Sitemap: https://k-heritage.pages.dev/sitemap.xml
+Sitemap: https://heritage.aikorea24.kr/sitemap.xml

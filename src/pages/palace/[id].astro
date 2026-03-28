@@ -58,7 +58,7 @@ const description = `${palaceName} ${countLabel[lang]}`;
             )}
             <div class="info">
               <h3>{getBuildingName(b, lang)}</h3>
-              <p>{b.explanationKr.slice(0, 80)}…</p>
+              <p>{b.explanationKr.replace(/<br\s*\/?>/g, ' ').slice(0, 80)}…</p>
             </div>
           </a>
         </li>

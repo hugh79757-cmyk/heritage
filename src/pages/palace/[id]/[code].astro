@@ -72,7 +72,7 @@ const labels: Record<string, { photos: string; videos: string }> = {
       <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
     </div>
 
-    <div class="description">{explanation}</div>
+    <div class="description" set:html={explanation.replace(/\r\n/g, "<br/>").replace(/\n/g, "<br/>")} />
 
     {detail.images.length > 0 && (
       <>

@@ -1,5 +1,3 @@
-import palaceData from './palace_data.json';
-
 /* ── Palace metadata ── */
 export interface Palace {
   id: number;
@@ -127,19 +125,23 @@ export interface BuildingItem {
   explanationEn: string;
 }
 
-/* ── Fetch palace building list (from local JSON) ── */
+/* ── Fetch palace building list ── */
 export async function fetchPalaceList(gungNumber: number): Promise<BuildingItem[]> {
-  const buildings = (palaceData as Record<string, any[]>)[String(gungNumber)] || [];
-  return buildings.map((b: any) => ({
-    serialNumber: b.serialNumber,
-    detailCode: b.detailCode,
-    nameKr: b.nameKr,
-    nameEn: b.nameEn || b.nameKr,
-    nameJa: b.nameJa || b.nameKr,
-    nameZh: b.nameZh || b.nameKr,
-    imageUrl: b.mainImage,
-    explanationKr: b.explanationKr,
-    explanationEn: b.explanationEn || b.explanationKr,
+  const url = `https://www.heritage.go.kr/heri/gungDetail/gogungListOpenApi.do?gung_number=${gungNumber}`;
+  const res = await fetch(url);
+  const xml = await res.text();
+  const items = extractBlocks(xml, 'list');
+
+  return items.map((block) => ({
+    serialNumber: extractTag(block, 'serial_number'),
+    detailCode: extractTag(block, 'detail_code'),
+    nameKr: extractTag(block, 'contents_kor'),
+    nameEn: extractTag(block, 'contents_eng') || extractTag(block, 'contents_kor'),
+    nameJa: extractTag(block, 'contents_jpa') || extractTag(block, 'contents_kor'),
+    nameZh: extractTag(block, 'contents_chi') || extractTag(block, 'contents_kor'),
+    imageUrl: extractTag(block, 'imgUrl'),
+    explanationKr: extractTag(block, 'explanation_kor'),
+    explanationEn: extractTag(block, 'explanation_eng') || extractTag(block, 'explanation_kor'),
   }));
 }
 
@@ -166,27 +168,49 @@ export async function fetchBuildingDetail(
   serialNumber: number,
   detailCode: number,
 ): Promise<BuildingDetail | null> {
-  const buildings = (palaceData as Record<string, any[]>)[String(gungNumber)] || [];
-  const b = buildings.find((item: any) =>
-    String(item.serialNumber) === String(serialNumber) &&
-    String(item.detailCode) === String(detailCode)
-  );
-  if (!b) return null;
+  const url = `https://www.heritage.go.kr/heri/gungDetail/gogungDetailOpenApi.do?serial_number=${serialNumber}&detail_code=${detailCode}&gung_number=${gungNumber}`;
+  const res = await fetch(url);
+  const xml = await res.text();
+
+  if (!xml.includes('<result>')) return null;
+
+  /* mainImage */
+  const mainImageRaw = extractTag(xml, 'imgUrl');
+  const mainImage = mainImageRaw.replace(/\s+/g, '').trim();
+
+  /* images */
+  const imgBlocks = extractBlocks(xml, 'imageInfo');
+  const images = imgBlocks.map((b) => ({
+    url: extractTag(b, 'imageUrl').replace(/\s+/g, '').trim(),
+    descKr: extractTag(b, 'imageExplanationKor'),
+    descEn: extractTag(b, 'imageExplanationEng') || extractTag(b, 'imageExplanationKor'),
+  }));
+
+  /* videos */
+  const vidBlocks = extractBlocks(xml, 'movieInfo');
+  const videos = vidBlocks.map((b) => ({
+    titleKr: extractTag(b, 'movieContentsKor'),
+    titleEn: extractTag(b, 'movieContentsEng') || extractTag(b, 'movieContentsKor'),
+    urlKr: extractTag(b, 'movieUrlKor'),
+    urlEn: extractTag(b, 'movieUrlEng') || extractTag(b, 'movieUrlKor'),
+    urlJa: extractTag(b, 'movieUrlJpa') || extractTag(b, 'movieUrlKor'),
+    urlZh: extractTag(b, 'movieUrlChi') || extractTag(b, 'movieUrlKor'),
+  }));
 
   return {
-    serialNumber: b.serialNumber,
-    detailCode: b.detailCode,
-    gungNumber: b.gungNumber,
-    nameKr: b.nameKr,
-    nameEn: b.nameEn || b.nameKr,
-    nameJa: b.nameJa || b.nameKr,
-    nameZh: b.nameZh || b.nameKr,
-    explanationKr: b.explanationKr,
-    explanationEn: b.explanationEn || b.explanationKr,
-    explanationJa: b.explanationJa || b.explanationKr,
-    explanationZh: b.explanationZh || b.explanationKr,
-    mainImage: b.mainImage,
-    images: b.images || [],
-    videos: b.videos || [],
+    serialNumber: extractTag(xml, 'serial_number'),
+    detailCode: extractTag(xml, 'detail_code'),
+    gungNumber: extractTag(xml, 'gung_number'),
+    nameKr: extractTag(xml, 'contents_kor'),
+    nameEn: extractTag(xml, 'contents_eng') || extractTag(xml, 'contents_kor'),
+    nameJa: extractTag(xml, 'contents_jpa') || extractTag(xml, 'contents_kor'),
+    nameZh: extractTag(xml, 'contents_chi') || extractTag(xml, 'contents_kor'),
+    explanationKr: extractTag(xml, 'explanation_kor'),
+    explanationEn: extractTag(xml, 'explanation_eng') || extractTag(xml, 'explanation_kor'),
+    explanationJa: extractTag(xml, 'explanation_jpa') || extractTag(xml, 'explanation_kor'),
+    explanationZh: extractTag(xml, 'explanation_chi') || extractTag(xml, 'explanation_kor'),
+    mainImage,
+    images,
+    videos,
   };
 }

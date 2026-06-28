@@ -1,0 +1,152 @@
+---
+import GuideLayout from '../../components/GuideLayout.astro';
+import BreadcrumbNav from '../../components/BreadcrumbNav.astro';
+import FAQSection from '../../components/FAQSection.astro';
+import '../../styles/global.css';
+import { fetchPalaceList, getLang } from '../../lib/api';
+
+const lang = getLang(Astro.url);
+const htmlLang = lang === 'kr' ? 'ko' : lang;
+const buildings = await fetchPalaceList(5);
+
+const title = 'Jongmyo Shrine Complete Guide 2026 | K-Heritage';
+const description = 'Complete guide to Jongmyo Shrine: ticket prices, opening hours, UNESCO World Heritage significance, royal ancestral rites, and visitor tips for 2026.';
+
+const faqByLang: Record<string, { question: string; answer: string }[]> = {
+  kr: [
+    { question: "이 내용은 아직 준비 중입니다", answer: "영어 버전을 참조해주세요." },
+  ],
+  en: [
+  { question: 'What is Jongmyo Shrine?', answer: 'Jongmyo (종묘) is the royal ancestral shrine of the Joseon dynasty, where ceremonies honoring deceased kings and queens were performed. It was designated a UNESCO World Heritage Site in 1995.' },
+  { question: 'How much is the Jongmyo ticket?', answer: 'Adults: ₩1,000. Youth (7–18): ₩500. Free for children under 7 and seniors 65+. The cheapest of all Seoul heritage sites.' },
+  { question: 'What are Jongmyo opening hours?', answer: '09:00–18:00 (Mar–Oct), 09:00–17:00 (Nov–Feb). Closed Tuesdays. The main hall (Jeongjeon) requires a guided tour to enter.' },
+  { question: 'What is Jongmyo Jerye?', answer: 'Jongmyo Jerye (종묘제례) is the Royal Ancestral Rite, performed annually on the first Sunday of May. It is an Intangible Cultural Heritage, featuring traditional music (Jeryeak) and dance (Jerye Mu).' },
+],
+};
+const faqItems = faqByLang[lang] || faqByLang.en;
+
+const h: Record<string, any> = {
+  en: {
+    h1: 'Jongmyo Shrine Complete Guide 2026',
+    intro: 'Jongmyo Shrine (종묘) is the UNESCO World Heritage royal ancestral shrine of the Joseon dynasty, where ceremonies honoring deceased kings and queens were performed for over 500 years. The shrine houses spirit tablets of 49 kings and queens, making it one of the longest continuously used shrines in the world. It represents the pinnacle of Confucian architectural design in Korea.',
+    h2_1: 'Ticket Prices & Admission',
+    h2_2: 'Opening Hours & Guided Tours',
+    h2_3: 'How to Get There',
+    h2_4: 'UNESCO World Heritage Significance',
+    h2_5: 'Jongmyo Jerye — Royal Ancestral Rite',
+    h2_6: 'Visitor Tips',
+    buildings_text: 'The main structure is Jeongjeon (정전), the Primary Hall, which stretches 101 meters — making it the longest wooden building in Asia. It houses 49 spirit tablets in individual chambers. Yeongnyeongjeon (영녕전), the Secondary Hall, houses 35 additional tablets. The grounds also include the Hongnyemun Gate and Ancestral Rite Museum.',
+    cta: 'Explore all buildings at Jongmyo →',
+  },
+  kr: {
+    h1: '종묘 완전 가이드 2026',
+    intro: '종묘(宗廟)는 조선 왕조의 왕실 사당으로, 500년 넘게 왕과 왕비를 제사지낸 UNESCO 세계유산입니다. 49위의 왕과 왕비의 신주가 모셔져 있으며, 세계에서 가장 오래 사용된 사당 중 하나입니다.',
+    h2_1: '관람권 및 입장료',
+    h2_2: '개방시간 및 가이드 투어',
+    h2_3: '교통 안내',
+    h2_4: 'UNESCO 세계유산 의의',
+    h2_5: '종묘제례',
+    h2_6: '관람 팁',
+    buildings_text: '본전(正殿)인 정전은 길이 101m로 아시아에서 가장 긴 목조건물입니다. 49위의 왕과 왕비 신주가 모셔져 있으며, 영녕전(永寧殿)에는 추가 35위의 신주가 있습니다.',
+    cta: '종묘 건물 전체 보기 →',
+  },
+  ja: {
+    h1: '宗廟 完全ガイド 2026',
+    intro: '宗廟（종묘）は朝鮮王朝の王室祠堂で、500年以上にわたり王と王妃を祀り続けたUNESCO世界遺産です。49柱の王と王妃の位牌が安置され、世界で最も長く使用され続けている祠堂の一つです。',
+    h2_1: 'チケット料金',
+    h2_2: '営業時間とガイドツアー',
+    h2_3: 'アクセス方法',
+    h2_4: 'UNESCO世界遺産の意義',
+    h2_5: '宗廟祭礼',
+    h2_6: '観光ヒント',
+    buildings_text: '本殿である正殿は長さ101mでアジア最長の木造建築。49柱の王と王妃の位牌が安置され、永寧殿には追加35柱の位牌があります。',
+    cta: '宗廟の全建築物を見る →',
+  },
+  zh: {
+    h1: '宗庙完全指南 2026',
+    intro: '宗庙（종묘）是朝鲜王朝的王室祠堂，500多年来一直祭祀国王和王后，是UNESCO世界遗产。安放了49位国王和王后的神主，是世界上使用时间最长的祠堂之一。',
+    h2_1: '门票价格',
+    h2_2: '开放时间与导览',
+    h2_3: '交通指南',
+    h2_4: 'UNESCO世界遗产意义',
+    h2_5: '宗庙祭礼',
+    h2_6: '游客贴士',
+    buildings_text: '正殿（정전）长101米，是亚洲最长的木结构建筑。安放了49位国王和王后的神主，永宁殿安放了另外35位。',
+    cta: '查看宗庙全部建筑 →',
+  },
+};
+
+const t = h[lang] || h.en;
+
+function getBldName(b: typeof buildings[0]) {
+  const map: Record<string, string> = { kr: b.nameKr, en: b.nameEn, ja: b.nameJa, zh: b.nameZh };
+  return map[lang] || b.nameEn;
+}
+---
+<GuideLayout title={title} description={description} lang={htmlLang}>
+  <style>@import '../../styles/global.css';</style>
+  <div class="container">
+    <BreadcrumbNav items={[{ name: 'Home', url: '/' }, { name: 'Guide', url: '/guide' }, { name: 'Jongmyo' }]} lang={lang} />
+    <article class="guide-content">
+      <h1>{t.h1}</h1>
+      <p class="guide-meta">Updated: June 2026 &middot; Korea Heritage Service official data</p>
+      <img class="guide-hero-img" src="https://www.heritage.go.kr/gung/gogung5/images/img_jongmyo_story_bg_00_00.jpg" alt="Jongmyo Shrine" width="960" height="400" />
+      <p class="guide-intro">{t.intro}</p>
+
+      <h2>{t.h2_1}</h2>
+      <div class="info-box"><p>Adults: ₩1,000 &middot; Youth (7–18): ₩500 &middot; Children under 7 & Seniors 65+: Free</p></div>
+
+      <h2>{t.h2_2}</h2>
+      <div class="info-box"><p><strong>Mar–Oct:</strong> 09:00–18:00 (last entry 17:30)<br/><strong>Nov–Feb:</strong> 09:00–17:00 (last entry 16:30)<br/><strong>Closed:</strong> Every Tuesday<br/><strong>Note:</strong> Entry to Jeongjeon (main hall) requires a free guided tour, available at fixed intervals.</p></div>
+
+      <h2>{t.h2_3}</h2>
+      <p><strong>Subway:</strong> Line 1/3/5 Jongno 3-ga Station (Exit 11) — 5 min walk.</p>
+      <p><strong>Bus:</strong> Routes 101, 162, 171, 272, 606 stop near Jongno 3-ga.</p>
+
+      <h2>{t.h2_4}</h2>
+      <p>Jongmyo was designated a UNESCO World Heritage Site in 1995 for its outstanding universal value as a masterpiece of Confucian architecture and ritual practice. The shrine has been continuously used for over 500 years, making it one of the oldest and longest-operating shrines in East Asia.</p>
+      <p>The architectural design follows strict Confucian principles — the simple, unadorned wooden structures emphasize solemnity and respect. The 101-meter-long Jeongjeon is the longest wooden building in Asia, a remarkable feat of traditional engineering.</p>
+
+      <h2>{t.h2_5}</h2>
+      <p>The annual Royal Ancestral Rite (종묘제례, Jongmyo Jerye) is performed on the first Sunday of May. This elaborate ceremony features 28 musicians and 64 dancers in traditional costumes, performing ancient court music and dances to honor the spirits of deceased monarchs. In 2001, the Jongmyo Jeryeak (court music) was designated a UNESCO Intangible Cultural Heritage of Humanity.</p>
+
+      <h2>{t.h2_6}</h2>
+      <div class="info-box tip-box">
+        <ul>
+          <li>The guided tour of Jeongjeon is free and runs every 20-30 minutes</li>
+          <li>The Ancestral Rite Museum inside the grounds is free to enter</li>
+          <li>Combine with Changgyeonggung (adjacent) for a full day</li>
+          <li>May is the best month to visit if you want to see the Jerye ceremony</li>
+          <li>The long, corridor-like interior of Jeongjeon is a unique photo opportunity</li>
+        </ul>
+      </div>
+
+      <FAQSection items={faqByLang} lang={lang} />
+    </article>
+  </div>
+</GuideLayout>
+
+<style>
+  .guide-content{padding:80px 0 60px;max-width:800px;margin:0 auto}
+  .guide-content h1{font-family:'Noto Serif KR',serif;font-size:clamp(1.8rem,4vw,2.6rem);font-weight:700;margin-bottom:12px;line-height:1.3}
+  .guide-meta{font-size:0.85rem;color:var(--color-text-muted,#9A8B7F);margin-bottom:24px}
+  .guide-hero-img{width:100%;max-height:400px;object-fit:cover;border-radius:16px;margin-bottom:32px}
+  .guide-intro{font-size:1.1rem;line-height:1.8;margin-bottom:32px;color:var(--color-text-light,#6B5B4F)}
+  .guide-content h2{font-family:'Noto Serif KR',serif;font-size:1.4rem;font-weight:700;margin-top:48px;margin-bottom:16px;padding-bottom:10px;border-bottom:2px solid var(--color-accent,#D4A574)}
+  .guide-content p{font-size:1rem;line-height:1.9;margin-bottom:16px}
+  .info-box{background:var(--color-card,#fff);border:1px solid var(--color-border,#E8DDD4);border-radius:12px;padding:20px;margin:16px 0 24px}
+  html.dark .info-box{background:var(--color-card,#1C1916);border-color:var(--color-border,#2D2720)}
+  .tip-box{border-left:4px solid var(--color-primary,#C8956C)}
+  .info-box ul{margin-top:8px;padding-left:20px}.info-box li{margin-bottom:6px;line-height:1.6;font-size:0.95rem}
+  .building-highlights{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;margin:20px 0 24px}
+  .building-highlight-card{display:flex;align-items:center;gap:12px;padding:12px;background:var(--color-card,#fff);border:1px solid var(--color-border,#E8DDD4);border-radius:10px;text-decoration:none;color:inherit;transition:border-color 0.2s}
+  html.dark .building-highlight-card{background:var(--color-card,#1C1916);border-color:var(--color-border,#2D2720)}
+  .building-highlight-card:hover{border-color:var(--color-primary,#C8956C)}
+  .building-highlight-card img{width:80px;height:56px;object-fit:cover;border-radius:8px;flex-shrink:0}
+  .building-highlight-card h4{font-size:0.9rem;font-weight:600;margin-bottom:4px;color:var(--color-text,#1A1210)}
+  .building-highlight-card p{font-size:0.78rem;color:var(--color-text-muted,#9A8B7F);margin:0;line-height:1.4}
+  .cta-box{text-align:center;margin:32px 0}
+  .cta-box a{display:inline-block;padding:14px 32px;background:var(--color-primary,#C8956C);color:#fff;border-radius:12px;font-weight:600;font-size:1rem;text-decoration:none;transition:background 0.3s,transform 0.2s}
+  .cta-box a:hover{background:var(--color-primary-dark,#8B5E3C);transform:translateY(-2px)}
+  @media(max-width:640px){.building-highlights{grid-template-columns:1fr}}
+</style>

@@ -1,5 +1,7 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
+import BreadcrumbNav from '../../../components/BreadcrumbNav.astro';
+import AudioGuide from '../../../components/AudioGuide.astro';
 import '../../../styles/global.css';
 import { PALACES, getLang, getPalaceName, fetchBuildingDetail, type Lang } from '../../../lib/api';
 
@@ -16,6 +18,15 @@ const detail = await fetchBuildingDetail(palaceId, serialNumber, detailCode);
 if (!detail) return Astro.redirect(`/palace/${palaceId}?lang=${lang}`);
 
 const palaceName = getPalaceName(palace, lang);
+
+const palaceColors: Record<number, string> = {
+  1: 'var(--palace-gyeongbok)',
+  2: 'var(--palace-changdeok)',
+  3: 'var(--palace-changgyeong)',
+  4: 'var(--palace-deoksu)',
+  5: 'var(--palace-jongmyo)',
+};
+const accentColor = palaceColors[palaceId] || 'var(--dancheong-yellow)';
 
 function getName(lang: Lang) {
   const map: Record<Lang, string> = { kr: detail!.nameKr, en: detail!.nameEn, ja: detail!.nameJa, zh: detail!.nameZh };
@@ -42,79 +53,165 @@ const labels: Record<string, { photos: string; videos: string }> = {
   zh: { photos: '照片集', videos: '视频' },
 };
 ---
-<Layout title={title} description={description} image={detail.mainImage} lang={htmlLang}>
-  <style>
-    @import '../../../styles/global.css';
-  </style>
+<Layout title={title} description={description} lang={htmlLang}>
+  <style>@import '../../../styles/global.css';</style>
+
+  <!-- 시네마틱 빌딩 히어로 -->
+  {detail.mainImage && (
+    <section class="bld-hero">
+      <div class="bld-hero-bg">
+        <img src={detail.mainImage} alt={buildingName} fetchpriority="high" />
+      </div>
+      <div class="bld-hero-overlay"></div>
+      <div class="bld-hero-content">
+        <span class="bld-palace-name" style={`color: ${accentColor}`}>{palaceName}</span>
+        <h1 class="bld-title">{buildingName}</h1>
+      </div>
+    </section>
+  )}
 
   <div class="container">
-    <nav class="breadcrumb">
-      <a href={`/?lang=${lang}`}>Home</a> &rsaquo;
-      <a href={`/palace/${palaceId}?lang=${lang}`}>{palaceName}</a> &rsaquo;
-      {buildingName}
-    </nav>
+    <BreadcrumbNav items={[
+      { name: 'Home', url: '/' },
+      { name: palaceName, url: `/palace/${palaceId}` },
+      { name: buildingName },
+    ]} lang={lang} />
 
-    <div class="detail-header">
-      <h2>{buildingName}</h2>
-    </div>
+    <article class="bld-content">
+      <div class="description" set:html={explanation.replace(/\r\n/g, "<br/>").replace(/\n/g, "<br/>")} />
 
-    {detail.mainImage && (
-      <img class="detail-image" src={detail.mainImage} alt={buildingName} width="960" height="480" />
-    )}
+      <!-- 오디오 가이드 -->
+      <AudioGuide
+        asno={String(serialNumber)}
+        ctcd="11"
+        kdcd="11"
+        lang={lang}
+        name={buildingName}
+        explanation={JSON.stringify({
+          kr: detail.explanationKr,
+          en: detail.explanationEn,
+          ja: detail.explanationJa,
+          zh: detail.explanationZh,
+        })}
+      />
 
-    <div class="ad-container" style="margin:1.5rem 0;text-align:center;">
-      <ins class="adsbygoogle"
-           style="display:block;text-align:center"
-           data-ad-layout="in-article"
-           data-ad-format="fluid"
-           data-ad-client="ca-pub-5938862195544185"
-           data-ad-slot="4797390169"></ins>
-      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-    </div>
+      <div class="ad-container" style="margin:2rem 0;text-align:center;">
+        <ins class="adsbygoogle"
+             style="display:block;text-align:center"
+             data-ad-layout="in-article"
+             data-ad-format="fluid"
+             data-ad-client="ca-pub-5938862195544185"
+             data-ad-slot="4797390169"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+      </div>
 
-    <div class="description" set:html={explanation.replace(/\r\n/g, "<br/>").replace(/\n/g, "<br/>")} />
+      {detail.images.length > 0 && (
+        <>
+          <h3 class="section-title" style={`border-bottom-color: ${accentColor}`}>{labels[lang].photos}</h3>
+          <div class="gallery">
+            {detail.images.map((img) => (
+              <img src={img.url} alt={lang === 'en' ? img.descEn : img.descKr} loading="lazy" width="300" height="200" />
+            ))}
+          </div>
+        </>
+      )}
 
-    {detail.images.length > 0 && (
-      <>
-        <h3 class="section-title">{labels[lang].photos}</h3>
-        <div class="gallery">
-          {detail.images.map((img) => (
-            <img src={img.url} alt={lang === 'en' ? img.descEn : img.descKr} loading="lazy" width="300" height="200" />
-          ))}
-        </div>
-      </>
-    )}
+      {detail.videos.length > 0 && (
+        <>
+          <h3 class="section-title" style={`border-bottom-color: ${accentColor}`}>{labels[lang].videos}</h3>
+          <div class="video-grid">
+            {detail.videos.map((v) => (
+              <video controls preload="none" poster={detail.mainImage}>
+                <source src={getVideoUrl(v, lang)} type="video/mp4" />
+              </video>
+            ))}
+          </div>
+        </>
+      )}
 
-    {detail.videos.length > 0 && (
-      <>
-        <h3 class="section-title">{labels[lang].videos}</h3>
-        <div class="video-grid">
-          {detail.videos.map((v) => (
-            <video controls preload="none" poster={detail.mainImage}>
-              <source src={getVideoUrl(v, lang)} type="video/mp4" />
-            </video>
-          ))}
-        </div>
-      </>
-    )}
-
-    <div class="ad-container" style="margin:1.5rem 0;text-align:center;">
-      <ins class="adsbygoogle"
-           style="display:block;text-align:center"
-           data-ad-layout="in-article"
-           data-ad-format="fluid"
-           data-ad-client="ca-pub-5938862195544185"
-           data-ad-slot="4797390169"></ins>
-      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-    </div>
-
-    <script type="application/ld+json" set:html={JSON.stringify({
-      "@context": "https://schema.org",
-      "@type": "LandmarksOrHistoricalBuildings",
-      "name": buildingName,
-      "description": description,
-      "image": detail.mainImage,
-      "isPartOf": { "@type": "LandmarksOrHistoricalBuildings", "name": palaceName },
-    })} />
+      <div class="ad-container" style="margin:2rem 0;text-align:center;">
+        <ins class="adsbygoogle"
+             style="display:block;text-align:center"
+             data-ad-layout="in-article"
+             data-ad-format="fluid"
+             data-ad-client="ca-pub-5938862195544185"
+             data-ad-slot="4797390169"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+      </div>
+    </article>
   </div>
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "LandmarksOrHistoricalBuildings",
+    "name": buildingName,
+    "description": description,
+    "image": detail.mainImage,
+    "isPartOf": { "@type": "LandmarksOrHistoricalBuildings", "name": palaceName },
+  })} />
 </Layout>
+
+<style>
+  .bld-hero {
+    position: relative;
+    width: 100%;
+    height: 50vh;
+    min-height: 300px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    overflow: hidden;
+    background: var(--bg-night);
+  }
+  .bld-hero-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+  .bld-hero-bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.6) saturate(1.2);
+  }
+  .bld-hero-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: linear-gradient(180deg, rgba(8,5,16,0.1) 0%, rgba(8,5,16,0.7) 60%, var(--bg-night) 100%);
+  }
+  .bld-hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    padding: 0 24px 48px;
+    width: 100%;
+  }
+  .bld-palace-name {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    margin-bottom: 8px;
+    opacity: 0.8;
+  }
+  .bld-title {
+    font-family: 'Noto Serif KR', serif;
+    font-weight: 900;
+    font-size: clamp(1.8rem, 5vw, 2.8rem);
+    color: var(--dancheong-white);
+    text-shadow: 0 0 12px rgba(255,215,0,0.25);
+  }
+  .bld-content {
+    max-width: 800px;
+    margin: 0 auto;
+    padding-bottom: 60px;
+  }
+  .description {
+    font-size: 1rem;
+    line-height: 1.9;
+    margin-bottom: 32px;
+    white-space: pre-line;
+    color: var(--color-text);
+  }
+</style>

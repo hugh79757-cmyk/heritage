@@ -485,7 +485,15 @@ const landmarkData = JSON.stringify(mapLandmarks);
       attributionControl: false
     });
     map.addControl(new maplibregl.AttributionControl({ compact: true }), 'bottom-right');
-    map.on('load', () => { addMarkers(LANDMARKS); });
+    map.on('load', () => {
+      addMarkers(LANDMARKS);
+      // Show nearby list with all landmarks by default
+      userLat = SEOUL.lat;
+      userLng = SEOUL.lng;
+      currentRadius = 3;
+      document.getElementById('radiusControls').style.display = 'flex';
+      updateNearby();
+    });
     map.on('click', (e) => {
       setTimeout(() => {
         if (!markerClicked) closeSheet();

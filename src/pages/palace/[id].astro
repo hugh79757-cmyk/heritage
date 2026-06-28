@@ -1,5 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import BreadcrumbNav from '../../components/BreadcrumbNav.astro';
+import DancheongPatterns from '../../components/DancheongPatterns.astro';
 import '../../styles/global.css';
 import { PALACES, getLang, getPalaceName, fetchPalaceList, type Lang } from '../../lib/api';
 
@@ -13,6 +15,18 @@ if (!palace) return Astro.redirect('/');
 const buildings = await fetchPalaceList(palaceId);
 const palaceName = getPalaceName(palace, lang);
 
+const palaceColors: Record<number, string> = {
+  1: 'var(--palace-gyeongbok)',
+  2: 'var(--palace-changdeok)',
+  3: 'var(--palace-changgyeong)',
+  4: 'var(--palace-deoksu)',
+  5: 'var(--palace-jongmyo)',
+};
+const palaceHanja: Record<number, string> = {
+  1: '景福宮', 2: '昌德宮', 3: '昌慶宮', 4: '德壽宮', 5: '宗廟',
+};
+const accentColor = palaceColors[palaceId] || 'var(--dancheong-yellow)';
+
 function getBuildingName(b: typeof buildings[0], lang: Lang) {
   const map: Record<Lang, string> = { kr: b.nameKr, en: b.nameEn, ja: b.nameJa, zh: b.nameZh };
   return map[lang] || b.nameKr;
@@ -25,45 +39,62 @@ const countLabel: Record<string, string> = {
   zh: `${buildings.length}处建筑与遗址`,
 };
 
+const guideLabels: Record<string, string> = {
+  kr: '가이드 보기',
+  en: 'View Guide',
+  ja: 'ガイドを見る',
+  zh: '查看指南',
+};
+
 const title = `${palaceName} — K-Heritage Guide`;
 const description = `${palaceName} ${countLabel[lang]}`;
 ---
-<Layout title={title} description={description} image={palace.image} lang={htmlLang}>
-  <style>
-    @import '../../styles/global.css';
-  </style>
+<Layout title={title} description={description} lang={htmlLang}>
+  <style>@import '../../styles/global.css';</style>
+  <DancheongPatterns />
+
+  <!-- 시네마틱 히어로 -->
+  <section class="palace-hero">
+    <div class="palace-hero-bg">
+      <img src={palace.heroImage || palace.image} alt={palaceName} fetchpriority="high" />
+    </div>
+    <div class="palace-hero-overlay" style={`background: linear-gradient(180deg, rgba(8,5,16,0.2) 0%, rgba(8,5,16,0.7) 60%, var(--bg-night) 100%)`}></div>
+    <div class="palace-hero-content">
+      <span class="palace-hanja" style={`color: ${accentColor}`}>{palaceHanja[palaceId] || ''}</span>
+      <h1 class="palace-title">{palaceName}</h1>
+      <p class="palace-count">{countLabel[lang]}</p>
+      <a href={`/guide/${palaceId === 1 ? 'gyeongbokgung' : palaceId === 2 ? 'changdeokgung' : palaceId === 3 ? 'changgyeonggung' : palaceId === 4 ? 'deoksugung' : 'jongmyo'}?lang=${lang}`} class="btn btn-primary" style={`background: ${accentColor}`}>
+        {guideLabels[lang]} &rarr;
+      </a>
+    </div>
+  </section>
 
   <div class="container">
-    <nav class="breadcrumb">
-      <a href={`/?lang=${lang}`}>Home</a> &rsaquo; {palaceName}
-    </nav>
+    <BreadcrumbNav items={[{ name: 'Home', url: '/' }, { name: palaceName }]} lang={lang} />
 
-    <div class="detail-header">
-      <h2>{palaceName}</h2>
-      <p style="color:var(--color-text-light);">{countLabel[lang]}</p>
-    </div>
+    <!-- 건물 목록 -->
+    <section class="building-section">
+      <div class="section-header" style="padding-top:0;">
+        <h2>{lang === 'kr' ? '건축물 목록' : lang === 'ja' ? '建築物一覧' : lang === 'zh' ? '建筑列表' : 'Buildings'}</h2>
+      </div>
 
-    <ul class="building-list">
-      {buildings.map((b) => (
-        <li>
-          <a href={`/palace/${palaceId}/${b.detailCode}?sn=${b.serialNumber}&lang=${lang}`}>
-            {b.imageUrl && (
-              <img
-                src={b.imageUrl}
-                alt={getBuildingName(b, lang)}
-                loading="lazy"
-                width="90"
-                height="65"
-              />
-            )}
-            <div class="info">
-              <h3>{getBuildingName(b, lang)}</h3>
-              <p>{b.explanationKr.replace(/<br\s*\/?>/g, ' ').slice(0, 80)}…</p>
-            </div>
-          </a>
-        </li>
-      ))}
-    </ul>
+      <ul class="building-list">
+        {buildings.map((b) => (
+          <li style={`--bld-accent: ${accentColor}`}>
+            <a href={`/palace/${palaceId}/${b.detailCode}?sn=${b.serialNumber}&lang=${lang}`}>
+              {b.imageUrl && (
+                <img src={b.imageUrl} alt={getBuildingName(b, lang)} loading="lazy" width="90" height="65" />
+              )}
+              <div class="info">
+                <h3>{getBuildingName(b, lang)}</h3>
+                <p>{b.explanationKr.replace(/<br\s*\/?>/g, ' ').slice(0, 80)}…</p>
+              </div>
+              <span class="bld-arrow">&rsaquo;</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
   </div>
 
   <script>
@@ -106,3 +137,116 @@ const description = `${palaceName} ${countLabel[lang]}`;
     "availableLanguage": ["ko", "en", "ja", "zh"]
   })} />
 </Layout>
+
+<style>
+  .palace-hero {
+    position: relative;
+    width: 100%;
+    height: 60vh;
+    min-height: 400px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    overflow: hidden;
+    background: var(--bg-night);
+  }
+  .palace-hero-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+  .palace-hero-bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.65) saturate(1.2);
+  }
+  .palace-hero-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+  }
+  .palace-hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    padding: 0 24px 60px;
+    width: 100%;
+  }
+  .palace-hanja {
+    display: block;
+    font-family: 'Noto Serif KR', serif;
+    font-size: clamp(1rem, 3vw, 1.4rem);
+    letter-spacing: 0.15em;
+    opacity: 0.7;
+    margin-bottom: 8px;
+  }
+  .palace-title {
+    font-family: 'Noto Serif KR', serif;
+    font-weight: 900;
+    font-size: clamp(2rem, 6vw, 3.2rem);
+    color: var(--dancheong-white);
+    margin-bottom: 8px;
+    text-shadow: 0 0 12px rgba(255,215,0,0.3);
+  }
+  .palace-count {
+    font-size: 1rem;
+    color: var(--color-text-light);
+    margin-bottom: 24px;
+  }
+
+  .building-section { padding: 0 0 60px; }
+  .building-list { list-style: none; margin-top: 16px; }
+  .building-list li {
+    border-bottom: 1px solid var(--color-border);
+    transition: background 0.2s;
+  }
+  .building-list li:hover {
+    background: color-mix(in srgb, var(--bld-accent, var(--dancheong-yellow)) 4%, transparent);
+  }
+  .building-list a {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 8px;
+    text-decoration: none;
+    color: inherit;
+    border-radius: var(--radius-sm);
+    transition: background 0.2s;
+  }
+  .building-list img {
+    width: 90px;
+    height: 65px;
+    object-fit: cover;
+    border-radius: var(--radius-sm);
+    flex-shrink: 0;
+    filter: brightness(0.85);
+    transition: filter 0.3s;
+  }
+  .building-list li:hover img {
+    filter: brightness(1) saturate(1.2);
+  }
+  .building-list .info { flex: 1; min-width: 0; }
+  .building-list .info h3 {
+    font-size: 1rem;
+    margin-bottom: 2px;
+    color: var(--color-text);
+    font-weight: 600;
+  }
+  .building-list .info p {
+    font-size: 0.85rem;
+    color: var(--color-text-light);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .bld-arrow {
+    font-size: 1.2rem;
+    color: var(--color-text-muted);
+    flex-shrink: 0;
+    transition: color 0.2s;
+  }
+  .building-list li:hover .bld-arrow {
+    color: var(--bld-accent, var(--dancheong-yellow));
+  }
+</style>

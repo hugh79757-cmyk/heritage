@@ -1,0 +1,162 @@
+---
+import GuideLayout from '../../components/GuideLayout.astro';
+import BreadcrumbNav from '../../components/BreadcrumbNav.astro';
+import FAQSection from '../../components/FAQSection.astro';
+import '../../styles/global.css';
+import { fetchPalaceList, getLang } from '../../lib/api';
+
+const lang = getLang(Astro.url);
+const htmlLang = lang === 'kr' ? 'ko' : lang;
+const buildings = await fetchPalaceList(4);
+
+const title = 'Deoksugung Palace Complete Guide 2026 | K-Heritage';
+const description = 'Complete guide to Deoksugung Palace: ticket prices, opening hours, Seokjojeon Hall, stone wall road, Emperor Gojong history, and visitor tips for 2026.';
+
+const faqByLang: Record<string, { question: string; answer: string }[]> = {
+  kr: [
+    { question: "이 내용은 아직 준비 중입니다", answer: "영어 버전을 참조해주세요." },
+  ],
+  en: [
+  { question: 'What are Deoksugung Palace opening hours?', answer: '09:00–21:00 (summer, Mar–Oct). 09:00–20:00 (winter, Nov–Feb). Closed Mondays. The palace is uniquely open until 9 PM, making it ideal for evening visits.' },
+  { question: 'How much is the Deoksugung ticket?', answer: 'Adults: ₩1,000. Youth (7–18): ₩500. Free for children under 7 and seniors 65+. One of the cheapest palace admissions in Seoul.' },
+  { question: 'What is the Deoksugung Stone Wall Road?', answer: 'The Deoksugung Stone Wall Road (덕수궁 돌담길) is a picturesque 900-meter path along the palace\'s western wall, one of the most romantic walking routes in Seoul, especially beautiful at sunset.' },
+  { question: 'Can I visit Deoksugung at night?', answer: 'Yes, Deoksugung is the only palace open until 9 PM. The illuminated palace and stone wall road at dusk create a magical atmosphere. Thursday evenings sometimes feature free guided tours.' },
+],
+};
+const faqItems = faqByLang[lang] || faqByLang.en;
+
+const h: Record<string, any> = {
+  en: {
+    h1: 'Deoksugung Palace Complete Guide 2026',
+    intro: 'Deoksugung Palace (덕수궁) is unique among Seoul\'s palaces — it\'s the only one where traditional Korean architecture coexists with Western-style buildings. Originally a royal residence during the Joseon dynasty, it became the imperial palace of Emperor Gojong in 1897. The palace is famous for its 900-meter stone wall road, the neoclassical Seokjojeon Hall, and extended evening hours until 9 PM.',
+    h2_1: 'Ticket Prices & Admission',
+    h2_2: 'Opening Hours — Open Until 9 PM',
+    h2_3: 'How to Get There',
+    h2_4: 'Must-See Buildings & Highlights',
+    h2_5: 'The Stone Wall Road (돌담길)',
+    h2_6: 'Visitor Tips',
+    buildings_text: 'Deoksugung uniquely blends East and West. Seokjojeon (석조전), a Western-style granite building, served as the state council hall. Junghwajeon (중화전) is the traditional throne hall. Jeukjodang (즉조당) is where Emperor Gojong proclaimed the Korean Empire. The modern National Museum of Modern and Contemporary Art (MMCA) branch is also within the palace grounds.',
+    cta: 'Explore all buildings at Deoksugung →',
+  },
+  kr: {
+    h1: '덕수궁 완전 가이드 2026',
+    intro: '덕수궁(德壽宮)은 서울 궁궐 중 유일하게 전통 건축과 근대 서양 건축이 공존하는 궁궐입니다. 1897년 고종황제의 황제궁이 되었으며, 900m 돌담길과 석조전으로 유명합니다. 밤 9시까지 개방하는 서울 유일의 야간 관람 궁궐입니다.',
+    h2_1: '관람권 및 입장료',
+    h2_2: '개방시간 — 밤 9시까지',
+    h2_3: '교통 안내',
+    h2_4: '주요 건축물 및 하이라이트',
+    h2_5: '돌담길',
+    h2_6: '관람 팁',
+    buildings_text: '덕수궁은 동서양 건축의 조화가 특징입니다. 석조전(石造殿)은 서양식 화강암 건물로 대한제국 시대 국정 회의장이었으며, 중화전(中和殿)은 전통 정전, 즉조당(卽祚堂)은 고종황제가 대한제국을 선포한 곳입니다.',
+    cta: '덕수궁 건물 전체 보기 →',
+  },
+  ja: {
+    h1: '徳寿宮 完全ガイド 2026',
+    intro: '徳寿宮（덕수궁）はソウルの宮殿の中で唯一、伝統建築と近代西洋建築が共存する宮殿です。1897年に高宗皇帝の皇帝宮となり、900mの石垣道と石造殿で知られています。夜9時まで開館するソウル唯一の夜間観覧宮殿です。',
+    h2_1: 'チケット料金',
+    h2_2: '営業時間 — 夜9時まで',
+    h2_3: 'アクセス方法',
+    h2_4: '見どころ建築物',
+    h2_5: '石垣道',
+    h2_6: '観光ヒント',
+    buildings_text: '徳寿宮は東西建築の調和が特徴。石造殿は西洋式花崗岩建築で大韓帝国時代の会議場、中和殿は伝統的な正殿、即祚堂は高宗皇帝が大韓帝国を宣言した場所です。',
+    cta: '徳寿宮の全建築物を見る →',
+  },
+  zh: {
+    h1: '德寿宫完全指南 2026',
+    intro: '德寿宫（덕수궁）是首尔宫殿中唯一传统建筑与近代西方建筑共存的宫殿。1897年成为高宗皇帝的皇帝宫，以900米石墙路和石造殿闻名。是首尔唯一开放至晚上9点的夜间参观宫殿。',
+    h2_1: '门票价格',
+    h2_2: '开放时间 — 至晚上9点',
+    h2_3: '交通指南',
+    h2_4: '必看建筑与亮点',
+    h2_5: '石墙路',
+    h2_6: '游客贴士',
+    buildings_text: '德寿宫融合东西方建筑特色。石造殿是西式花岗岩建筑，曾是大韩帝国时期的国务会议厅；中和殿是传统正殿；即조堂是高宗皇帝宣布大韩帝国成立的地方。',
+    cta: '查看德寿宫全部建筑 →',
+  },
+};
+
+const t = h[lang] || h.en;
+
+function getBldName(b: typeof buildings[0]) {
+  const map: Record<string, string> = { kr: b.nameKr, en: b.nameEn, ja: b.nameJa, zh: b.nameZh };
+  return map[lang] || b.nameEn;
+}
+---
+<GuideLayout title={title} description={description} lang={htmlLang}>
+  <style>@import '../../styles/global.css';</style>
+  <div class="container">
+    <BreadcrumbNav items={[{ name: 'Home', url: '/' }, { name: 'Guide', url: '/guide' }, { name: 'Deoksugung' }]} lang={lang} />
+    <article class="guide-content">
+      <h1>{t.h1}</h1>
+      <p class="guide-meta">Updated: June 2026 &middot; Korea Heritage Service official data</p>
+      <img class="guide-hero-img" src="https://www.heritage.go.kr/gung/gogung4/images/mode_general_00_01.jpg" alt="Deoksugung Palace Seokjojeon" width="960" height="400" />
+      <p class="guide-intro">{t.intro}</p>
+
+      <h2>{t.h2_1}</h2>
+      <div class="info-box"><p>Adults: ₩1,000 &middot; Youth (7–18): ₩500 &middot; Children under 7 & Seniors 65+: Free<br/>The cheapest palace admission in Seoul — exceptional value for the experience.</p></div>
+
+      <h2>{t.h2_2}</h2>
+      <div class="info-box"><p><strong>Mar–Oct:</strong> 09:00–21:00 (last entry 20:00)<br/><strong>Nov–Feb:</strong> 09:00–20:00 (last entry 19:00)<br/><strong>Closed:</strong> Every Monday (not Tuesday like other palaces!)</p></div>
+      <p>Deoksugung is the only Seoul palace open until 9 PM, making it perfect for evening visits. The palace illuminated at night, combined with the stone wall road at sunset, creates an unforgettable atmosphere.</p>
+
+      <h2>{t.h2_3}</h2>
+      <p><strong>Subway:</strong> Line 1/2 City Hall Station (Exit 12) — 2 min walk. Line 3 Gwanghwamun Station (Exit 7) — 5 min walk.</p>
+      <p><strong>Bus:</strong> Routes 100, 401, 402, 600 stop at City Hall.</p>
+
+      <h2>{t.h2_4}</h2>
+      <p>{t.buildings_text}</p>
+      <div class="building-highlights">
+        {buildings.slice(0, 6).map(b => (
+          <a href={`/palace/4/${b.detailCode}?sn=${b.serialNumber}&lang=${lang}`} class="building-highlight-card">
+            {b.imageUrl && <img src={b.imageUrl} alt={getBldName(b)} loading="lazy" width="120" height="80" />}
+            <div><h4>{getBldName(b)}</h4><p>{b.explanationKr.replace(/<br\s*\/?>/g, ' ').slice(0, 60)}...</p></div>
+          </a>
+        ))}
+      </div>
+      <div class="cta-box"><a href={`/palace/4?lang=${lang}`}>{t.cta}</a></div>
+
+      <h2>{t.h2_5}</h2>
+      <p>The Deoksugung Stone Wall Road (덕수궁 돌담길) stretches 900 meters along the palace's western perimeter. Lined with trees and period street lamps, it's one of Seoul's most beloved walking routes. At sunset, the warm light filtering through the trees creates a romantic atmosphere that has made this path a favorite for couples and photographers alike.</p>
+      <p>The path connects from City Hall Station toward Gwanghwamun, passing the National Museum of Modern and Contemporary Art (MMCA Deoksugung) along the way.</p>
+
+      <h2>{t.h2_6}</h2>
+      <div class="info-box tip-box">
+        <ul>
+          <li>Visit at sunset to experience both daytime and illuminated evening views</li>
+          <li>Thursday evenings often feature free guided tours — check the official website</li>
+          <li>The MMCA branch inside the palace grounds is included with palace admission</li>
+          <li>The stone wall road is especially photogenic in autumn when leaves change color</li>
+          <li>Free admission with hanbok — rental shops are available near City Hall Station</li>
+        </ul>
+      </div>
+
+      <FAQSection items={faqByLang} lang={lang} />
+    </article>
+  </div>
+</GuideLayout>
+
+<style>
+  .guide-content{padding:80px 0 60px;max-width:800px;margin:0 auto}
+  .guide-content h1{font-family:'Noto Serif KR',serif;font-size:clamp(1.8rem,4vw,2.6rem);font-weight:700;margin-bottom:12px;line-height:1.3}
+  .guide-meta{font-size:0.85rem;color:var(--color-text-muted,#9A8B7F);margin-bottom:24px}
+  .guide-hero-img{width:100%;max-height:400px;object-fit:cover;border-radius:16px;margin-bottom:32px}
+  .guide-intro{font-size:1.1rem;line-height:1.8;margin-bottom:32px;color:var(--color-text-light,#6B5B4F)}
+  .guide-content h2{font-family:'Noto Serif KR',serif;font-size:1.4rem;font-weight:700;margin-top:48px;margin-bottom:16px;padding-bottom:10px;border-bottom:2px solid var(--color-accent,#D4A574)}
+  .guide-content p{font-size:1rem;line-height:1.9;margin-bottom:16px}
+  .info-box{background:var(--color-card,#fff);border:1px solid var(--color-border,#E8DDD4);border-radius:12px;padding:20px;margin:16px 0 24px}
+  html.dark .info-box{background:var(--color-card,#1C1916);border-color:var(--color-border,#2D2720)}
+  .tip-box{border-left:4px solid var(--color-primary,#C8956C)}
+  .info-box ul{margin-top:8px;padding-left:20px}.info-box li{margin-bottom:6px;line-height:1.6;font-size:0.95rem}
+  .building-highlights{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;margin:20px 0 24px}
+  .building-highlight-card{display:flex;align-items:center;gap:12px;padding:12px;background:var(--color-card,#fff);border:1px solid var(--color-border,#E8DDD4);border-radius:10px;text-decoration:none;color:inherit;transition:border-color 0.2s}
+  html.dark .building-highlight-card{background:var(--color-card,#1C1916);border-color:var(--color-border,#2D2720)}
+  .building-highlight-card:hover{border-color:var(--color-primary,#C8956C)}
+  .building-highlight-card img{width:80px;height:56px;object-fit:cover;border-radius:8px;flex-shrink:0}
+  .building-highlight-card h4{font-size:0.9rem;font-weight:600;margin-bottom:4px;color:var(--color-text,#1A1210)}
+  .building-highlight-card p{font-size:0.78rem;color:var(--color-text-muted,#9A8B7F);margin:0;line-height:1.4}
+  .cta-box{text-align:center;margin:32px 0}
+  .cta-box a{display:inline-block;padding:14px 32px;background:var(--color-primary,#C8956C);color:#fff;border-radius:12px;font-weight:600;font-size:1rem;text-decoration:none;transition:background 0.3s,transform 0.2s}
+  .cta-box a:hover{background:var(--color-primary-dark,#8B5E3C);transform:translateY(-2px)}
+  @media(max-width:640px){.building-highlights{grid-template-columns:1fr}}
+</style>

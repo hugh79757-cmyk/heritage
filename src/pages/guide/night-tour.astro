@@ -1,0 +1,157 @@
+---
+import GuideLayout from '../../components/GuideLayout.astro';
+import BreadcrumbNav from '../../components/BreadcrumbNav.astro';
+import FAQSection from '../../components/FAQSection.astro';
+import '../../styles/global.css';
+import { getLang } from '../../lib/api';
+
+const lang = getLang(Astro.url);
+const htmlLang = lang === 'kr' ? 'ko' : lang;
+
+const title = 'Seoul Palace Night Tour Guide 2026 | K-Heritage';
+const description = 'Complete guide to Seoul palace night tours (야간개장): Gyeongbokgung, Changdeokgung, Changgyeonggung night tour schedules, reservation tips, and what to expect in 2026.';
+
+const faqByLang: Record<string, { question: string; answer: string }[]> = {
+  kr: [
+    { question: "이 내용은 아직 준비 중입니다", answer: "영어 버전을 참조해주세요." },
+  ],
+  en: [
+  { question: 'Which palaces offer night tours?', answer: 'Three palaces host special night tours: Gyeongbokgung, Changdeokgung, and Changgyeonggung. Deoksugung is regularly open until 9 PM and doesn\'t need a separate night tour event.' },
+  { question: 'How do I reserve night tour tickets?', answer: 'Reserve through the Korea Heritage Service website (heritage.go.kr). Tickets are released 2-3 weeks before each event and sell out within hours. Set alerts and book immediately when released.' },
+  { question: 'How much are night tour tickets?', answer: 'Night tour tickets are typically ₩3,000 for adults and ₩1,500 for youth, the same as regular admission. Some special events may have different pricing.' },
+  { question: 'When do night tours happen?', answer: 'Night tours are held during spring (April–May) and autumn (September–November). Exact dates are announced 2-3 weeks in advance. Each palace typically hosts 2-4 events per season.' },
+  { question: 'What should I bring to a night tour?', answer: 'Bring a light jacket (evenings are cool), comfortable shoes, and a fully charged phone for photos. Flash photography may be restricted. Tripods are usually not allowed.' },
+  { question: 'Is the night tour worth it?', answer: 'Absolutely. The illuminated palaces at night create a magical atmosphere completely different from daytime visits. The Changgyeonggung Moonlight Tour is particularly famous for its lantern-lit paths through the garden.' },
+],
+};
+const faqItems = faqByLang[lang] || faqByLang.en;
+
+const h: Record<string, any> = {
+  en: {
+    h1: 'Seoul Palace Night Tour Guide 2026',
+    intro: 'Seoul palace night tours (야간개장) offer a magical experience — walking through illuminated royal palaces under the stars. These limited-time events, held during spring and autumn, transform the familiar palace grounds into an enchanting nighttime wonderland. Each event is unique, with special lighting, performances, and cultural programs.',
+    h2_1: 'Night Tour Overview',
+    h2_2: 'Gyeongbokgung Night Tour',
+    h2_3: 'Changdeokgung Night Tour',
+    h2_4: 'Changgyeonggung Moonlight Tour (달빛기행)',
+    h2_5: 'Deoksugung — Open Until 9 PM',
+    h2_6: 'Reservation Tips',
+    h2_7: 'What to Expect',
+    cta: 'Explore palace details →',
+  },
+  kr: {
+    h1: '궁궐 야간개장 완전 가이드 2026',
+    intro: '궁궐 야간개장은 조명이 켜진 궁궐을 밤하늘 아래 걸어보는 특별한 경험을 선사합니다. 봄과 가을에 한정된 기간 동안 열리는 이 이벤트는 낮과는 완전히 다른 궁궐의 모습을 보여줍니다.',
+    h2_1: '야간개장 개요',
+    h2_2: '경복궁 야간개장',
+    h2_3: '창덕궁 야간개장',
+    h2_4: '창경궁 달빛기행',
+    h2_5: '덕수궁 — 밤 9시까지 개방',
+    h2_6: '예약 팁',
+    h2_7: '현장 안내',
+    cta: '궁궐 상세 보기 →',
+  },
+  ja: {
+    h1: 'ソウル宮殿 夜間営業ガイド 2026',
+    intro: '宮殿の夜間営業は、星空の下で照明された宮殿を散策する魔法のような体験を提供します。春と秋に開催されるこの期間限定イベントは、昼間とは全く異なる宮殿の姿を見せます。',
+    h2_1: '夜間営業概要',
+    h2_2: '景福宮 夜間営業',
+    h2_3: '昌德宮 夜間営業',
+    h2_4: '昌慶宮 月光ツアー',
+    h2_5: '徳寿宮 — 夜9時まで営業',
+    h2_6: '予約ヒント',
+    h2_7: '現地ガイド',
+    cta: '宮殿の詳細を見る →',
+  },
+  zh: {
+    h1: '首尔宫殿夜间开放指南 2026',
+    intro: '宫殿夜间开放（야간개장）提供在星空下漫步灯火辉煌宫殿的奇妙体验。这些春秋季节限时举办的活动，展现了宫殿与白天完全不同的面貌。',
+    h2_1: '夜间开放概况',
+    h2_2: '景福宫夜间开放',
+    h2_3: '昌德宫夜间开放',
+    h2_4: '昌庆宫月光之旅',
+    h2_5: '德寿宫 — 开放至晚上9点',
+    h2_6: '预约技巧',
+    h2_7: '现场指南',
+    cta: '查看宫殿详情 →',
+  },
+};
+
+const t = h[lang] || h.en;
+---
+<GuideLayout title={title} description={description} lang={htmlLang}>
+  <style>@import '../../styles/global.css';</style>
+  <div class="container">
+    <BreadcrumbNav items={[{ name: 'Home', url: '/' }, { name: 'Guide', url: '/guide' }, { name: 'Night Tour' }]} lang={lang} />
+    <article class="guide-content">
+      <h1>{t.h1}</h1>
+      <p class="guide-meta">Updated: June 2026 &middot; Korea Heritage Service official data</p>
+      <p class="guide-intro">{t.intro}</p>
+
+      <h2>{t.h2_1}</h2>
+      <div class="info-box">
+        <p><strong>Season:</strong> Spring (April–May) and Autumn (September–November)<br/>
+        <strong>Tickets:</strong> ₩3,000 adults / ₩1,500 youth<br/>
+        <strong>Booking:</strong> heritage.go.kr, 2-3 weeks before each event<br/>
+        <strong>Availability:</strong> Extremely limited — sells out in hours</p>
+      </div>
+
+      <h2>{t.h2_2}</h2>
+      <p>Gyeongbokgung's night tour is one of the most popular cultural events in Seoul. The tour follows a special route through the main palace buildings, with Geunjeongjeon and Gyeonghoeru Pavilion illuminated against the night sky. Special traditional music performances are often held at Gyeonghoeru.</p>
+      <p><strong>Duration:</strong> Approximately 70 minutes. <strong>Capacity:</strong> ~3,000 per event. <strong>Sessions:</strong> Usually 2 time slots per event night (7:00 PM and 8:30 PM).</p>
+
+      <h2>{t.h2_3}</h2>
+      <p>Changdeokgung's night tour focuses on the harmonious integration of architecture and nature. The illuminated palace buildings reflect beautifully in the ponds and streams. The Secret Garden may be included in some special night events — a rare opportunity to see this UNESCO site after dark.</p>
+
+      <h2>{t.h2_4}</h2>
+      <p>The Changgyeonggung Moonlight Tour (달빛기행) is perhaps the most atmospheric of all night tours. Visitors walk through the palace grounds by lantern light, passing through Changgyeongwon Garden where the reflections of moonlit pavilions on the pond create an unforgettable scene.</p>
+      <p><strong>Duration:</strong> Approximately 90 minutes. <strong>Capacity:</strong> Limited to ~500 per session — the most exclusive of all night tours.</p>
+
+      <h2>{t.h2_5}</h2>
+      <p>Deoksugung doesn't need a special night tour — it's <strong>open until 9 PM every day</strong> during summer (March–October). The palace illuminated at dusk, combined with the famous Stone Wall Road at sunset, creates a magical evening experience. Visit on any summer evening for a taste of nighttime palace magic.</p>
+
+      <h2>{t.h2_6}</h2>
+      <div class="info-box tip-box">
+        <ul>
+          <li><strong>Book immediately</strong> when tickets are released — set a phone alarm for heritage.go.kr</li>
+          <li>Weekday night tours sell out slower than weekends</li>
+          <li>If you miss online booking, check for same-day availability at the palace entrance (limited)</li>
+          <li>Buy the integrated ticket (₩10,000) for regular daytime visits, then book night tours separately</li>
+          <li>Changgyeonggung's Moonlight Tour is the hardest to get — try multiple dates</li>
+        </ul>
+      </div>
+
+      <h2>{t.h2_7}</h2>
+      <div class="info-box">
+        <ul>
+          <li><strong>What to wear:</strong> Comfortable walking shoes, light layers (evenings can be cool)</li>
+          <li><strong>Photography:</strong> Allowed in most areas, but no flash or tripods</li>
+          <li><strong>Food:</strong> Not available inside — eat before arriving</li>
+          <li><strong>Getting there:</strong> Use public transport — parking is extremely limited</li>
+          <li><strong>Accessibility:</strong> Some paths may be uneven; wheelchair accessibility varies by palace</li>
+        </ul>
+      </div>
+
+      <div class="cta-box"><a href={`/?lang=${lang}`}>{t.cta}</a></div>
+
+      <FAQSection items={faqByLang} lang={lang} />
+    </article>
+  </div>
+</GuideLayout>
+
+<style>
+  .guide-content{padding:80px 0 60px;max-width:800px;margin:0 auto}
+  .guide-content h1{font-family:'Noto Serif KR',serif;font-size:clamp(1.8rem,4vw,2.6rem);font-weight:700;margin-bottom:12px;line-height:1.3}
+  .guide-meta{font-size:0.85rem;color:var(--color-text-muted,#9A8B7F);margin-bottom:24px}
+  .guide-intro{font-size:1.1rem;line-height:1.8;margin-bottom:32px;color:var(--color-text-light,#6B5B4F)}
+  .guide-content h2{font-family:'Noto Serif KR',serif;font-size:1.4rem;font-weight:700;margin-top:48px;margin-bottom:16px;padding-bottom:10px;border-bottom:2px solid var(--color-accent,#D4A574)}
+  .guide-content p{font-size:1rem;line-height:1.9;margin-bottom:16px}
+  .guide-content ul{margin:12px 0 20px;padding-left:24px}.guide-content li{margin-bottom:8px;line-height:1.7;font-size:0.95rem}
+  .info-box{background:var(--color-card,#fff);border:1px solid var(--color-border,#E8DDD4);border-radius:12px;padding:20px;margin:16px 0 24px}
+  html.dark .info-box{background:var(--color-card,#1C1916);border-color:var(--color-border,#2D2720)}
+  .tip-box{border-left:4px solid var(--color-primary,#C8956C)}
+  .info-box ul{margin-top:8px;padding-left:20px}.info-box li{margin-bottom:6px;line-height:1.6;font-size:0.95rem}
+  .cta-box{text-align:center;margin:32px 0}
+  .cta-box a{display:inline-block;padding:14px 32px;background:var(--color-primary,#C8956C);color:#fff;border-radius:12px;font-weight:600;font-size:1rem;text-decoration:none;transition:background 0.3s,transform 0.2s}
+  .cta-box a:hover{background:var(--color-primary-dark,#8B5E3C);transform:translateY(-2px)}
+</style>

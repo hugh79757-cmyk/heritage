@@ -1,0 +1,162 @@
+---
+import GuideLayout from '../../components/GuideLayout.astro';
+import BreadcrumbNav from '../../components/BreadcrumbNav.astro';
+import FAQSection from '../../components/FAQSection.astro';
+import '../../styles/global.css';
+import { fetchPalaceList, getLang } from '../../lib/api';
+
+const lang = getLang(Astro.url);
+const htmlLang = lang === 'kr' ? 'ko' : lang;
+const buildings = await fetchPalaceList(3);
+
+const title = 'Changgyeonggung Palace Complete Guide 2026 | K-Heritage';
+const description = 'Complete guide to Changgyeonggung Palace: ticket prices, opening hours, night tours, must-see buildings including Daemyeongjeon and Changgyeongwon Garden.';
+
+const faqByLang: Record<string, { question: string; answer: string }[]> = {
+  kr: [
+    { question: '창경궁 관람 시간은?', answer: '3~10월: 09:00~18:00. 11~2월: 09:00~17:00. 매주 화요일 휴관. 입장 마감은 폐관 1시간 전.' },
+    { question: '창경궁 입장료는?', answer: '성인 ₩3,000, 청소년 ₩1,500. 7세 이하·65세 이상 무료. 통합관람권 사용 가능.' },
+    { question: '창경궁 야간개장이 있나요?', answer: '봄과 가을에 달빛기행 야간개장이 개최됩니다. heritage.go.kr에서 사전 예약 필수.' },
+    { question: '방문 시간은?', answer: '궁궐만 약 1~1.5시간. 창경원 포함 시 약 2시간.' },
+  ],
+  en: [
+  { question: 'What are Changgyeonggung opening hours?', answer: 'March–October: 09:00–18:00. November–February: 09:00–17:00. Closed every Tuesday. Last admission one hour before closing.' },
+  { question: 'How much is the Changgyeonggung ticket?', answer: 'Adults: ₩3,000. Youth (7–18): ₩1,500. Free for children under 7 and seniors 65+. The integrated palace ticket covers admission.' },
+  { question: 'Does Changgyeonggung have a night tour?', answer: 'Yes, Changgyeonggung hosts "Moonlight Tour" (달빛기행) events in spring and autumn. These are among the most popular night tours in Seoul. Reserve through heritage.go.kr.' },
+  { question: 'What is Changgyeongwon Garden?', answer: 'Changgyeongwon is a traditional Korean garden within the palace grounds, featuring a pond, walking paths, and the historic Hongnyangdang Pavilion. It was originally created as a royal garden for the queens and concubines.' },
+  ],
+};
+const faqItems = faqByLang[lang] || faqByLang.en;
+
+const h: Record<string, any> = {
+  en: {
+    h1: 'Changgyeonggung Palace Complete Guide 2026',
+    intro: 'Changgyeonggung Palace (창경궁) was built in 1418 as a secondary palace for the Joseon dynasty. Unlike other palaces designed primarily for state affairs, Changgyeonggung served as a residential palace where kings and queens lived their daily lives. The palace is renowned for Changgyeongwon Garden, one of the finest traditional Korean gardens, and hosts the famous "Moonlight Tour" night events.',
+    h2_1: 'Ticket Prices & Admission',
+    h2_2: 'Opening Hours',
+    h2_3: 'How to Get There',
+    h2_4: 'Must-See Buildings & Highlights',
+    h2_5: 'Night Tour — Moonlight Tour (달빛기행)',
+    h2_6: 'Visitor Tips',
+    buildings_text: 'Changgyeonggung features Daemyeongjeon (대명전), the largest building and former living quarters of the queen. Honghwangjeon served as the king\'s office. Okcheongyo Bridge, the oldest stone bridge in Seoul, spans the stream at the palace entrance. Changgyeongwon Garden offers peaceful walking paths around a central pond.',
+    cta: 'Explore all buildings at Changgyeonggung →',
+  },
+  kr: {
+    h1: '창경궁 완전 가이드 2026',
+    intro: '창경궁(昌慶宮)은 1418년 건립된 조선 왕조의 이궁으로, 국사 처리보다는 왕과 왕비의 일상 생활이 이루어진 생활 궁궐입니다. 아름다운 창경원과 달빛기행으로 유명합니다.',
+    h2_1: '관람권 및 입장료',
+    h2_2: '개방시간',
+    h2_3: '교통 안내',
+    h2_4: '주요 건축물 및 하이라이트',
+    h2_5: '야간개장 — 달빛기행',
+    h2_6: '관람 팁',
+    buildings_text: '창경궁의 대명전(大明전)은 가장 큰 건물로 왕비의 거처였으며, 홍화전은 왕의 집무실이었습니다. 옥정교는 서울에서 가장 오른 돌다리입니다. 창경원은 중앙 연못을 중심으로 한 평화로운 산책로를 제공합니다.',
+    cta: '창경궁 건물 전체 보기 →',
+  },
+  ja: {
+    h1: '昌慶宮 完全ガイド 2026',
+    intro: '昌慶宮（창경궁）は1418年に築かれた朝鮮王朝の離宮で、国政処理ではなく王と王妃の日常生活が行われた生活宮殿です。美しい昌慶苑と月光ツアーで知られています。',
+    h2_1: 'チケット料金',
+    h2_2: '営業時間',
+    h2_3: 'アクセス方法',
+    h2_4: '見どころ建築物',
+    h2_5: '夜間営業 — 月光ツアー',
+    h2_6: '観光ヒント',
+    buildings_text: '昌慶宮の大明殿は最大の建物で王妃の居住所、洪化殿は王の執務室でした。玉晴橋はソウルで最も古い石橋。昌慶苑は中央の池を囲む静かな散歩道を提供します。',
+    cta: '昌慶宮の全建築物を見る →',
+  },
+  zh: {
+    h1: '昌庆宫完全指南 2026',
+    intro: '昌庆宫（창경궁）建于1418年，是朝鲜王朝的离宫，与主要用于国事的其他宫殿不同，这里曾是国王和王后日常生活的地方。以美丽的昌庆苑和月光之旅闻名。',
+    h2_1: '门票价格',
+    h2_2: '开放时间',
+    h2_3: '交通指南',
+    h2_4: '必看建筑与亮点',
+    h2_5: '夜间开放 — 月光之旅',
+    h2_6: '游客贴士',
+    buildings_text: '昌庆宫的大明殿是最大的建筑，曾是王后的居所；洪化殿是国王的办公室。玉晴桥是首尔最古老的石桥。昌庆苑围绕中央池塘提供宁静的散步小路。',
+    cta: '查看昌庆宫全部建筑 →',
+  },
+};
+
+const t = h[lang] || h.en;
+
+function getBldName(b: typeof buildings[0]) {
+  const map: Record<string, string> = { kr: b.nameKr, en: b.nameEn, ja: b.nameJa, zh: b.nameZh };
+  return map[lang] || b.nameEn;
+}
+---
+<GuideLayout title={title} description={description} lang={htmlLang}>
+  <style>@import '../../styles/global.css';</style>
+  <div class="container">
+    <BreadcrumbNav items={[{ name: 'Home', url: '/' }, { name: 'Guide', url: '/guide' }, { name: 'Changgyeonggung' }]} lang={lang} />
+    <article class="guide-content">
+      <h1>{t.h1}</h1>
+      <p class="guide-meta">Updated: June 2026 &middot; Korea Heritage Service official data</p>
+      <img class="guide-hero-img" src="https://www.heritage.go.kr/gung/gogung3/images/img_changgyeong_story_bg_00_00.jpg" alt="Changgyeonggung Palace" width="960" height="400" />
+      <p class="guide-intro">{t.intro}</p>
+
+      <h2>{t.h2_1}</h2>
+      <div class="info-box"><p>Adults: ₩3,000 &middot; Youth (7–18): ₩1,500 &middot; Children under 7 & Seniors 65+: Free<br/>Integrated palace ticket (₩10,000) covers all five palaces + Jongmyo for one year.</p></div>
+
+      <h2>{t.h2_2}</h2>
+      <div class="info-box"><p><strong>Mar–Oct:</strong> 09:00–18:00 (last entry 17:00)<br/><strong>Nov–Feb:</strong> 09:00–17:00 (last entry 16:00)<br/><strong>Closed:</strong> Every Tuesday</p></div>
+
+      <h2>{t.h2_3}</h2>
+      <p><strong>Subway:</strong> Line 3 Anguk Station (Exit 3) — 8 min walk. Line 4 Changgyeonggung Station (Exit 4) — 3 min walk.</p>
+      <p><strong>Bus:</strong> Routes 101, 162, 171, 272, 606 stop near Anguk.</p>
+
+      <h2>{t.h2_4}</h2>
+      <p>{t.buildings_text}</p>
+      <div class="building-highlights">
+        {buildings.slice(0, 6).map(b => (
+          <a href={`/palace/3/${b.detailCode}?sn=${b.serialNumber}&lang=${lang}`} class="building-highlight-card">
+            {b.imageUrl && <img src={b.imageUrl} alt={getBldName(b)} loading="lazy" width="120" height="80" />}
+            <div><h4>{getBldName(b)}</h4><p>{b.explanationKr.replace(/<br\s*\/?>/g, ' ').slice(0, 60)}...</p></div>
+          </a>
+        ))}
+      </div>
+      <div class="cta-box"><a href={`/palace/3?lang=${lang}`}>{t.cta}</a></div>
+
+      <h2>{t.h2_5}</h2>
+      <p>Changgyeonggung's "Moonlight Tour" (달빛기행) is one of the most sought-after night events in Seoul. Held during spring and autumn, visitors walk through the illuminated palace grounds by lantern light, experiencing the palace as royalty once did. Reserve through heritage.go.kr — tickets sell out within minutes.</p>
+
+      <h2>{t.h2_6}</h2>
+      <div class="info-box tip-box">
+        <ul>
+          <li>Changgyeonggung is less crowded than Gyeongbokgung — ideal for peaceful visits</li>
+          <li>Combine with Changdeokgung (adjacent) for a full day of palace exploration</li>
+          <li>Changgyeongwon Garden is especially beautiful in spring with cherry blossoms</li>
+          <li>Free admission with hanbok rental from nearby shops</li>
+        </ul>
+      </div>
+
+      <FAQSection items={faqByLang} lang={lang} />
+    </article>
+  </div>
+</GuideLayout>
+
+<style>
+  .guide-content{padding:80px 0 60px;max-width:800px;margin:0 auto}
+  .guide-content h1{font-family:'Noto Serif KR',serif;font-size:clamp(1.8rem,4vw,2.6rem);font-weight:700;margin-bottom:12px;line-height:1.3}
+  .guide-meta{font-size:0.85rem;color:var(--color-text-muted,#9A8B7F);margin-bottom:24px}
+  .guide-hero-img{width:100%;max-height:400px;object-fit:cover;border-radius:16px;margin-bottom:32px}
+  .guide-intro{font-size:1.1rem;line-height:1.8;margin-bottom:32px;color:var(--color-text-light,#6B5B4F)}
+  .guide-content h2{font-family:'Noto Serif KR',serif;font-size:1.4rem;font-weight:700;margin-top:48px;margin-bottom:16px;padding-bottom:10px;border-bottom:2px solid var(--color-accent,#D4A574)}
+  .guide-content p{font-size:1rem;line-height:1.9;margin-bottom:16px}
+  .info-box{background:var(--color-card,#fff);border:1px solid var(--color-border,#E8DDD4);border-radius:12px;padding:20px;margin:16px 0 24px}
+  html.dark .info-box{background:var(--color-card,#1C1916);border-color:var(--color-border,#2D2720)}
+  .tip-box{border-left:4px solid var(--color-primary,#C8956C)}
+  .info-box ul{margin-top:8px;padding-left:20px}.info-box li{margin-bottom:6px;line-height:1.6;font-size:0.95rem}
+  .building-highlights{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;margin:20px 0 24px}
+  .building-highlight-card{display:flex;align-items:center;gap:12px;padding:12px;background:var(--color-card,#fff);border:1px solid var(--color-border,#E8DDD4);border-radius:10px;text-decoration:none;color:inherit;transition:border-color 0.2s}
+  html.dark .building-highlight-card{background:var(--color-card,#1C1916);border-color:var(--color-border,#2D2720)}
+  .building-highlight-card:hover{border-color:var(--color-primary,#C8956C)}
+  .building-highlight-card img{width:80px;height:56px;object-fit:cover;border-radius:8px;flex-shrink:0}
+  .building-highlight-card h4{font-size:0.9rem;font-weight:600;margin-bottom:4px;color:var(--color-text,#1A1210)}
+  .building-highlight-card p{font-size:0.78rem;color:var(--color-text-muted,#9A8B7F);margin:0;line-height:1.4}
+  .cta-box{text-align:center;margin:32px 0}
+  .cta-box a{display:inline-block;padding:14px 32px;background:var(--color-primary,#C8956C);color:#fff;border-radius:12px;font-weight:600;font-size:1rem;text-decoration:none;transition:background 0.3s,transform 0.2s}
+  .cta-box a:hover{background:var(--color-primary-dark,#8B5E3C);transform:translateY(-2px)}
+  @media(max-width:640px){.building-highlights{grid-template-columns:1fr}}
+</style>

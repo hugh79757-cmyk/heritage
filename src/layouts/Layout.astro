@@ -2,7 +2,6 @@
 export interface Props {
   title: string;
   description: string;
-  image?: string;
   lang?: string;
   canonical?: string;
   type?: string;
@@ -11,7 +10,6 @@ export interface Props {
 const {
   title,
   description,
-  image = 'https://www.heritage.go.kr/gung/gogung1/images/ic-c1.jpg',
   lang = 'ko',
   canonical,
   type = 'website',
@@ -21,18 +19,42 @@ const siteUrl = 'https://heritage.aikorea24.kr';
 const canonicalUrl = canonical || new URL(Astro.url.pathname, siteUrl).href;
 ---
 <!DOCTYPE html>
-<html lang={lang}>
+<html lang={lang} class="dark">
 <head>
+  <!-- Google Analytics (GA4) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-HCV3PDCWQ5"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-HCV3PDCWQ5');
+  </script>
+
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#080510" />
   <title>{title}</title>
   <meta name="description" content={description} />
   <link rel="canonical" href={canonicalUrl} />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
+  <!-- Core Web Vitals: preconnect for critical resources -->
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://unpkg.com" crossorigin />
+
   <meta property="og:title" content={title} />
   <meta property="og:description" content={description} />
-  <meta property="og:image" content={image} />
+  <meta property="og:image" content="https://heritage.aikorea24.kr/og-image.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content={
+    lang === 'ko' ? '경복궁 근정전 야경 — K-Heritage Guide' :
+    lang === 'ja' ? '景福宮 夜景 — K-Heritage Guide' :
+    lang === 'zh' ? '景福宫夜景 — K-Heritage Guide' :
+    'Gyeongbokgung Palace at Night — K-Heritage Guide'
+  } />
   <meta property="og:url" content={canonicalUrl} />
   <meta property="og:type" content={type} />
   <meta property="og:site_name" content="K-Heritage Guide" />
@@ -40,7 +62,7 @@ const canonicalUrl = canonical || new URL(Astro.url.pathname, siteUrl).href;
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content={title} />
   <meta name="twitter:description" content={description} />
-  <meta name="twitter:image" content={image} />
+  <meta name="twitter:image" content="https://heritage.aikorea24.kr/og-image.jpg" />
 <meta name="p:domain_verify" content="a2f1f9d5f2c18d423c1d99f6c2d0247b" />
 
   <link rel="alternate" hreflang="ko" href={`${canonicalUrl}?lang=kr`} />
@@ -52,8 +74,8 @@ const canonicalUrl = canonical || new URL(Astro.url.pathname, siteUrl).href;
   <script is:inline>
     (function(){
       var t=localStorage.getItem('theme');
-      if(t==='dark'||(!t&&window.matchMedia('(prefers-color-scheme:dark)').matches)){
-        document.documentElement.classList.add('dark');
+      if(t==='light'){
+        document.documentElement.classList.remove('dark');
       }
     })();
   </script>
@@ -67,18 +89,18 @@ const canonicalUrl = canonical || new URL(Astro.url.pathname, siteUrl).href;
       height: 30px;
       border-radius: 50%;
       overflow: hidden;
-      border: 2px solid rgba(255,255,255,0.3);
+      border: 2px solid rgba(245,240,232,0.2);
       cursor: pointer;
       transition: border-color 0.2s, transform 0.2s;
       flex-shrink: 0;
     }
     .flag-btn:hover {
-      border-color: rgba(255,255,255,0.8);
+      border-color: rgba(245,240,232,0.6);
       transform: scale(1.15);
     }
     .flag-btn.active {
-      border-color: #e8a87c;
-      box-shadow: 0 0 0 2px rgba(232,168,124,0.4);
+      border-color: #FFD700;
+      box-shadow: 0 0 0 2px rgba(255,215,0,0.4);
     }
     .flag-btn img {
       width: 100%;
@@ -88,6 +110,15 @@ const canonicalUrl = canonical || new URL(Astro.url.pathname, siteUrl).href;
   </style>
   </head>
 <body>
+  <!-- Custom cursor -->
+  <div id="cursor-dot"></div>
+  <div id="cursor-ring"></div>
+
+  <!-- Ambient background orbs -->
+  <div class="ambient-orb"></div>
+  <div class="ambient-orb"></div>
+  <div class="ambient-orb"></div>
+
   <!-- Google Translate banner -->
   <div id="gt-banner" class="gt-banner gt-hidden">
     <div class="container gt-inner">
@@ -130,6 +161,207 @@ const canonicalUrl = canonical || new URL(Astro.url.pathname, siteUrl).href;
     </div>
   </footer>
 
+  <!-- GSAP + ScrollTrigger from CDN -->
+  <script is:inline src="https://unpkg.com/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script is:inline src="https://unpkg.com/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+
+  <!-- Main animation & interaction init -->
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+      const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      if (isTouch || prefersReduced) return;
+
+      // ── Custom Cursor ──
+      const dot = document.getElementById('cursor-dot');
+      const ring = document.getElementById('cursor-ring');
+      let mouseX = 0, mouseY = 0;
+      let ringX = 0, ringY = 0;
+
+      document.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        dot.style.transform = `translate(${mouseX}px, ${mouseY}px)`;
+      });
+
+      function animateRing() {
+        ringX += (mouseX - ringX) * 0.15;
+        ringY += (mouseY - ringY) * 0.15;
+        ring.style.transform = `translate(${ringX}px, ${ringY}px)`;
+        requestAnimationFrame(animateRing);
+      }
+      animateRing();
+
+      // Cursor hover effect
+      document.querySelectorAll('a, button, .dancheong-card, .card, .btn, [data-cursor-hover]').forEach(el => {
+        el.addEventListener('mouseenter', () => {
+          dot.classList.add('cursor-hover');
+          ring.classList.add('cursor-hover');
+        });
+        el.addEventListener('mouseleave', () => {
+          dot.classList.remove('cursor-hover');
+          ring.classList.remove('cursor-hover');
+        });
+      });
+
+      // Cursor trail
+      let lastTrail = 0;
+      document.addEventListener('mousemove', (e) => {
+        const now = Date.now();
+        if (now - lastTrail < 40) return;
+        lastTrail = now;
+        const trail = document.createElement('div');
+        trail.className = 'cursor-trail';
+        trail.style.left = e.clientX + 'px';
+        trail.style.top = e.clientY + 'px';
+        document.body.appendChild(trail);
+        setTimeout(() => trail.remove(), 800);
+      });
+
+      // ── GSAP Scroll Animations ──
+      // Hero parallax
+      const heroBg = document.querySelector('.hero-bg');
+      if (heroBg) {
+        gsap.to(heroBg, {
+          y: '30%',
+          scale: 1.1,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: '.hero-full',
+            start: 'top top',
+            end: 'bottom top',
+            scrub: 1,
+          },
+        });
+      }
+
+      // Hero content fade
+      const heroContent = document.querySelector('.hero-content');
+      if (heroContent) {
+        gsap.to(heroContent, {
+          opacity: 0,
+          y: -80,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: '.hero-full',
+            start: 'top top',
+            end: 'bottom 30%',
+            scrub: 1,
+          },
+        });
+      }
+
+      // Reveal animations
+      document.querySelectorAll('.reveal-up').forEach(el => {
+        gsap.fromTo(el,
+          { opacity: 0, y: 40 },
+          {
+            opacity: 1, y: 0,
+            duration: 1,
+            ease: 'power3.out',
+            scrollTrigger: {
+              trigger: el,
+              start: 'top 85%',
+              toggleActions: 'play none none reverse',
+            },
+          }
+        );
+      });
+
+      document.querySelectorAll('.reveal-scale').forEach(el => {
+        gsap.fromTo(el,
+          { opacity: 0, scale: 0.9 },
+          {
+            opacity: 1, scale: 1,
+            duration: 1,
+            ease: 'power3.out',
+            scrollTrigger: {
+              trigger: el,
+              start: 'top 85%',
+              toggleActions: 'play none none reverse',
+            },
+          }
+        );
+      });
+
+      // Stagger reveal
+      document.querySelectorAll('.reveal-stagger').forEach(el => {
+        gsap.fromTo(el.children,
+          { opacity: 0, y: 30 },
+          {
+            opacity: 1, y: 0,
+            duration: 0.7,
+            stagger: 0.1,
+            ease: 'power3.out',
+            scrollTrigger: {
+              trigger: el,
+              start: 'top 85%',
+              toggleActions: 'play none none reverse',
+            },
+          }
+        );
+      });
+
+      // Section header parallax
+      document.querySelectorAll('.section-header').forEach(el => {
+        gsap.fromTo(el,
+          { opacity: 0, y: 30 },
+          {
+            opacity: 1, y: 0,
+            duration: 0.8,
+            ease: 'power3.out',
+            scrollTrigger: {
+              trigger: el,
+              start: 'top 85%',
+              toggleActions: 'play none none reverse',
+            },
+          }
+        );
+      });
+
+      // KDH hook section
+      const kdhHook = document.querySelector('.kdh-hook');
+      if (kdhHook) {
+        gsap.fromTo(kdhHook,
+          { opacity: 0, y: 40 },
+          {
+            opacity: 1, y: 0,
+            duration: 1,
+            ease: 'power3.out',
+            scrollTrigger: {
+              trigger: kdhHook,
+              start: 'top 85%',
+              toggleActions: 'play none none reverse',
+            },
+          }
+        );
+      }
+
+      // Magnetic buttons
+      document.querySelectorAll('.btn-magnetic').forEach(btn => {
+        btn.addEventListener('mousemove', (e) => {
+          const rect = btn.getBoundingClientRect();
+          const x = (e.clientX - rect.left) / rect.width - 0.5;
+          const y = (e.clientY - rect.top) / rect.height - 0.5;
+          gsap.to(btn, {
+            x: x * 15,
+            y: y * 15,
+            duration: 0.3,
+            ease: 'power2.out',
+          });
+        });
+        btn.addEventListener('mouseleave', () => {
+          gsap.to(btn, {
+            x: 0, y: 0,
+            duration: 0.5,
+            ease: 'elastic.out(1, 0.3)',
+          });
+        });
+      });
+    });
+  </script>
+
   <!-- Nav scroll effect -->
   <script is:inline>
     (function(){
@@ -169,14 +401,14 @@ const canonicalUrl = canonical || new URL(Astro.url.pathname, siteUrl).href;
     })();
   </script>
 
-  <!-- Dark mode toggle -->
+  <!-- Dark mode toggle (dark is default) -->
   <script is:inline>
     (function(){
       var btn=document.getElementById('theme-toggle'),html=document.documentElement;
       function upd(){
         var d=html.classList.contains('dark');
-        document.getElementById('icon-sun').style.display=d?'block':'none';
-        document.getElementById('icon-moon').style.display=d?'none':'block';
+        document.getElementById('icon-sun').style.display=d?'none':'block';
+        document.getElementById('icon-moon').style.display=d?'block':'none';
       }
       upd();
       btn.addEventListener('click',function(){

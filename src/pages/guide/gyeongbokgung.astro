@@ -1,0 +1,279 @@
+---
+import GuideLayout from '../../components/GuideLayout.astro';
+import BreadcrumbNav from '../../components/BreadcrumbNav.astro';
+import FAQSection from '../../components/FAQSection.astro';
+import '../../styles/global.css';
+import { PALACES, getLang, fetchPalaceList } from '../../lib/api';
+
+const lang = getLang(Astro.url);
+const htmlLang = lang === 'kr' ? 'ko' : lang;
+const palace = PALACES.find(p => p.id === 1)!;
+const buildings = await fetchPalaceList(1);
+
+const titles: Record<string, string> = {
+  kr: '경복궁 완전 가이드 2026 — K-Heritage',
+  en: 'Gyeongbokgung Palace Complete Guide 2026 | K-Heritage',
+  ja: '景福宮 完全ガイド 2026 — K-Heritage',
+  zh: '景福宫完全指南 2026 — K-Heritage',
+};
+const descriptions: Record<string, string> = {
+  kr: '경복궁 관람 팁, 입장료, 개방시간, 교통, 건물별 안내 — 2026년 최신 정보',
+  en: 'Complete guide to Gyeongbokgung Palace: ticket prices, opening hours, buildings map, visitor tips, night tour info for 2026.',
+  ja: '景福宮の完全ガイド：チケット料金、営業時間、建築物案内、2026年最新情報',
+  zh: '景福宫完全指南：门票价格、开放时间、建筑导览、2026年最新信息',
+};
+
+const content = {
+  kr: {
+    h1: '경복궁 완전 가이드 2026',
+    intro: '경복궁(景福宮)은 1395년 건립된 조선왕조의 법궁으로, 서울 한복판에 자리하고 있다. 한국 왕실 건축과 역사를 상징하는 이 궁궐의 관람 정보를 안내합니다.',
+    h2_1: '관람권 및 입장료',
+    h2_2: '개방시간 및 관람 적기',
+    h2_3: '교통 안내',
+    h2_4: '주요 건축물 및 하이라이트',
+    h2_5: '야간개장 안내',
+    h2_6: '관람 팁 및 한복 대여',
+    visit_info: '성인 ₩3,000, 청소년(7~18세) ₩1,500, 7세 이하 및 65세 이상 무료. 개방시간은 2~10월 09:00~18:00, 11~1월 09:00~17:00이며, 매주 화요일 휴관입니다.',
+    ticket_detail: '통합관람권(₩10,000)으로 5대 궁궐+종묘를 1년간 무제한 관람할 수 있어, 여러 궁궐을 방문할 계획이라면 매우 경제적입니다. 학생 할인도 가능합니다.',
+    hours_detail: '2~10월: 09:00~18:00 (입장 마감 17:00)\n11~1월: 09:00~17:00 (입장 마감 16:00)\n휴관: 매주 화요일\n성수기: 벚꽃 시즌(4월), 단풍 시즌(10~11월)',
+    hours_tip: '오전 9시에 도착하면 관람객이 가장 적어 쾌적한 관람이 가능합니다. 주말 오후는 가장 붐비며, 평일 오전이 가장 한적합니다. 단풍 시즌(10~11월)에는 궁궐 건물과 어우러진 붉은 단풍이 장관입니다.',
+    transport: {
+      subway: '지하철 3호선 경복궁역(5번 출구) — 도보 5분. 안국역(3번 출구)도 편리하며, 북촌한옥마을과 함께 방문 가능.',
+      bus: '버스 102, 171, 271, 606번 경복궁 하차.',
+      taxi: '기사님께 "경복궁"이라고 말씀하세요. 정문(광화문)은 광화문광장 쪽입니다.',
+    },
+    buildings_text: '경복궁에는 30개 이상의 건축물이 있습니다. 가장 상징적인 건전(勤政殿)은 왕이 국사를 처리하던 전각이며, 경회루(慶會樓)는 연회를 열던 누각, 향원정(香遠亭)은 연못 위의 육각정으로 서울에서 가장 사진이 많이 찍히는 장소 중 하나입니다.',
+    night_tour: '경복궁은 봄과 가을에 특별한 야간개장을 개최합니다. 궁궐이 야간 조명으로 물드는 모습은 낮과는 완전히 다른 매력을 선사합니다.',
+    night_tour_tip: '야간개장 티켓은 국가유산청 홈페이지(heritage.go.kr)에서 사전 예약 필수. 오픈 몇 시간 만에 매진되므로 알림 설정을 권장합니다.',
+    tip: '오전 9시에 방문하면 관람객이 가장 적습니다. 넓은 궁궐 내부이므로 편한 신발을 신으세요. 근처 한복 대여점에서 한복을 빌리면 입장료가 무료입니다!',
+    additional_tips: [
+      '오전 9시 방문 시 관람객이 가장 적음',
+      '국립고궁박물관·국립민속박물관 경내 무료 입장',
+      '경내 전구역 사진 촬영 가능',
+      '궁궐 건물 내부 음식·음료 반입 금지',
+      '경회루 인근 기념품점에서 전통 기념품 구매 가능',
+    ],
+    cta: '경복궁 건물 전체 보기 →',
+  },
+  en: {
+    h1: 'Gyeongbokgung Palace Complete Guide 2026',
+    intro: 'Gyeongbokgung Palace (경복궁) is the primary royal palace of the Joseon dynasty, built in 1395. Located in the heart of Seoul, it serves as the symbol of Korean royal architecture and governance.',
+    h2_1: 'Ticket Prices & Admission',
+    h2_2: 'Opening Hours & Best Time to Visit',
+    h2_3: 'How to Get There',
+    h2_4: 'Must-See Buildings & Highlights',
+    h2_5: 'Night Tour',
+    h2_6: 'Visitor Tips & Hanbok Rental',
+    visit_info: 'Adults: ₩3,000 (~$2.30). Youth (7-18): ₩1,500. Children under 7 and seniors 65+: Free. Open 09:00–18:00 (Feb–Oct), 09:00–17:00 (Nov–Jan). Closed every Tuesday.',
+    ticket_detail: 'The integrated palace ticket (₩10,000) covers all five major palaces and Jongmyo Shrine for one full year — excellent value if visiting multiple sites.',
+    hours_detail: 'Feb–Oct: 09:00–18:00 (last entry 17:00)\nNov–Jan: 09:00–17:00 (last entry 16:00)\nClosed: Every Tuesday\nPeak seasons: Cherry blossom (April), Autumn foliage (Oct–Nov)',
+    hours_tip: 'Arrive at 9:00 AM for the fewest crowds. Weekend afternoons are most crowded. Weekday mornings are the most peaceful. Autumn foliage season (mid-Oct to late Nov) offers stunning photo opportunities.',
+    transport: {
+      subway: 'Seoul Metro Line 3 to Gyeongbokgung Station (Exit 5) — 5 min walk. Anguk Station (Exit 3) is also convenient, especially if combining with Bukchon Hanok Village.',
+      bus: 'Bus routes 102, 171, 271, 606 stop near the palace.',
+      taxi: 'Tell the driver "Gyeongbokgung". The main entrance (Gwanghwamun Gate) faces Gwanghwamun Square.',
+    },
+    buildings_text: 'Gyeongbokgung houses over 30 buildings. The most iconic is Geunjeongjeon (throne hall), Gyeonghoeru Pavilion (royal banquets on a lake), and Hyangwonjeong (hexagonal pavilion on a lotus pond — one of Seoul\'s most photographed spots).',
+    night_tour: 'Gyeongbokgung hosts special night tours in spring and autumn. The palace illuminated at night creates a magical atmosphere.',
+    night_tour_tip: 'Night tour tickets must be reserved through heritage.go.kr. They sell out within hours — set alerts and book immediately.',
+    tip: 'Visit at 9:00 AM for the fewest crowds. Wear comfortable shoes. Rent a hanbok nearby for free admission!',
+    additional_tips: [
+      'Audio guides available at the entrance (₩3,000)',
+      'National Palace Museum and Folk Museum are free to enter',
+      'Photography allowed throughout the grounds',
+      'Food and drinks not allowed inside palace buildings',
+      'Gift shop near Gyeonghoeru sells traditional souvenirs',
+    ],
+    cta: 'Explore all buildings at Gyeongbokgung →',
+  },
+  ja: {
+    h1: '景福宮 完全ガイド 2026',
+    intro: '景福宮（경복궁）は1395年に築かれた朝鮮王朝の第一法宮で、ソウルの中心部に位置しています。韓国の王室建築と歴史を象徴するこの宮殿の観光情報をご案内します。',
+    h2_1: 'チケット料金',
+    h2_2: '営業時間とベストシーズン',
+    h2_3: 'アクセス方法',
+    h2_4: '見どころ建築物',
+    h2_5: '夜間営業',
+    h2_6: '観光ヒントと韓服レンタル',
+    visit_info: '大人₩3,000、青少年（7〜18歳）₩1,500、7歳以下及び65歳以上無料。営業時間は2〜10月 09:00〜18:00、11〜1月 09:00〜17:00、毎週火曜休館。',
+    ticket_detail: '統合観覧券（₩10,000）で5大宮殿+宗廟を1年間無制限で観覧できます。',
+    hours_detail: '2〜10月: 09:00〜18:00（最終入場 17:00）\n11〜1月: 09:00〜17:00（最終入場 16:00）\n休館: 毎週火曜日\nピークシーズン: 桜（4月）、紅葉（10〜11月）',
+    hours_tip: '朝9時に到着すれば観光客が最少です。週末の午後は最も混雑し、平日の午前が最も静かです。',
+    transport: {
+      subway: 'ソウル地下鉄3号線 景福宮駅（5番出口）— 徒歩5分。安国駅（3番出口）も便利で、北村韓屋村と合わせて訪問可能。',
+      bus: 'バス102、171、271、606 景福宮下車。',
+      taxi: '運転手に「경복궁」と言ってください。正門（光化門）は光化門広場側です。',
+    },
+    buildings_text: '景福宮には30以上の建築物があります。最も象徴的な勤政殿は王が国政を執務した正殿、慶會樓は宴会影响があった楼閣、香遠亭は蓮池の上の六角亭です。',
+    night_tour: '景福宮は春と秋に特別な夜間営業を開催します。夜间に照明された宮殿は昼間とは全く異なる魅力があります。',
+    night_tour_tip: '夜間営業チケットはheritage.go.krで事前予約が必要です。数時間で完売します。',
+    tip: '朝9時に訪問すれば観光客が最少です。広い宮殿なので快適な靴を履いてください。近くの韓服レンタル店で韓服を借りると入場料が無料になります！',
+    additional_tips: [
+      '入口で多言語音声ガイドレンタル可能（₩3,000）',
+      '国立宮廷博物館・国立民俗博物館は無料',
+      '宮殿全域で撮影可能',
+      '宮殿建物内部への飲食物持ち込み禁止',
+      '慶會樓近くのギフトショップで伝統的なお土産販売',
+    ],
+    cta: '景福宮の全建築物を見る →',
+  },
+  zh: {
+    h1: '景福宫完全指南 2026',
+    intro: '景福宫（경복궁）建于1395年，是朝鲜王朝的主要法宫，位于首尔市中心。这里是韩国皇家建筑和历史的象征。',
+    h2_1: '门票价格',
+    h2_2: '开放时间与最佳游览时间',
+    h2_3: '交通指南',
+    h2_4: '必看建筑与亮点',
+    h2_5: '夜间开放',
+    h2_6: '游客贴士与韩服租赁',
+    visit_info: '成人₩3,000，青少年（7-18岁）₩1,500，7岁以下及65岁以上免费。开放时间：2-10月 09:00-18:00，11-1月 09:00-17:00，每周二闭馆。',
+    ticket_detail: '综合门票（₩10,000）可在一年内无限次参观五大宫殿和宗庙，非常划算。',
+    hours_detail: '2-10月: 09:00-18:00（最后入场 17:00）\n11-1月: 09:00-17:00（最后入场 16:00）\n闭馆: 每周二\n旺季: 樱花季（4月）、红叶季（10-11月）',
+    hours_tip: '早上9点到达游客最少。周末下午最拥挤，平日上午最清静。',
+    transport: {
+      subway: '首尔地铁3号线景福宫站（5号出口）— 步行5分钟。安国站（3号出口）也方便，可与北村韩屋村一同游览。',
+      bus: '公交102、171、271、606路景福宫站下车。',
+      taxi: '告诉司机"경복궁"。正门（光化门）在光化门广场方向。',
+    },
+    buildings_text: '景福宫内有30多座建筑。最具代表性的是勤政殿（王处理政务的正殿）、庆会楼（举行宴会的楼阁）、香远亭（莲池上的六角亭）。',
+    night_tour: '景福宫在春秋两季举办特别夜间开放活动。夜间灯光下的宫殿与白天截然不同。',
+    night_tour_tip: '夜间开放门票需在heritage.go.kr提前预约，几小时内就会售罄。',
+    tip: '建议早上9点到达以避开人群。宫殿面积较大，请穿舒适的鞋子。在附近韩服租赁店租借韩服可免费入场！',
+    additional_tips: [
+      '入口处可租借多语言语音导览（₩3,000）',
+      '国立宫廷博物馆·国立民俗博物馆免费入场',
+      '宫殿全域可拍照',
+      '宫殿建筑内部禁止携带食物饮料',
+      '庆会楼附近纪念品店可购买传统纪念品',
+    ],
+    cta: '查看景福宫全部建筑 →',
+  },
+}[lang] ?? content.en;
+
+const faqByLang: Record<string, { question: string; answer: string }[]> = {
+  kr: [
+    { question: '경복궁 관람 시간은?', answer: '2월~10월 09:00~18:00, 11월~1월 09:00~17:00. 매주 화요일 휴관. 입장 마감은 폐관 1시간 전.' },
+    { question: '경복궁 입장료는?', answer: '성인 3,000원, 청소년(7-18세) 1,500원. 7세 미만·65세 이상 무료. 통합관람권(10,000원)으로 5대 궁궐+종묘 이용 가능.' },
+    { question: '경복궁 근처 한복 대여는?', answer: '광화문 주변과 경복궁 서쪽 문 근처에 한복 대여점이 많이 있습니다. 한복 착용 시 입장료 무료.' },
+    { question: '경복궁 주차는?', answer: '경복궁 공식 주차장은 없습니다. 주변 공영주차장 이용 또는 지하철 3호선 경복궁역(5번 출구) 이용 권장.' },
+  ],
+  en: [
+    { question: 'What are Gyeongbokgung opening hours?', answer: 'Feb–Oct: 09:00–18:00. Nov–Jan: 09:00–17:00. Closed every Tuesday. Last admission 1 hour before closing.' },
+    { question: 'How much is the ticket?', answer: 'Adults ₩3,000, Youth (7-18) ₩1,500. Free for children under 7 and seniors 65+. Integrated ticket (₩10,000) covers all 5 palaces + Jongmyo.' },
+    { question: 'Hanbok rental near Gyeongbokgung?', answer: 'Many rental shops near Gwanghwamun and the west gate. Wearing hanbok grants free admission.' },
+    { question: 'Parking at Gyeongbokgung?', answer: 'No official parking. Use nearby public lots or Metro Line 3 Gyeongbokgung Station (Exit 5).' },
+  ],
+  ja: [
+    { question: '景福宮の営業時間は？', answer: '2〜10月: 09:00〜18:00。11〜1月: 09:00〜17:00。毎週火曜休館。最終入場は閉館1時間前。' },
+    { question: '入場料は？', answer: '大人₩3,000、青少年(7〜18歳)₩1,500。7歳以下・65歳以上無料。統合観覧券(₩10,000)で5宮殿+宗廟。' },
+    { question: '韓服レンタルは？', answer: '光化門周辺と西門近くに很多のレンタル店。韓服着用で入場料無料。' },
+    { question: '駐車場は？', answer: '公式駐車場なし。近隣の公営駐車場または地下鉄3号線景福宮駅(5番出口)推奨。' },
+  ],
+  zh: [
+    { question: '景福宫开放时间？', answer: '2-10月: 09:00-18:00。11-1月: 09:00-17:00。每周二闭馆。最后入场为闭馆前1小时。' },
+    { question: '门票价格？', answer: '成人₩3,000，青少年(7-18岁)₩1,500。7岁以下·65岁以上免费。综合门票(₩10,000)可游览5大宫殿+宗庙。' },
+    { question: '附近韩服租赁？', answer: '光化门周边和西门附近有很多租赁店。穿韩服可免费入场。' },
+    { question: '停车？', answer: '无官方停车场。建议使用附近公共停车场或地铁3号线景福宫站（5号出口）。' },
+  ],
+};
+
+const faqItems = faqByLang[lang] || faqByLang.en;
+
+function getBldName(b: typeof buildings[0]) {
+  const map: Record<string, string> = { kr: b.nameKr, en: b.nameEn, ja: b.nameJa, zh: b.nameZh };
+  return map[lang] || b.nameEn;
+}
+---
+<GuideLayout title={titles[lang]} description={descriptions[lang]} lang={htmlLang}>
+  <style>@import '../../styles/global.css';</style>
+
+  <div class="container">
+    <BreadcrumbNav items={[{ name: 'Home', url: '/' }, { name: 'Guide', url: '/guide' }, { name: 'Gyeongbokgung' }]} lang={lang} />
+
+    <article class="guide-content">
+      <h1>{content.h1}</h1>
+      <p class="guide-meta">Updated: June 2026 &middot; Korea Heritage Service official data</p>
+
+      <img class="guide-hero-img" src="https://www.heritage.go.kr/gung/gogung1/images/ic-e21.jpg" alt="Gyeongbokgung Palace Geunjeongjeon" width="960" height="400" />
+
+      <p class="guide-intro">{content.intro}</p>
+
+      <h2>{content.h2_1}</h2>
+      <div class="info-box"><p>{content.visit_info}</p></div>
+      <p>{content.ticket_detail}</p>
+
+      <h2>{content.h2_2}</h2>
+      <div class="info-box"><p set:html={content.hours_detail.replace(/\n/g, '<br/>')} /></div>
+      <p>{content.hours_tip}</p>
+
+      <h2>{content.h2_3}</h2>
+      <p><strong>{lang === 'kr' ? '지하철' : lang === 'ja' ? '地下鉄' : lang === 'zh' ? '地铁' : 'Subway'}:</strong> {content.transport.subway}</p>
+      <p><strong>{lang === 'kr' ? '버스' : lang === 'ja' ? 'バス' : lang === 'zh' ? '公交' : 'Bus'}:</strong> {content.transport.bus}</p>
+      <p><strong>{lang === 'kr' ? '택시' : lang === 'ja' ? 'タクシー' : lang === 'zh' ? '出租车' : 'Taxi'}:</strong> {content.transport.taxi}</p>
+
+      <div style="margin:2rem 0;text-align:center;">
+        <ins class="adsbygoogle" style="display:block;text-align:center" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5938862195544185" data-ad-slot="4797390169"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+      </div>
+
+      <h2>{content.h2_4}</h2>
+      <p>{content.buildings_text}</p>
+
+      <div class="building-highlights">
+        {buildings.slice(0, 6).map(b => (
+          <a href={`/palace/1/${b.detailCode}?sn=${b.serialNumber}&lang=${lang}`} class="building-highlight-card">
+            {b.imageUrl && <img src={b.imageUrl} alt={getBldName(b)} loading="lazy" width="120" height="80" />}
+            <div>
+              <h4>{getBldName(b)}</h4>
+              <p>{b.explanationKr.replace(/<br\s*\/?>/g, ' ').slice(0, 60)}...</p>
+            </div>
+          </a>
+        ))}
+      </div>
+
+      <div class="cta-box"><a href={`/palace/1?lang=${lang}`}>{content.cta}</a></div>
+
+      <h2>{content.h2_5}</h2>
+      <p>{content.night_tour}</p>
+      <p><strong>{lang === 'kr' ? '중요' : lang === 'ja' ? '重要' : lang === 'zh' ? '重要' : 'Important'}:</strong> {content.night_tour_tip}</p>
+
+      <h2>{content.h2_6}</h2>
+      <p>{content.tip}</p>
+
+      <div class="info-box tip-box">
+        <p><strong>{lang === 'kr' ? '추가 팁' : lang === 'ja' ? '追加ヒント' : lang === 'zh' ? '更多贴士' : 'Additional tips'}:</strong></p>
+        <ul>
+          {content.additional_tips.map(tip => <li>{tip}</li>)}
+        </ul>
+      </div>
+
+      <FAQSection items={faqByLang} lang={lang} />
+    </article>
+  </div>
+</GuideLayout>
+
+<style>
+  .guide-content { padding: 80px 0 60px; max-width: 800px; margin: 0 auto; }
+  .guide-content h1 { font-family: 'Noto Serif KR', serif; font-size: clamp(1.8rem, 4vw, 2.6rem); font-weight: 700; margin-bottom: 12px; line-height: 1.3; }
+  .guide-meta { font-size: 0.85rem; color: var(--color-text-muted, #9A8B7F); margin-bottom: 24px; }
+  .guide-hero-img { width: 100%; max-height: 400px; object-fit: cover; border-radius: 16px; margin-bottom: 32px; }
+  .guide-intro { font-size: 1.1rem; line-height: 1.8; margin-bottom: 32px; color: var(--color-text-light, #6B5B4F); }
+  .guide-content h2 { font-family: 'Noto Serif KR', serif; font-size: 1.4rem; font-weight: 700; margin-top: 48px; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 2px solid var(--color-accent, #D4A574); }
+  .guide-content p { font-size: 1rem; line-height: 1.9; margin-bottom: 16px; }
+  .info-box { background: var(--color-card, #fff); border: 1px solid var(--color-border, #E8DDD4); border-radius: 12px; padding: 20px; margin: 16px 0 24px; }
+  html.dark .info-box { background: var(--color-card, #1C1916); border-color: var(--color-border, #2D2720); }
+  .tip-box { border-left: 4px solid var(--color-primary, #C8956C); }
+  .info-box ul { margin-top: 8px; padding-left: 20px; }
+  .info-box li { margin-bottom: 6px; line-height: 1.6; font-size: 0.95rem; }
+  .building-highlights { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; margin: 20px 0 24px; }
+  .building-highlight-card { display: flex; align-items: center; gap: 12px; padding: 12px; background: var(--color-card, #fff); border: 1px solid var(--color-border, #E8DDD4); border-radius: 10px; text-decoration: none; color: inherit; transition: border-color 0.2s; }
+  html.dark .building-highlight-card { background: var(--color-card, #1C1916); border-color: var(--color-border, #2D2720); }
+  .building-highlight-card:hover { border-color: var(--color-primary, #C8956C); }
+  .building-highlight-card img { width: 80px; height: 56px; object-fit: cover; border-radius: 8px; flex-shrink: 0; }
+  .building-highlight-card h4 { font-size: 0.9rem; font-weight: 600; margin-bottom: 4px; color: var(--color-text, #1A1210); }
+  .building-highlight-card p { font-size: 0.78rem; color: var(--color-text-muted, #9A8B7F); margin: 0; line-height: 1.4; }
+  .cta-box { text-align: center; margin: 32px 0; }
+  .cta-box a { display: inline-block; padding: 14px 32px; background: var(--color-primary, #C8956C); color: #fff; border-radius: 12px; font-weight: 600; font-size: 1rem; text-decoration: none; transition: background 0.3s, transform 0.2s; }
+  .cta-box a:hover { background: var(--color-primary-dark, #8B5E3C); transform: translateY(-2px); }
+  @media (max-width: 640px) { .building-highlights { grid-template-columns: 1fr; } }
+</style>

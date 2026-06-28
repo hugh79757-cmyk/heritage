@@ -1,0 +1,147 @@
+---
+import GuideLayout from '../../components/GuideLayout.astro';
+import BreadcrumbNav from '../../components/BreadcrumbNav.astro';
+import '../../styles/global.css';
+import { PALACES, getLang } from '../../lib/api';
+
+const lang = getLang(Astro.url);
+const htmlLang = lang === 'kr' ? 'ko' : lang;
+
+const titles: Record<string, string> = {
+  kr: '한국 궁궐 가이드 — K-Heritage',
+  en: 'Korean Palace Guide — K-Heritage',
+  ja: '韓国宮殿ガイド — K-Heritage',
+  zh: '韩国宫殿指南 — K-Heritage',
+};
+const descs: Record<string, string> = {
+  kr: '경복궁, 창덕궁, 창경궁, 덕수궁, 종묘 — 관람 팁, 티켓, 교통정보 종합 가이드',
+  en: 'Complete guide to Seoul palaces: ticket prices, opening hours, transportation, and visitor tips for 2026',
+  ja: 'ソウル宮殿の完全ガイド：チケット料金、営業時間、交通情報、2026年最新情報',
+  zh: '首尔宫殿完全指南：门票价格、开放时间、交通信息、2026年最新攻略',
+};
+
+const guides = [
+  { slug: 'gyeongbokgung', name: { kr: '경복궁 가이드', en: 'Gyeongbokgung Palace', ja: '景福宮ガイド', zh: '景福宫指南' }, desc: { kr: '조선왕조 제일의 법궁 — 관람 팁과 건물별 안내', en: 'The primary royal palace of Joseon — visitor tips and building guide', ja: '朝鮮王朝第一の法宮 — 観光ガイドと建物案内', zh: '朝鲜王朝第一法宫 — 参观攻略与建筑导览' }, image: 'https://www.heritage.go.kr/gung/gogung1/images/ic-c1.jpg' },
+  { slug: 'changdeokgung', name: { kr: '창덕궁 가이드', en: 'Changdeokgung Palace', ja: '昌德宮ガイド', zh: '昌德宫指南' }, desc: { kr: 'UNESCO 세계유산 — 비원과 자연이 어우러진 궁궐', en: 'UNESCO World Heritage — palace harmonized with nature and the Secret Garden', ja: 'UNESCO世界遺産 — 秘苑と自然が調和した宮殿', zh: 'UNESCO世界遗产 — 与自然和谐的宫殿与秘苑' }, image: 'https://www.heritage.go.kr/gung/gogung2/images/img_changdeok_story_bg_00_00.jpg' },
+  { slug: 'changgyeonggung', name: { kr: '창경궁 가이드', en: 'Changgyeonggung Palace', ja: '昌慶宮ガイド', zh: '昌庆宫指南' }, desc: { kr: '생활 궁궐의 역사 — 창경원과 대명전', en: 'History as a residential palace — Changgyeongwon Garden and Daemyeongjeon', ja: '生活宮殿の歴史 — 昌慶苑と大明殿', zh: '生活宫殿的历史 — 昌庆苑与大明殿' }, image: 'https://www.heritage.go.kr/gung/gogung3/images/img_changgyeong_story_bg_00_00.jpg' },
+  { slug: 'deoksugung', name: { kr: '덕수궁 가이드', en: 'Deoksugung Palace', ja: '徳寿宮ガイド', zh: '德寿宫指南' }, desc: { kr: '근대와 전통이 공존 — 석조전과 고宗황제', en: 'Where modern and traditional coexist — Seokjojeon and Emperor Gojong', ja: '近代と伝統が共存 — 石造殿と高宗皇帝', zh: '现代与传统共存 — 石造殿与高宗皇帝' }, image: 'https://www.heritage.go.kr/gung/gogung4/images/mode_general_00_01.jpg' },
+  { slug: 'jongmyo', name: { kr: '종묘 가이드', en: 'Jongmyo Shrine', ja: '宗廟ガイド', zh: '宗庙指南' }, desc: { kr: 'UNESCO 세계유산 — 조선 왕실의 사당과 제례', en: 'UNESCO World Heritage — royal ancestral shrine and ceremonies', ja: 'UNESCO世界遺産 — 王室の祠堂と祭祀', zh: 'UNESCO世界遗产 — 朝鲜王室祠堂与祭祀' }, image: 'https://www.heritage.go.kr/gung/gogung5/images/img_jongmyo_story_bg_00_00.jpg' },
+  { slug: 'secret-garden', name: { kr: '창덕궁 비원 가이드', en: 'Changdeokgung Secret Garden', ja: '昌德宮秘苑ガイド', zh: '昌德宫秘苑指南' }, desc: { kr: '비원 예약 관람 완전 정복', en: 'Complete guide to Secret Garden reservation tours', ja: '秘苑予約観覧の完全ガイド', zh: '秘苑预约参观完全攻略' }, image: 'https://www.heritage.go.kr/gung/gogung2/images/img_changdeok_story_bg_00_00.jpg' },
+  { slug: 'palace-ticket', name: { kr: '궁궐 통합관람권', en: 'Seoul Palace Integrated Ticket', ja: '宮殿統合観覧券', zh: '宫殿综合门票' }, desc: { kr: '5대 궁궐 통합관람권 가격과 사용법', en: 'Price and usage guide for the integrated palace ticket', ja: '五大宮殿統合観覧券の価格と使い方', zh: '五大宫殿综合门票价格与使用方法' }, image: 'https://www.heritage.go.kr/gung/gogung1/images/ic-c1.jpg' },
+  { slug: 'palace-hours', name: { kr: '궁궐 개방시간 안내', en: 'Palace Opening Hours & Holidays', ja: '宮殿営業時間ガイド', zh: '宫殿开放时间指南' }, desc: { kr: '각 궁궐별 개방시간·휴관일·야간개장 일정', en: 'Opening hours, closed days, and night tour schedules for each palace', ja: '各宮殿の営業時間・休館日・夜間営業スケジュール', zh: '各宫殿开放时间、闭馆日、夜间开放日程' }, image: 'https://www.heritage.go.kr/gung/gogung1/images/ic-c1.jpg' },
+  { slug: 'night-tour', name: { kr: '궁궐 야간개장 가이드', en: 'Palace Night Tour Guide', ja: '宮殿夜間営業ガイド', zh: '宫殿夜间开放指南' }, desc: { kr: '경복궁·창덕궁·창경궁 야간개장 예약과 관람 안내', en: 'Night tour schedules, reservation tips, and what to expect', ja: '夜間営業のスケジュール、予約ヒント、現地ガイド', zh: '夜间开放日程、预约技巧、现场指南' }, image: 'https://www.heritage.go.kr/gung/gogung1/images/ic-e21.jpg' },
+];
+
+function getName(g: typeof guides[0]) {
+  const map: Record<string, string> = { kr: g.name.kr, en: g.name.en, ja: g.name.ja, zh: g.name.zh };
+  return map[lang] || g.name.en;
+}
+function getDesc(g: typeof guides[0]) {
+  const map: Record<string, string> = { kr: g.desc.kr, en: g.desc.en, ja: g.desc.ja, zh: g.desc.zh };
+  return map[lang] || g.desc.en;
+}
+---
+<GuideLayout title={titles[lang]} description={descs[lang]} lang={htmlLang}>
+  <style>
+    @import '../../styles/global.css';
+  </style>
+
+  <div class="container">
+    <BreadcrumbNav items={[{ name: 'Home', url: '/' }, { name: getName(guides[0]).split(' ')[0] + ' Guide' }]} lang={lang} />
+
+    <div class="guide-hero">
+      <h1>{titles[lang]}</h1>
+      <p class="guide-hero-desc">{descs[lang]}</p>
+      <p class="guide-updated">Updated: June 2026</p>
+    </div>
+
+    <div class="guide-grid">
+      {guides.map((g) => (
+        <a href={`/guide/${g.slug}?lang=${lang}`} class="guide-card">
+          <div class="guide-card-img">
+            <img src={g.image} alt={getName(g)} loading="lazy" width="400" height="220" />
+          </div>
+          <div class="guide-card-body">
+            <h3>{getName(g)}</h3>
+            <p>{getDesc(g)}</p>
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+</GuideLayout>
+
+<style>
+  .guide-hero {
+    text-align: center;
+    padding: 100px 0 40px;
+  }
+  .guide-hero h1 {
+    font-family: 'Noto Serif KR', serif;
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    font-weight: 700;
+    margin-bottom: 16px;
+  }
+  .guide-hero-desc {
+    font-size: 1.1rem;
+    color: var(--color-text-light, #6B5B4F);
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.7;
+  }
+  .guide-updated {
+    font-size: 0.85rem;
+    color: var(--color-text-muted, #9A8B7F);
+    margin-top: 12px;
+  }
+  .guide-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 24px;
+    padding: 40px 0 80px;
+  }
+  .guide-card {
+    background: var(--color-card, #fff);
+    border: 1px solid var(--color-border, #E8DDD4);
+    border-radius: 16px;
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  .guide-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+  }
+  .guide-card-img {
+    height: 180px;
+    overflow: hidden;
+  }
+  .guide-card-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s;
+  }
+  .guide-card:hover .guide-card-img img {
+    transform: scale(1.05);
+  }
+  .guide-card-body {
+    padding: 20px;
+  }
+  .guide-card-body h3 {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--color-text, #1A1210);
+  }
+  .guide-card-body p {
+    font-size: 0.9rem;
+    color: var(--color-text-light, #6B5B4F);
+    line-height: 1.6;
+  }
+  @media (max-width: 640px) {
+    .guide-grid { grid-template-columns: 1fr; }
+  }
+</style>

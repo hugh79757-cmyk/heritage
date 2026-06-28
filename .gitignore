@@ -26,4 +26,9 @@ pnpm-debug.log*
 # backup files
 backup*.txt
 backup*.py
-.DS_Store
+*.bak
+
+# generated data (regenerable)
+scripts/data/sql/
+scripts/data/*.json
+scripts/data/progress.json

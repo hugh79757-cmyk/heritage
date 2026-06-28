@@ -1,6 +1,9 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import MapExplore from '../components/MapExplore.astro';
+import TimeSlider from '../components/TimeSlider.astro';
+import DancheongCard from '../components/DancheongCard.astro';
+import DancheongPatterns from '../components/DancheongPatterns.astro';
 import '../styles/global.css';
 import { PALACES, getLang, getPalaceName, getPalaceDesc } from '../lib/api';
 
@@ -23,29 +26,33 @@ const descs: Record<string, string> = {
 const hero = {
   kr: {
     badge: '한국 문화유산 가이드',
-    title: '600년 역사의\n궁궐을 만나다',
-    subtitle: '경복궁부터 종묘까지 — 4개 언어 해설, 사진, 동영상과 함께\n한국의 궁궐과 왕실 문화를 깊이 있게 탐험하세요.',
+    hanja: '景福宮',
+    title: '단청이 깨어난다',
+    subtitle: '600년 궁궐의 화려함이 네온 빛으로 되살아납니다.\n경복궁부터 종묘까지 — 4개 언어로 탐험하세요.',
     cta1: '내 주변 탐색',
     cta2: '궁궐 둘러보기',
   },
   en: {
     badge: 'Korean Heritage Guide',
-    title: 'Discover 600 Years\nof Royal History',
-    subtitle: 'From Gyeongbokgung to Jongmyo — explore Korean palaces\nwith guides in 4 languages, photos, and videos.',
+    hanja: 'Gyeongbokgung',
+    title: 'The Palace Awakens',
+    subtitle: '600 years of royal splendor, reborn in neon light.\nFrom Gyeongbokgung to Jongmyo — explore in 4 languages.',
     cta1: 'Explore Nearby',
     cta2: 'Browse Palaces',
   },
   ja: {
     badge: '韓国文化遺産ガイド',
-    title: '600年の歴史\n宮殿に出会う',
-    subtitle: '景福宮から宗廟まで — 4言語の解説、写真、動画で\n韓国の宮殿と王室文化を深く探訪しましょう。',
+    hanja: '景福宮',
+    title: '宮殿が目覚める',
+    subtitle: '600年の王宮の輝きがネオンの光で蘇る。\n景福宮から宗廟まで — 4言語で探訪しましょう。',
     cta1: '周辺を探す',
     cta2: '宮殿を見る',
   },
   zh: {
     badge: '韩国文化遗产指南',
-    title: '邂逅600年\n皇家历史',
-    subtitle: '从景福宫到宗庙 — 通过4种语言的讲解、照片和视频\n深入探索韩国的宫殿与王室文化。',
+    hanja: '景福宫',
+    title: '宫殿苏醒',
+    subtitle: '600年皇家辉煌在霓虹灯中重生。\n从景福宫到宗庙 — 用4种语言探索。',
     cta1: '探索附近',
     cta2: '浏览宫殿',
   },
@@ -59,29 +66,61 @@ const sec: Record<string, { h2: string; p: string }> = {
   zh: { h2: '五大宫殿与宗庙', p: '选择宫殿，查看每座建筑的详细讲解' },
 };
 const s = sec[lang];
+
+const kdhTitle: Record<string, string> = {
+  kr: '케이팝 데몬 헌터스\n속 그 장소',
+  en: 'Real Locations from\nKPop Demon Hunters',
+  ja: 'KPop Demon Hunters\nの実際のロケ地',
+  zh: 'KPop Demon Hunters\n实际拍摄地',
+};
+const kdhSub: Record<string, string> = {
+  kr: '영화에 등장한 실제 서울 장소를 탐험하세요',
+  en: 'Explore the real Seoul locations featured in the film',
+  ja: '映画に登場するソウルの実際の場所を探索',
+  zh: '探索电影中出现的首尔实际场景',
+};
+const kdhBtn: Record<string, string> = {
+  kr: '촬영지 보기',
+  en: 'View Locations',
+  ja: 'ロケ地を見る',
+  zh: '查看拍摄地',
+};
+
+const palaceColors = [
+  'var(--palace-gyeongbok)',
+  'var(--palace-changdeok)',
+  'var(--palace-changgyeong)',
+  'var(--palace-deoksu)',
+  'var(--palace-jongmyo)',
+];
+
+const palaceHanja = ['景福宮', '昌德宮', '昌慶宮', '徳寿宮', '宗廟'];
 ---
 <Layout title={titles[lang]} description={descs[lang]} lang={htmlLang}>
-  <style>
-    @import '../styles/global.css';
-  </style>
+  <style>@import '../styles/global.css';</style>
+  <DancheongPatterns />
 
-  <!-- ═══ HERO ═══ -->
-  <section class="hero-full">
+  <!-- ═══ HERO — 2026 시네마틱 ═══ -->
+  <section class="hero-full" id="hero">
     <div class="hero-bg">
-      <img
-        src="https://www.heritage.go.kr/gung/gogung1/images/ic-e21.jpg"
-        alt="Gyeongbokgung Geunjeongjeon"
-        fetchpriority="high"
-      />
+      <img src="https://www.heritage.go.kr/gung/gogung1/images/ic-e21.jpg" alt="Gyeongbokgung Geunjeongjeon" fetchpriority="high" />
     </div>
     <div class="hero-overlay"></div>
+    <div class="hero-particles" aria-hidden="true">
+      <span class="particle p1">❋</span><span class="particle p2">◈</span><span class="particle p3">✦</span>
+      <span class="particle p4">❋</span><span class="particle p5">◈</span><span class="particle p6">✦</span>
+      <span class="particle p7">❋</span><span class="particle p8">◈</span><span class="particle p9">✦</span>
+      <span class="particle p10">❋</span><span class="particle p11">◈</span><span class="particle p12">✦</span>
+      <span class="particle p13">❋</span><span class="particle p14">◈</span><span class="particle p15">✦</span>
+    </div>
     <div class="hero-content">
       <span class="hero-badge">{h.badge}</span>
-      <h1 class="hero-title" set:html={h.title.replace(/\n/g, '<br/>')} />
+      <div class="hero-hanja neon-text-gold">{h.hanja}</div>
+      <h1 class="hero-title hero-title-mask">{h.title}</h1>
       <p class="hero-subtitle" set:html={h.subtitle.replace(/\n/g, '<br/>')} />
       <div class="hero-cta">
-        <a href="#map-section" class="btn btn-primary">{h.cta1} &darr;</a>
-        <a href="#palaces" class="btn btn-outline">{h.cta2}</a>
+        <a href="#map-section" class="btn btn-primary btn-magnetic">{h.cta1} &darr;</a>
+        <a href="#palaces" class="btn btn-outline btn-magnetic">{h.cta2}</a>
       </div>
     </div>
     <div class="hero-scroll">
@@ -90,43 +129,130 @@ const s = sec[lang];
     </div>
   </section>
 
+  <!-- 민화 호작도 reveal -->
+  <div class="minhwa-reveal-section">
+    <div class="minhwa-reveal-inner">
+      <img
+        src="/minhwa-tiger-magpie.jpeg"
+        alt="조선 민화 호작도 — 호랑이와 까치"
+        width="1200"
+        height="600"
+        loading="lazy"
+      />
+      <div class="minhwa-reveal-text">
+        <span class="neon-text-gold">600년 왕조의 수호자</span>
+      </div>
+    </div>
+  </div>
+
   <!-- ═══ MAP ═══ -->
-  <div class="container">
+  <div class="container reveal-up" id="map-section">
     <MapExplore lang={lang} />
   </div>
 
-  <!-- ═══ PALACE CARDS ═══ -->
-  <section id="palaces">
+  <hr class="dancheong-divider" />
+
+  <!-- ═══ 타임슬라이더 — 조선/현재 비교 ═══ -->
+  <div class="container reveal-up">
+    <div class="section-header">
+      <h2>{lang === 'kr' ? '시간을 넘나들다' : lang === 'ja' ? '時を超えて' : lang === 'zh' ? '穿越时光' : 'Through Time'}</h2>
+      <p>{lang === 'kr' ? '조선 전성기의 화려한 단청과 현재의 모습을 비교하세요' : lang === 'ja' ? '朝鮮王朝の華やかな丹青と現在を比較' : lang === 'zh' ? '比较朝鲜王朝华丽的丹青与现在的样子' : 'Compare the vibrant dancheong of the Joseon era with today'}</p>
+    </div>
+    <TimeSlider
+      lang={lang}
+      beforeSrc="/geunjeongjeon-night.jpg"
+      afterSrc="/tour-images/gyeongbokgung.jpg"
+    />
+  </div>
+
+  <hr class="dancheong-divider" />
+
+  <!-- ═══ 5대 궁궐 카드 — Bento Grid ═══ -->
+  <section id="palaces" class="reveal-up">
     <div class="container">
       <div class="section-header">
         <h2>{s.h2}</h2>
         <p>{s.p}</p>
       </div>
-      <div class="card-grid">
-        {PALACES.map((p) => (
-          <a href={`/palace/${p.id}?lang=${lang}`} class="card">
-            <div class="card-img-wrap">
-              <img
-                src={p.image}
-                alt={getPalaceName(p, lang)}
-                loading="lazy"
-                width="400"
-                height="220"
-              />
-              <div class="card-img-overlay"></div>
-            </div>
-            <div class="card-body">
-              <h3>{getPalaceName(p, lang)}</h3>
-              <p>{getPalaceDesc(p, lang)}</p>
-            </div>
-            <div class="card-arrow">&rarr;</div>
-          </a>
-        ))}
+      <div class="bento-grid">
+        <!-- First palace: hero size -->
+        <div class="bento-item bento-6 bento-row-2">
+          <DancheongCard
+            name={getPalaceName(PALACES[0], lang)}
+            nameH={palaceHanja[0]}
+            desc={getPalaceDesc(PALACES[0], lang)}
+            image={PALACES[0].image}
+            href={`/palace/${PALACES[0].id}?lang=${lang}`}
+            color={palaceColors[0]}
+            lang={lang}
+            size="large"
+          />
+        </div>
+        <!-- Second & third -->
+        <div class="bento-item bento-3">
+          <DancheongCard
+            name={getPalaceName(PALACES[1], lang)}
+            nameH={palaceHanja[1]}
+            desc={getPalaceDesc(PALACES[1], lang)}
+            image={PALACES[1].image}
+            href={`/palace/${PALACES[1].id}?lang=${lang}`}
+            color={palaceColors[1]}
+            lang={lang}
+          />
+        </div>
+        <div class="bento-item bento-3">
+          <DancheongCard
+            name={getPalaceName(PALACES[2], lang)}
+            nameH={palaceHanja[2]}
+            desc={getPalaceDesc(PALACES[2], lang)}
+            image={PALACES[2].image}
+            href={`/palace/${PALACES[2].id}?lang=${lang}`}
+            color={palaceColors[2]}
+            lang={lang}
+          />
+        </div>
+        <!-- Fourth & fifth -->
+        <div class="bento-item bento-3">
+          <DancheongCard
+            name={getPalaceName(PALACES[3], lang)}
+            nameH={palaceHanja[3]}
+            desc={getPalaceDesc(PALACES[3], lang)}
+            image={PALACES[3].image}
+            href={`/palace/${PALACES[3].id}?lang=${lang}`}
+            color={palaceColors[3]}
+            lang={lang}
+          />
+        </div>
+        <div class="bento-item bento-3">
+          <DancheongCard
+            name={getPalaceName(PALACES[4], lang)}
+            nameH={palaceHanja[4]}
+            desc={getPalaceDesc(PALACES[4], lang)}
+            image={PALACES[4].image}
+            href={`/palace/${PALACES[4].id}?lang=${lang}`}
+            color={palaceColors[4]}
+            lang={lang}
+          />
+        </div>
       </div>
     </div>
   </section>
 
-    <!-- AdSense -->
+  <hr class="dancheong-divider" />
+
+  <!-- ═══ 케데헌 트래픽 훅 ═══ -->
+  <section class="kdh-hook">
+    <div class="container">
+      <div class="kdh-hook-inner">
+        <span class="kdh-hook-badge">KPop Demon Hunters</span>
+        <h2 class="kdh-hook-title" set:html={kdhTitle[lang]?.replace(/\n/g, '<br/>') || kdhTitle.en.replace(/\n/g, '<br/>')} />
+        <p class="kdh-hook-sub">{kdhSub[lang] || kdhSub.en}</p>
+        <a href={`/kpop-demon-hunters?lang=${lang}`} class="btn btn-primary btn-magnetic">{kdhBtn[lang] || kdhBtn.en} &rarr;</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- AdSense -->
   <div class="container" style="margin:2rem auto;max-width:728px;text-align:center;">
     <ins class="adsbygoogle"
          style="display:block;text-align:center"
@@ -146,3 +272,68 @@ const s = sec[lang];
     "inLanguage": ["ko","en","ja","zh"],
   })} />
 </Layout>
+
+<style>
+  .hero-hanja {
+    font-family: 'Noto Serif KR', serif;
+    font-size: clamp(1rem, 3vw, 1.6rem);
+    letter-spacing: 0.15em;
+    margin-bottom: 8px;
+    opacity: 0.8;
+  }
+
+  .hero-title-mask {
+    background-image: url('/l3GGABnn.jpeg');
+    background-size: cover;
+    background-position: center;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    filter: brightness(1.2) saturate(1.3);
+  }
+
+  /* 단청 문양 파티클 */
+  .hero-particles {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    overflow: hidden;
+  }
+  .particle {
+    position: absolute;
+    font-size: 10px;
+    opacity: 0;
+    animation: float-up linear infinite;
+  }
+  .p1 { left: 8%; color: #FFD700; animation-duration: 12s; animation-delay: 0s; font-size: 8px; }
+  .p2 { left: 18%; color: #00C8FF; animation-duration: 14s; animation-delay: 1s; font-size: 12px; }
+  .p3 { left: 28%; color: #FF3B5C; animation-duration: 11s; animation-delay: 3s; font-size: 9px; }
+  .p4 { left: 38%; color: #FFD700; animation-duration: 13s; animation-delay: 2s; font-size: 11px; }
+  .p5 { left: 48%; color: #00C8FF; animation-duration: 15s; animation-delay: 4s; font-size: 7px; }
+  .p6 { left: 58%; color: #FF3B5C; animation-duration: 10s; animation-delay: 0.5s; font-size: 10px; }
+  .p7 { left: 68%; color: #FFD700; animation-duration: 14s; animation-delay: 2.5s; font-size: 12px; }
+  .p8 { left: 78%; color: #00C8FF; animation-duration: 12s; animation-delay: 1.5s; font-size: 8px; }
+  .p9 { left: 88%; color: #FF3B5C; animation-duration: 13s; animation-delay: 3.5s; font-size: 11px; }
+  .p10 { left: 13%; color: #FFD700; animation-duration: 16s; animation-delay: 5s; font-size: 9px; }
+  .p11 { left: 43%; color: #00C8FF; animation-duration: 11s; animation-delay: 6s; font-size: 10px; }
+  .p12 { left: 73%; color: #FF3B5C; animation-duration: 14s; animation-delay: 4.5s; font-size: 8px; }
+  .p13 { left: 23%; color: #FFD700; animation-duration: 15s; animation-delay: 7s; font-size: 12px; }
+  .p14 { left: 53%; color: #00C8FF; animation-duration: 12s; animation-delay: 5.5s; font-size: 7px; }
+  .p15 { left: 83%; color: #FF3B5C; animation-duration: 13s; animation-delay: 8s; font-size: 10px; }
+
+  @keyframes float-up {
+    0% { bottom: -20px; opacity: 0; }
+    10% { opacity: 0.2; }
+    90% { opacity: 0.15; }
+    100% { bottom: 110%; opacity: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .particle { animation: none !important; opacity: 0 !important; }
+  }
+
+  @media (max-width: 768px) {
+    .bento-grid { gap: 12px; }
+  }
+</style>

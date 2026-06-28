@@ -1,0 +1,144 @@
+---
+import GuideLayout from '../../components/GuideLayout.astro';
+import BreadcrumbNav from '../../components/BreadcrumbNav.astro';
+import FAQSection from '../../components/FAQSection.astro';
+import '../../styles/global.css';
+import { getLang } from '../../lib/api';
+
+const lang = getLang(Astro.url);
+const htmlLang = lang === 'kr' ? 'ko' : lang;
+
+const title = 'Seoul Palace Opening Hours & Holidays Guide 2026 | K-Heritage';
+const description = 'Complete guide to Seoul palace opening hours, closed days, night tour schedules, and seasonal hours for Gyeongbokgung, Changdeokgung, Changgyeonggung, Deoksugung, and Jongmyo Shrine in 2026.';
+
+const faqByLang: Record<string, { question: string; answer: string }[]> = {
+  kr: [
+    { question: "이 내용은 아직 준비 중입니다", answer: "영어 버전을 참조해주세요." },
+  ],
+  en: [
+  { question: 'Which palaces are closed on Tuesdays?', answer: 'Gyeongbokgung, Changdeokgung, Changgyeonggung, and Jongmyo Shrine are closed every Tuesday. Deoksugung is closed on Mondays instead. Plan your palace visits accordingly.' },
+  { question: 'What are the general palace opening hours?', answer: 'Most palaces open at 09:00. Closing times vary by season: 18:00 (Mar–Oct) and 17:00 (Nov–Feb). Last admission is one hour before closing. Deoksugung stays open until 21:00 in summer.' },
+  { question: 'Are palaces open on public holidays?', answer: 'Yes, palaces are open on public holidays including Seollal (Lunar New Year) and Chuseok. Special extended hours may apply during major holidays. Check heritage.go.kr for specific schedules.' },
+  { question: 'What happens during bad weather?', answer: 'Palaces remain open during rain and snow. Some outdoor areas may be restricted during extreme weather. The Secret Garden tour may be cancelled in severe conditions — check the website before visiting.' },
+  { question: 'When is the best time to avoid crowds?', answer: 'Weekday mornings (9:00–11:00) are the least crowded. Avoid weekends and public holidays. The cherry blossom season (April) and autumn foliage (October–November) draw the largest crowds.' },
+  ],
+};
+const faqItems = faqByLang[lang] || faqByLang.en;
+
+const palaces = [
+  { name: 'Gyeongbokgung', summer: '09:00–18:00', winter: '09:00–17:00', closed: 'Tuesday', extra: 'Last entry 1 hour before closing' },
+  { name: 'Changdeokgung', summer: '09:00–18:00', winter: '09:00–17:00', closed: 'Tuesday', extra: 'Secret Garden requires separate reservation' },
+  { name: 'Changgyeonggung', summer: '09:00–18:00', winter: '09:00–17:00', closed: 'Tuesday', extra: 'Night tours (달빛기행) in spring/autumn' },
+  { name: 'Deoksugung', summer: '09:00–21:00', winter: '09:00–20:00', closed: 'Monday', extra: 'Open until 9 PM — unique evening hours' },
+  { name: 'Jongmyo', summer: '09:00–18:00', winter: '09:00–17:00', closed: 'Tuesday', extra: 'Jeongjeon guided tour included' },
+];
+
+const h: Record<string, any> = {
+  en: { h1: 'Seoul Palace Opening Hours & Holidays Guide 2026', intro: 'Planning your palace visits requires knowing the opening hours, which vary by palace, season, and day of the week. This guide covers everything you need to schedule your Seoul palace tour efficiently.' },
+  kr: { h1: '궁궐 개방시간·휴관일 완전 가이드 2026', intro: '궁궐 관람 계획을 세우려면 각 궁궐별 개방시간, 계절별 시간표, 휴관일을 미리 확인해야 합니다. 이 가이드에서高效的 한 관람 계획을 세울 수 있는 모든 정보를 안내합니다.' },
+  ja: { h1: 'ソウル宮殿営業時間・休館日ガイド 2026', intro: '宮殿の訪問計画を立てるには、宮殿ごとの営業時間、季節別スケジュール、休館日を事前に確認する必要があります。このガイドでは効率的な観光計画を立てるためのすべての情報をご案内します。' },
+  zh: { h1: '首尔宫殿开放时间与节假日指南 2026', intro: '规划宫殿参观行程需要了解各宫殿的开放时间、季节性调整和闭馆日。本指南为您提供高效安排首尔宫殿之旅所需的所有信息。' },
+};
+
+const t = h[lang] || h.en;
+---
+<GuideLayout title={title} description={description} lang={htmlLang}>
+  <style>@import '../../styles/global.css';</style>
+  <div class="container">
+    <BreadcrumbNav items={[{ name: 'Home', url: '/' }, { name: 'Guide', url: '/guide' }, { name: 'Palace Hours' }]} lang={lang} />
+    <article class="guide-content">
+      <h1>{t.h1}</h1>
+      <p class="guide-meta">Updated: June 2026 &middot; Korea Heritage Service official data</p>
+      <p class="guide-intro">{t.intro}</p>
+
+      <h2>Opening Hours by Palace</h2>
+      <div class="hours-table">
+        {palaces.map(p => (
+          <div class="hours-row">
+            <div class="palace-name">{p.name}</div>
+            <div class="hours-detail">
+              <span class="season-badge summer">Mar–Oct: {p.summer}</span>
+              <span class="season-badge winter">Nov–Feb: {p.winter}</span>
+              <span class="closed-badge">Closed: {p.closed}</span>
+              <span class="extra-note">{p.extra}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <h2>Key Differences to Remember</h2>
+      <div class="info-box tip-box">
+        <ul>
+          <li><strong>Deoksugung is closed on Monday</strong> — all other palaces close on Tuesday</li>
+          <li><strong>Deoksugung stays open until 9 PM</strong> in summer (21:00) — perfect for evening visits</li>
+          <li><strong>Last admission</strong> is always 1 hour before closing at every palace</li>
+          <li><strong>Secret Garden</strong> (Changdeokgung) requires separate advance reservation</li>
+        </ul>
+      </div>
+
+      <h2>Seasonal Hours Summary</h2>
+      <div class="info-box">
+        <p><strong>Spring/Summer (March–October):</strong> Most palaces 09:00–18:00. Deoksugung 09:00–21:00.</p>
+        <p><strong>Autumn/Winter (November–February):</strong> Most palaces 09:00–17:00. Deoksugung 09:00–20:00.</p>
+        <p><strong>Holiday hours:</strong> Palaces are open on public holidays. Extended hours may apply during Seollal and Chuseok.</p>
+      </div>
+
+      <h2>Night Tour Schedules</h2>
+      <p>Several palaces host special night tours (야간개장) during spring and autumn. These require advance reservation through heritage.go.kr:</p>
+      <ul>
+        <li><strong>Gyeongbokgung Night Tour</strong> — Spring and autumn, typically 2-3 events per year</li>
+        <li><strong>Changdeokgung Night Tour</strong> — Spring and autumn, limited availability</li>
+        <li><strong>Changgyeonggung Moonlight Tour (달빛기행)</strong> — Spring and autumn, extremely popular</li>
+        <li><strong>Deoksugung</strong> — Already open until 9 PM; no separate night tour needed</li>
+      </ul>
+
+      <h2>Recommended Itinerary by Day</h2>
+      <div class="info-box">
+        <p><strong>Monday:</strong> Gyeongbokgung → Changdeokgung → Changgyeonggung (all open)</p>
+        <p><strong>Tuesday:</strong> Deoksugung only (others closed) — visit in the evening until 9 PM</p>
+        <p><strong>Wednesday–Sunday:</strong> All palaces open — follow the geographic route: Gyeongbokgung → Anguk → Changdeokgung → Changgyeonggung → Jongmyo → walk to Deoksugung</p>
+      </div>
+
+      <h2>Best Times to Visit</h2>
+      <div class="info-box tip-box">
+        <ul>
+          <li><strong>Least crowded:</strong> Weekday mornings, 9:00–11:00 AM</li>
+          <li><strong>Most crowded:</strong> Weekends, public holidays, cherry blossom season (April), autumn foliage (Oct–Nov)</li>
+          <li><strong>Best light for photography:</strong> Late afternoon golden hour (4–6 PM in summer)</li>
+          <li><strong>Rainy day option:</strong> Deoksugung has covered walkways and the MMCA museum inside</li>
+        </ul>
+      </div>
+
+      <div class="cta-box"><a href={`/?lang=${lang}`}>Plan your palace visit →</a></div>
+
+      <FAQSection items={faqByLang} lang={lang} />
+    </article>
+  </div>
+</GuideLayout>
+
+<style>
+  .guide-content{padding:80px 0 60px;max-width:800px;margin:0 auto}
+  .guide-content h1{font-family:'Noto Serif KR',serif;font-size:clamp(1.8rem,4vw,2.6rem);font-weight:700;margin-bottom:12px;line-height:1.3}
+  .guide-meta{font-size:0.85rem;color:var(--color-text-muted,#9A8B7F);margin-bottom:24px}
+  .guide-intro{font-size:1.1rem;line-height:1.8;margin-bottom:32px;color:var(--color-text-light,#6B5B4F)}
+  .guide-content h2{font-family:'Noto Serif KR',serif;font-size:1.4rem;font-weight:700;margin-top:48px;margin-bottom:16px;padding-bottom:10px;border-bottom:2px solid var(--color-accent,#D4A574)}
+  .guide-content p{font-size:1rem;line-height:1.9;margin-bottom:16px}
+  .guide-content ul{margin:12px 0 20px;padding-left:24px}.guide-content li{margin-bottom:8px;line-height:1.7;font-size:0.95rem}
+  .info-box{background:var(--color-card,#fff);border:1px solid var(--color-border,#E8DDD4);border-radius:12px;padding:20px;margin:16px 0 24px}
+  html.dark .info-box{background:var(--color-card,#1C1916);border-color:var(--color-border,#2D2720)}
+  .tip-box{border-left:4px solid var(--color-primary,#C8956C)}
+  .info-box ul{margin-top:8px;padding-left:20px}.info-box li{margin-bottom:6px;line-height:1.6;font-size:0.95rem}
+  .hours-table{display:flex;flex-direction:column;gap:12px;margin:16px 0 24px}
+  .hours-row{background:var(--color-card,#fff);border:1px solid var(--color-border,#E8DDD4);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:8px}
+  html.dark .hours-row{background:var(--color-card,#1C1916);border-color:var(--color-border,#2D2720)}
+  .palace-name{font-weight:700;font-size:1.05rem;color:var(--color-text,#1A1210)}
+  .hours-detail{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+  .season-badge{font-size:0.8rem;padding:4px 10px;border-radius:6px;font-weight:600}
+  .season-badge.summer{background:rgba(46,134,193,0.1);color:#2E86C1}
+  .season-badge.winter{background:rgba(142,68,173,0.1);color:#8E44AD}
+  .closed-badge{font-size:0.8rem;padding:4px 10px;border-radius:6px;background:rgba(231,76,60,0.1);color:#E74C3C;font-weight:600}
+  .extra-note{font-size:0.8rem;color:var(--color-text-muted,#9A8B7F)}
+  .cta-box{text-align:center;margin:32px 0}
+  .cta-box a{display:inline-block;padding:14px 32px;background:var(--color-primary,#C8956C);color:#fff;border-radius:12px;font-weight:600;font-size:1rem;text-decoration:none;transition:background 0.3s,transform 0.2s}
+  .cta-box a:hover{background:var(--color-primary-dark,#8B5E3C);transform:translateY(-2px)}
+</style>

@@ -1,0 +1,40 @@
+---
+export interface BreadcrumbItem {
+  name: string;
+  url?: string;
+}
+
+interface Props {
+  items: BreadcrumbItem[];
+  lang?: string;
+}
+
+const { items, lang = 'kr' } = Astro.props;
+const siteUrl = 'https://heritage.aikorea24.kr';
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: items.map((item, i) => ({
+    "@type": "ListItem",
+    position: i + 1,
+    name: item.name,
+    ...(item.url ? { item: `${siteUrl}${item.url}` } : {}),
+  })),
+};
+---
+
+<nav class="breadcrumb" aria-label="Breadcrumb">
+  {items.map((item, i) => (
+    <>
+      {i > 0 && <span class="breadcrumb-sep">&rsaquo;</span>}
+      {item.url ? (
+        <a href={`${item.url}?lang=${lang}`}>{item.name}</a>
+      ) : (
+        <span class="breadcrumb-current">{item.name}</span>
+      )}
+    </>
+  ))}
+</nav>
+
+<script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />

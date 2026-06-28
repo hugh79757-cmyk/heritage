@@ -1,0 +1,103 @@
+---
+export interface FAQItem {
+  question: string;
+  answer: string;
+}
+
+interface Props {
+  title?: string;
+  items: FAQItem[] | Record<string, FAQItem[]>;
+  lang?: string;
+}
+
+const { title = 'Frequently Asked Questions', items, lang = 'kr' } = Astro.props;
+
+const faqItems = Array.isArray(items)
+  ? items
+  : (items[lang] ?? items.en ?? []);
+
+const titles: Record<string, string> = {
+  kr: '자주 묻는 질문',
+  en: 'Frequently Asked Questions',
+  ja: 'よくあるご質問',
+  zh: '常见问题',
+};
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqItems.map(item => ({
+    "@type": "Question",
+    name: item.question,
+    acceptedAnswer: {
+      "@type": "Answer",
+      text: item.answer,
+    },
+  })),
+};
+---
+
+<section class="faq-section">
+  <h2 class="section-title">{titles[lang] || title}</h2>
+  <div class="faq-list">
+    {faqItems.map((item) => (
+      <details class="faq-item">
+        <summary class="faq-question">{item.question}</summary>
+        <div class="faq-answer" set:html={item.answer} />
+      </details>
+    ))}
+  </div>
+</section>
+
+<script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+<style>
+  .faq-section {
+    margin: 48px 0;
+  }
+  .faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 20px;
+  }
+  .faq-item {
+    background: var(--color-card, #fff);
+    border: 1px solid var(--color-border, #E8DDD4);
+    border-radius: var(--radius-sm, 10px);
+    overflow: hidden;
+  }
+  html.dark .faq-item {
+    background: var(--color-card, #1C1916);
+    border-color: var(--color-border, #2D2720);
+  }
+  .faq-question {
+    padding: 16px 20px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    color: var(--color-text, #1A1210);
+  }
+  .faq-question::-webkit-details-marker { display: none; }
+  .faq-question::after {
+    content: '+';
+    font-size: 1.2rem;
+    color: var(--color-primary, #C8956C);
+    flex-shrink: 0;
+    transition: transform 0.2s;
+  }
+  details[open] .faq-question::after {
+    transform: rotate(45deg);
+  }
+  .faq-answer {
+    padding: 0 20px 16px;
+    font-size: 0.95rem;
+    line-height: 1.8;
+    color: var(--color-text-light, #6B5B4F);
+  }
+</style>

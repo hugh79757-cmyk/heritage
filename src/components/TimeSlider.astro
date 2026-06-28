@@ -1,0 +1,217 @@
+---
+interface Props {
+  lang?: string;
+  beforeSrc?: string;
+  afterSrc?: string;
+  beforeLabel?: string;
+  afterLabel?: string;
+}
+
+const {
+  lang = 'kr',
+  beforeSrc = 'https://www.heritage.go.kr/gung/gogung1/images/ic-e21.jpg',
+  afterSrc = 'https://www.heritage.go.kr/gung/gogung1/images/ic-c1.jpg',
+  beforeLabel = '',
+  afterLabel = '',
+} = Astro.props;
+
+const labels: Record<string, { joseon: string; now: string; hint: string; yearJoseon: string; yearNow: string }> = {
+  kr: { joseon: '조선 전성기', now: '현재', hint: '드래그하여 비교하세요', yearJoseon: '1395년', yearNow: '2026년' },
+  en: { joseon: 'Joseon Dynasty', now: 'Present Day', hint: 'Drag to compare', yearJoseon: '1395', yearNow: '2026' },
+  ja: { joseon: '朝鮮王朝', now: '現代', hint: 'ドラッグで比較', yearJoseon: '1395年', yearNow: '2026年' },
+  zh: { joseon: '朝鲜王朝', now: '现代', hint: '拖动比较', yearJoseon: '1395年', yearNow: '2026年' },
+};
+
+const L = labels[lang] || labels.kr;
+---
+
+<div class="timeslider" id="timeslider">
+  <div class="ts-labels">
+    <span class="ts-label-left">{L.yearJoseon} {L.joseon}</span>
+    <span class="ts-label-right">{L.yearNow} {L.now}</span>
+  </div>
+  <div class="ts-viewport">
+    <div class="ts-layer ts-after">
+      <img src={afterSrc} alt={afterLabel || '현재 경복궁'} width="960" height="500" />
+    </div>
+    <div class="ts-layer ts-before">
+      <img src={beforeSrc} alt={beforeLabel || '조선시대 경복궁'} width="960" height="500" />
+    </div>
+    <div class="ts-handle" id="tsHandle">
+      <div class="ts-handle-line"></div>
+      <div class="ts-handle-circle">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M8 4l-6 8 6 8"/>
+          <path d="M16 4l6 8-6 8"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+  <p class="ts-hint">{L.hint}</p>
+</div>
+
+<script>
+(function() {
+  const slider = document.getElementById('timeslider');
+  if (!slider) return;
+
+  const viewport = slider.querySelector('.ts-viewport') as HTMLElement;
+  const before = slider.querySelector('.ts-before') as HTMLElement;
+  const handle = document.getElementById('tsHandle');
+  if (!viewport || !before || !handle) return;
+
+  let isDragging = false;
+  let currentPercent = 50;
+
+  function updatePosition(clientX: number) {
+    const rect = viewport.getBoundingClientRect();
+    let x = clientX - rect.left;
+    x = Math.max(0, Math.min(x, rect.width));
+    currentPercent = (x / rect.width) * 100;
+    before.style.clipPath = `inset(0 ${100 - currentPercent}% 0 0)`;
+    handle.style.left = `${currentPercent}%`;
+  }
+
+  // Touch events
+  handle.addEventListener('touchstart', (e) => {
+    isDragging = true;
+    e.preventDefault();
+  }, { passive: false });
+
+  viewport.addEventListener('touchstart', (e) => {
+    isDragging = true;
+    updatePosition(e.touches[0].clientX);
+  }, { passive: true });
+
+  window.addEventListener('touchmove', (e) => {
+    if (!isDragging) return;
+    updatePosition(e.touches[0].clientX);
+  }, { passive: true });
+
+  window.addEventListener('touchend', () => { isDragging = false; });
+
+  // Mouse events
+  handle.addEventListener('mousedown', (e) => {
+    isDragging = true;
+    e.preventDefault();
+  });
+
+  viewport.addEventListener('mousedown', (e) => {
+    isDragging = true;
+    updatePosition(e.clientX);
+  });
+
+  window.addEventListener('mousemove', (e) => {
+    if (!isDragging) return;
+    updatePosition(e.clientX);
+  });
+
+  window.addEventListener('mouseup', () => { isDragging = false; });
+
+  // Initial position
+  before.style.clipPath = 'inset(0 50% 0 0)';
+  handle.style.left = '50%';
+})();
+</script>
+
+<style>
+  .timeslider {
+    padding: 40px 0;
+    max-width: 960px;
+    margin: 0 auto;
+  }
+  .ts-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-text-light);
+  }
+  .ts-label-left { color: var(--neon-gold); }
+  .ts-label-right { color: var(--neon-blue); }
+
+  .ts-viewport {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border-radius: 16px;
+    overflow: hidden;
+    cursor: ew-resize;
+    touch-action: pan-y;
+    border: 1px solid var(--color-border);
+  }
+
+  .ts-layer {
+    position: absolute;
+    inset: 0;
+  }
+  .ts-layer img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .ts-before {
+    z-index: 2;
+    clip-path: inset(0 50% 0 0);
+  }
+  .ts-after {
+    z-index: 1;
+  }
+  .ts-after img {
+    filter: brightness(0.85) saturate(1.1);
+  }
+  .ts-before img {
+    filter: brightness(0.9) saturate(1.3) hue-rotate(-5deg);
+  }
+
+  .ts-handle {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    z-index: 10;
+    width: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: translateX(-50%);
+  }
+  .ts-handle-line {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: var(--dancheong-white);
+    box-shadow: 0 0 8px rgba(255,255,255,0.5);
+  }
+  .ts-handle-circle {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--dancheong-yellow);
+    color: var(--dancheong-black);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 20px rgba(255,215,0,0.5), 0 2px 8px rgba(0,0,0,0.3);
+    transition: transform 0.2s;
+    position: relative;
+    z-index: 11;
+  }
+  .ts-handle-circle:hover {
+    transform: scale(1.1);
+  }
+
+  .ts-hint {
+    text-align: center;
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    margin-top: 12px;
+  }
+
+  @media (max-width: 640px) {
+    .ts-viewport { aspect-ratio: 4 / 3; border-radius: 12px; }
+    .ts-handle-circle { width: 36px; height: 36px; }
+  }
+</style>

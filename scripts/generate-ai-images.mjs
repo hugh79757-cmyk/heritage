@@ -59,6 +59,51 @@ const IMAGES = [
     prompt: `${STYLE_PREFIX}, Deoksugung Palace Seokjojeon Western-style building at night, contrast of modern and traditional, neon street lights, 9:16 mobile portrait`,
     size: '768x1344',
   },
+
+  // ═══════════════════════════════════════════════════
+  // PHASE 2 — KDH Scene Images (added below existing 5)
+  // ═══════════════════════════════════════════════════
+
+  {
+    id: 'kdh-hero',
+    prompt: `${STYLE_PREFIX}, Gyeongbokgung Palace Geunjeongjeon at night, KPop Demon Hunters main confrontation scene, dramatic action composition, red and blue neon lighting between dancheong pillars, heroic epic scale, action movie poster style, moonlight casting shadows, 9:16 mobile portrait`,
+    size: '768x1344',
+  },
+  {
+    id: 'kdh-gyeongbokgung',
+    prompt: `${STYLE_PREFIX}, Gyeongbokgung Palace main courtyard at night, action sequence under full moon, characters facing off between dancheong pillars, neon blue and gold light beams cutting through darkness, traditional lanterns, dramatic composition, 9:16 mobile portrait`,
+    size: '768x1344',
+  },
+  {
+    id: 'kdh-bukchon',
+    prompt: `${STYLE_PREFIX}, Bukchon Hanok Village narrow alleyway at night, chase scene through traditional Korean houses with curved tiled roofs, warm golden light spilling from hanok windows, neon pink accents, cinematic motion blur, dramatic perspective looking down alley, 9:16 mobile portrait`,
+    size: '768x1344',
+  },
+  {
+    id: 'kdh-naksan',
+    prompt: `${STYLE_PREFIX}, Naksan Park Seoul City Wall at night, rooftop chase along ancient fortress wall, Seoul skyline glowing in background, full moon, neon teal and gold lighting on stone wall, dramatic height perspective looking down at city, 9:16 mobile portrait`,
+    size: '768x1344',
+  },
+  {
+    id: 'kdh-nseoul-tower',
+    prompt: `${STYLE_PREFIX}, N Seoul Tower at night seen from below observation deck, climactic confrontation scene, neon pink and blue beams sweeping across night sky, Seoul city lights far below, cinematic wide angle, dramatic clouds, 9:16 mobile portrait`,
+    size: '768x1344',
+  },
+  {
+    id: 'kdh-gwanghwamun',
+    prompt: `${STYLE_PREFIX}, Gwanghwamun Square at night with King Sejong statue silhouette, dramatic opening chase scene wide shot, street reflections on wet ground after rain, traffic light trails, government buildings lit in background, cinematic movie still, 9:16 mobile portrait`,
+    size: '768x1344',
+  },
+  {
+    id: 'kdh-insadong',
+    prompt: `${STYLE_PREFIX}, Insadong traditional street at night, bustling market scene, traditional Korean tea houses and art galleries with colorful signs, paper lanterns hanging overhead, warm neon glow on cobblestone street, cinematic depth with crowd activity, 9:16 mobile portrait`,
+    size: '768x1344',
+  },
+  {
+    id: 'gyeongbok-hero',
+    prompt: `${STYLE_PREFIX}, Gyeongbokgung Palace Geunjeongjeon main hall at night, grand entrance view, full moon illuminating golden roof tiles, red and blue dancheong pillars glowing with neon light, palace courtyard with stone pavement, majestic cinematic wide shot, 9:16 mobile portrait`,
+    size: '768x1344',
+  },
 ];
 
 async function generateImage(imageDef) {

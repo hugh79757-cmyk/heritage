@@ -639,6 +639,7 @@ body { top: 0 !important; }
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  touch-action: pan-y;
   background: var(--bg-night);
 }
 .hero-full::before {
@@ -1201,6 +1202,279 @@ footer a:hover { color: var(--neon-gold); }
 }
 
 /* ═══════════════════════════════════════════════
+   PHASE 2 — GATE OPENING & HERO ANIMATIONS
+   ═══════════════════════════════════════════════ */
+
+/* Palace Gate panels — covers hero image, slides open */
+.hero-gate {
+  position: absolute;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  z-index: 5;
+  background: var(--bg-night);
+  pointer-events: none;
+  will-change: clip-path;
+}
+
+.hero-gate-left {
+  left: 0;
+  animation: gateOpenLeft 1.8s cubic-bezier(0.77, 0, 0.18, 1) 0.3s forwards;
+}
+
+.hero-gate-right {
+  right: 0;
+  animation: gateOpenRight 1.8s cubic-bezier(0.77, 0, 0.18, 1) 0.3s forwards;
+}
+
+@keyframes gateOpenLeft {
+  0%   { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); }
+  100% { clip-path: polygon(0 0, 0 0, 0 100%, 0 100%); }
+}
+
+@keyframes gateOpenRight {
+  0%   { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); }
+  100% { clip-path: polygon(100% 0, 100% 0, 100% 100%, 100% 100%); }
+}
+
+/* Character-by-character fill animation */
+.hero-title-fill {
+  display: inline-flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.fill-char {
+  display: inline-block;
+  background: linear-gradient(
+    90deg,
+    var(--neon-gold) 0%,
+    var(--dancheong-yellow) 30%,
+    var(--neon-red) 60%,
+    var(--neon-blue) 80%,
+    var(--neon-gold) 100%
+  );
+  background-size: 300% 100%;
+  background-position: 300% 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  animation: charFill 0.6s ease-out forwards;
+  will-change: background-position;
+}
+
+@keyframes charFill {
+  0%   { background-position: 300% 0; }
+  100% { background-position: 0% 0; }
+}
+
+/* Palace cinematic hero — scroll-driven camera enter */
+.palace-hero-content {
+  perspective: 1000px;
+}
+
+.palace-hero-title-anim {
+  animation: cameraEnter 1.2s ease-out forwards;
+}
+
+/* Progressive enhancement: scroll-driven on supported browsers */
+@supports (animation-timeline: view()) {
+  .palace-hero-title-anim {
+    animation: cameraEnter 1.5s ease-out forwards;
+    animation-timeline: view();
+    animation-range: entry 0% contain 50%;
+  }
+}
+
+@keyframes cameraEnter {
+  0% {
+    opacity: 0;
+    transform: translateZ(-200px) scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: translateZ(0) scale(1);
+  }
+}
+
+/* ═══════════════════════════════════════════════
+   PHASE 2 — KDH SCENE-BY-SCENE GUIDE
+   ═══════════════════════════════════════════════ */
+
+/* Each scene section — full width */
+.kdh-scene {
+  padding: 40px 0;
+  border-bottom: 1px solid var(--color-border-light);
+  scroll-margin-top: 80px; /* for anchor link offset */
+}
+
+.kdh-scene:last-of-type {
+  border-bottom: none;
+}
+
+.kdh-scene-inner {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+  align-items: center;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* Desktop: alternate image/text layout */
+@media (min-width: 768px) {
+  .kdh-scene-inner {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  /* Alternate: scene order even = image-right, odd = image-left */
+  .kdh-scene:nth-child(even) .kdh-scene-inner {
+    direction: rtl; /* flips column order */
+  }
+  .kdh-scene:nth-child(even) .kdh-scene-inner > * {
+    direction: ltr; /* restore text direction inside */
+  }
+
+  /* Re-apply text alignment for RTL-safe rendering */
+  .kdh-scene:nth-child(even) .kdh-scene-text {
+    text-align: left;
+  }
+}
+
+.kdh-scene-image {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid var(--color-border-light);
+}
+
+.kdh-scene-image img {
+  width: 100%;
+  height: auto;
+  display: block;
+  transition: transform 0.6s ease, filter 0.6s;
+  filter: brightness(0.85) saturate(1.1);
+}
+
+.kdh-scene-image:hover img {
+  transform: scale(1.03);
+  filter: brightness(0.95) saturate(1.2);
+}
+
+.kdh-scene-badge {
+  display: inline-block;
+  background: linear-gradient(135deg, var(--neon-red), #FF6B8A);
+  color: #fff;
+  padding: 4px 14px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.kdh-scene-text h3 {
+  font-family: 'Noto Serif KR', serif;
+  font-size: clamp(1.2rem, 3vw, 1.6rem);
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: var(--neon-gold);
+}
+
+.kdh-scene-desc {
+  font-size: 0.95rem;
+  color: var(--color-text);
+  line-height: 1.7;
+  margin-bottom: 12px;
+}
+
+.kdh-scene-context {
+  font-size: 0.85rem;
+  color: var(--color-text-light);
+  line-height: 1.6;
+  margin-bottom: 20px;
+  font-style: italic;
+  padding-left: 12px;
+  border-left: 2px solid var(--color-border-light);
+}
+
+/* KDH section header */
+.kdh-section-title {
+  font-family: 'Noto Serif KR', serif;
+  font-size: clamp(1.4rem, 4vw, 2rem);
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.kdh-section-sub {
+  text-align: center;
+  color: var(--color-text-light);
+  font-size: 1rem;
+  margin-bottom: 40px;
+}
+
+/* ═══════════════════════════════════════════════
+   PHASE 2 — TIMELINE THUMBNAILS
+   ═══════════════════════════════════════════════ */
+
+.route-step-image {
+  width: 60px;
+  height: 90px;
+  object-fit: cover;
+  border-radius: 8px;
+  flex-shrink: 0;
+  border: 1px solid var(--color-border-light);
+  filter: brightness(0.8);
+  transition: filter 0.3s, transform 0.3s;
+}
+
+.route-step:hover .route-step-image {
+  filter: brightness(1);
+  transform: scale(1.05);
+}
+
+/* On mobile (where route-info may stack) */
+@media (max-width: 640px) {
+  .route-step {
+    gap: 12px;
+  }
+  .route-step-image {
+    width: 48px;
+    height: 72px;
+  }
+}
+
+/* ═══════════════════════════════════════════════
+   PHASE 2 — KDH CONNECTION ON PALACE PAGES
+   ═══════════════════════════════════════════════ */
+
+.kdh-connection {
+  padding: 40px 0 60px;
+}
+
+.kdh-connection-inner {
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto;
+  background: var(--bg-glass);
+  backdrop-filter: blur(12px) saturate(1.2);
+  -webkit-backdrop-filter: blur(12px) saturate(1.2);
+  border: 1px solid var(--color-border-light);
+  border-radius: 16px;
+  padding: 40px 32px;
+}
+
+.kdh-connection-inner p {
+  font-size: 0.95rem;
+  color: var(--color-text-light);
+  line-height: 1.7;
+  margin-bottom: 24px;
+}
+
+/* ═══════════════════════════════════════════════
    모바일 반응형 (유지 + 향상)
    ═══════════════════════════════════════════════ */
 @media (max-width: 640px) {
@@ -1234,6 +1508,8 @@ footer a:hover { color: var(--neon-gold); }
   .ambient-orb { display: none; }
   .gradient-border::before { animation: none !important; }
   .minhwa-reveal-inner { animation: none !important; opacity: 0.75; }
+  .hero-gate { display: none; } /* Make gates invisible — already open */
+  .fill-char { background-position: 0% 0; -webkit-text-fill-color: var(--neon-gold); color: var(--neon-gold); } /* Show fully filled */
 }
 
 /* ═══════════════════════════════════════════════

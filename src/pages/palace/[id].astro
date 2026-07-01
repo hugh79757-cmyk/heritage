@@ -3,7 +3,8 @@ import Layout from '../../layouts/Layout.astro';
 import BreadcrumbNav from '../../components/BreadcrumbNav.astro';
 import DancheongPatterns from '../../components/DancheongPatterns.astro';
 import '../../styles/global.css';
-import { PALACES, getLang, getPalaceName, fetchPalaceList, type Lang } from '../../lib/api';
+import { PALACES, getLang, getPalaceName, getPalaceDesc, fetchPalaceList, type Lang } from '../../lib/api';
+import { getSceneByLocation } from '../../data/kdh-scenes';
 
 const lang = getLang(Astro.url);
 const htmlLang = lang === 'kr' ? 'ko' : lang;
@@ -14,6 +15,7 @@ if (!palace) return Astro.redirect('/');
 
 const buildings = await fetchPalaceList(palaceId);
 const palaceName = getPalaceName(palace, lang);
+const palaceDesc = getPalaceDesc(palace, lang);
 
 const palaceColors: Record<number, string> = {
   1: 'var(--palace-gyeongbok)',
@@ -26,6 +28,16 @@ const palaceHanja: Record<number, string> = {
   1: '景福宮', 2: '昌德宮', 3: '昌慶宮', 4: '德壽宮', 5: '宗廟',
 };
 const accentColor = palaceColors[palaceId] || 'var(--dancheong-yellow)';
+
+// Maps palace IDs to KDH scene lookup keys
+const palaceToScene: Record<string, string> = {
+  '1': 'gyeongbokgung',
+  '2': 'changdeokgung',
+  '3': 'changgyeonggung',
+  '4': 'deoksugung',
+};
+const sceneKey = palaceToScene[Astro.params.id || ''];
+const kdhScene = sceneKey ? getSceneByLocation(sceneKey) : null;
 
 function getBuildingName(b: typeof buildings[0], lang: Lang) {
   const map: Record<Lang, string> = { kr: b.nameKr, en: b.nameEn, ja: b.nameJa, zh: b.nameZh };
@@ -53,19 +65,20 @@ const description = `${palaceName} ${countLabel[lang]}`;
   <style>@import '../../styles/global.css';</style>
   <DancheongPatterns />
 
-  <!-- 시네마틱 히어로 -->
-  <section class="palace-hero">
-    <div class="palace-hero-bg">
-      <img src={palace.heroImage || palace.image} alt={palaceName} fetchpriority="high" />
+  <!-- Cinematic Hero -->
+  <section class="p2-cinematic-hero">
+    <div class="p2-cinematic-bg">
+      <img
+        src={palace.heroImage || palace.image}
+        alt={palaceName}
+        fetchpriority="high"
+      />
     </div>
-    <div class="palace-hero-overlay" style={`background: linear-gradient(180deg, rgba(8,5,16,0.2) 0%, rgba(8,5,16,0.7) 60%, var(--bg-night) 100%)`}></div>
-    <div class="palace-hero-content">
-      <span class="palace-hanja" style={`color: ${accentColor}`}>{palaceHanja[palaceId] || ''}</span>
-      <h1 class="palace-title">{palaceName}</h1>
-      <p class="palace-count">{countLabel[lang]}</p>
-      <a href={`/guide/${palaceId === 1 ? 'gyeongbokgung' : palaceId === 2 ? 'changdeokgung' : palaceId === 3 ? 'changgyeonggung' : palaceId === 4 ? 'deoksugung' : 'jongmyo'}?lang=${lang}`} class="btn btn-primary" style={`background: ${accentColor}`}>
-        {guideLabels[lang]} &rarr;
-      </a>
+    <div class="hero-overlay"></div>
+    <div class="p2-cinematic-content">
+      <span class="p2-cinematic-badge">{palaceHanja[palaceId] || ''}</span>
+      <h1 class="p2-cinematic-title">{palaceName}</h1>
+      <p class="p2-cinematic-subtitle">{palaceDesc}</p>
     </div>
   </section>
 
@@ -96,6 +109,21 @@ const description = `${palaceName} ${countLabel[lang]}`;
       </ul>
     </section>
   </div>
+
+  {kdhScene && (
+    <section class="p2-kdh-connection">
+      <div class="container">
+        <div class="p2-kdh-connection-inner">
+          <span class="kdh-connection-badge">KPop Demon Hunters</span>
+          <h3>{kdhScene.sceneTitle[lang] || kdhScene.sceneTitle.en}</h3>
+          <p>{(kdhScene.filmContext[lang] || kdhScene.filmContext.en).slice(0, 150)}...</p>
+          <a href="/kpop-demon-hunters" class="btn btn-primary">
+            {lang === 'kr' ? '전체 촬영지 보기' : lang === 'ja' ? '全ロケ地を見る' : lang === 'zh' ? '查看全部拍摄地' : 'View All Filming Locations'} &rarr;
+          </a>
+        </div>
+      </div>
+    </section>
+  )}
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
@@ -139,7 +167,8 @@ const description = `${palaceName} ${countLabel[lang]}`;
 </Layout>
 
 <style>
-  .palace-hero {
+  /* ── P2 Cinematic Hero ── */
+  .p2-cinematic-hero {
     position: relative;
     width: 100%;
     height: 60vh;
@@ -150,30 +179,25 @@ const description = `${palaceName} ${countLabel[lang]}`;
     overflow: hidden;
     background: var(--bg-night);
   }
-  .palace-hero-bg {
+  .p2-cinematic-bg {
     position: absolute;
     inset: 0;
     z-index: 0;
   }
-  .palace-hero-bg img {
+  .p2-cinematic-bg img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    filter: brightness(0.65) saturate(1.2);
+    filter: brightness(0.55) saturate(1.3) contrast(1.1);
   }
-  .palace-hero-overlay {
-    position: absolute;
-    inset: 0;
-    z-index: 1;
-  }
-  .palace-hero-content {
+  .p2-cinematic-content {
     position: relative;
     z-index: 2;
     text-align: center;
     padding: 0 24px 60px;
     width: 100%;
   }
-  .palace-hanja {
+  .p2-cinematic-badge {
     display: block;
     font-family: 'Noto Serif KR', serif;
     font-size: clamp(1rem, 3vw, 1.4rem);
@@ -181,7 +205,7 @@ const description = `${palaceName} ${countLabel[lang]}`;
     opacity: 0.7;
     margin-bottom: 8px;
   }
-  .palace-title {
+  .p2-cinematic-title {
     font-family: 'Noto Serif KR', serif;
     font-weight: 900;
     font-size: clamp(2rem, 6vw, 3.2rem);
@@ -189,12 +213,55 @@ const description = `${palaceName} ${countLabel[lang]}`;
     margin-bottom: 8px;
     text-shadow: 0 0 12px rgba(255,215,0,0.3);
   }
-  .palace-count {
+  .p2-cinematic-subtitle {
     font-size: 1rem;
     color: var(--color-text-light);
     margin-bottom: 24px;
   }
 
+  /* ── KDH Connection Section ── */
+  .p2-kdh-connection {
+    padding: 40px 0 60px;
+  }
+  .p2-kdh-connection-inner {
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto;
+    background: var(--bg-glass);
+    backdrop-filter: blur(12px) saturate(1.2);
+    -webkit-backdrop-filter: blur(12px) saturate(1.2);
+    border: 1px solid var(--color-border-light);
+    border-radius: 16px;
+    padding: 40px 32px;
+  }
+  .p2-kdh-connection-inner p {
+    font-size: 0.95rem;
+    color: var(--color-text-light);
+    line-height: 1.7;
+    margin-bottom: 24px;
+  }
+  .kdh-connection-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--neon-red), #FF6B8A);
+    color: #fff;
+    padding: 6px 20px;
+    border-radius: 30px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    box-shadow: 0 0 20px rgba(255,59,92,0.3);
+  }
+  .p2-kdh-connection-inner h3 {
+    font-family: 'Noto Serif KR', serif;
+    font-size: clamp(1.2rem, 4vw, 1.6rem);
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: var(--neon-gold);
+  }
+
+  /* ── Building List (kept from original) ── */
   .building-section { padding: 0 0 60px; }
   .building-list { list-style: none; margin-top: 16px; }
   .building-list li {

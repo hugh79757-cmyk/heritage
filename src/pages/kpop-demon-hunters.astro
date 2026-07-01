@@ -5,6 +5,7 @@ import FAQSection from '../components/FAQSection.astro';
 import DancheongCard from '../components/DancheongCard.astro';
 import '../styles/global.css';
 import { getLang } from '../lib/api';
+import { KDH_SCENES } from '../data/kdh-scenes';
 
 const lang = getLang(Astro.url);
 const htmlLang = lang === 'kr' ? 'ko' : lang;
@@ -64,7 +65,7 @@ const locations = [
     desc: { en: 'The chase scene through narrow hanok alleyways — one of the most iconic sequences in the film.', kr: '좁은 한옥 골목을 질주하는 추격 장면 — 영화에서 가장 상징적인 시퀀스 중 하나.', ja: '狭い韓屋路地を駆け抜ける追逐シーン — 映画で最も象徴的なシークエンスの一つ。', zh: '穿过狭窄韩屋小巷的追逐场景 — 电影中最具标志性的场景之一。' },
     image: '/tour-images/bukchon.jpg',
     link: '#',
-    guideLink: '#',
+    guideLink: '/kpop-demon-hunters#scene-bukchon',
     type: 'scenic',
     coords: '37.5826, 126.9857',
   },
@@ -75,7 +76,7 @@ const locations = [
     desc: { en: 'The rooftop chase along the ancient fortress wall — where tradition meets the modern skyline.', kr: '고대 성곽을 따라 지붕 위를 달리는 추격 장면 — 전통과 현대 스카이라인의 만남.', ja: '古代城郭に沿って屋上を駆ける追逐シーン — 伝統と近代スカイラインの出会い。', zh: '沿着古城墙屋顶追逐的场景 — 传统与现代天际线的交汇。' },
     image: '/tour-images/naksan.jpg',
     link: '#',
-    guideLink: '#',
+    guideLink: '/kpop-demon-hunters#scene-naksan',
     type: 'historic',
     coords: '37.5800, 127.0070',
   },
@@ -86,7 +87,7 @@ const locations = [
     desc: { en: 'The climactic rooftop confrontation with Seoul\'s night skyline as backdrop.', kr: '서울 야경을 배경으로 한 클라이맥스 옥상 대결 장면.', ja: 'ソウルの夜景を背景にしたクライマックスの屋上対決シーン。', zh: '以首尔夜景为背景的高潮屋顶对决场景。' },
     image: '/tour-images/nseoul.jpg',
     link: '#',
-    guideLink: '#',
+    guideLink: '/kpop-demon-hunters#scene-nseoul-tower',
     type: 'scenic',
     coords: '37.5512, 126.9882',
   },
@@ -97,7 +98,7 @@ const locations = [
     desc: { en: 'The dramatic opening chase through the historic square — King Sejong\'s statue witnesses the action.', kr: '세종대왕 동상이 지켜보는 역사적 광장에서의 드라마틱한 오프닝 추격 장면.', ja: '世宗大王像が見守る歴史的広場でのドラマチックなオープニング追逐シーン。', zh: '在世宗大王铜像见证下历史广场上的戏剧性开场追逐。' },
     image: '/tour-images/gwanghwamun.jpg',
     link: '#',
-    guideLink: '#',
+    guideLink: '/kpop-demon-hunters#scene-gwanghwamun',
     type: 'scenic',
     coords: '37.5724, 126.9769',
   },
@@ -108,7 +109,7 @@ const locations = [
     desc: { en: 'The traditional market scene where ancient artifacts become weapons of choice.', kr: '고대 유물이 무기가 되는 전통 시장 장면.', ja: '古代の遺物が武器となる伝統市場のシーン。', zh: '古代文物成为武器的传统市场场景。' },
     image: '/tour-images/insadong.jpg',
     link: '#',
-    guideLink: '#',
+    guideLink: '/kpop-demon-hunters#scene-insadong',
     type: 'historic',
     coords: '37.5710, 126.9882',
   },
@@ -155,7 +156,17 @@ const sectionSub: Record<string, string> = {
   <!-- 히어로 — 케데헌 네온 시네마틱 -->
   <section class="kdh-hero">
     <div class="kdh-hero-bg">
-      <img src="https://www.heritage.go.kr/gung/gogung1/images/ic-e21.jpg" alt="KPop Demon Hunters Seoul" fetchpriority="high" />
+      <img
+        src="/images/generated/kdh-hero-md.webp"
+        srcset="/images/generated/kdh-hero-sm.webp 375w, /images/generated/kdh-hero-md.webp 768w, /images/generated/kdh-hero-lg.webp 1200w"
+        sizes="100vw"
+        alt="KPop Demon Hunters Seoul"
+        fetchpriority="high"
+        width="768"
+        height="1344"
+        style="aspect-ratio: 768/1344; object-fit: cover;"
+        decoding="async"
+      />
     </div>
     <div class="kdh-hero-overlay"></div>
     <div class="kdh-hero-content">
@@ -167,14 +178,49 @@ const sectionSub: Record<string, string> = {
         <a href="#map-section" class="btn btn-outline">{lang === 'kr' ? '지도에서 보기' : lang === 'ja' ? '地図で見る' : lang === 'zh' ? '地图查看' : 'View on Map'}</a>
       </div>
     </div>
-    <div class="hero-scroll">
-      SCROLL
-      <div class="hero-scroll-line"></div>
-    </div>
   </section>
 
-  <!-- 민화 구분선 (이미지 추가 시 활성화) -->
-  <div class="minhwa-divider"></div>
+  <!-- ═══ SCENE-BY-SCENE GUIDE ═══ -->
+  <section class="kdh-scenes-section" id="locations">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="kdh-section-title">
+          {lang === 'kr' ? '씬별 가이드' : lang === 'ja' ? 'シーン別ガイド' : lang === 'zh' ? '场景指南' : 'Scene-by-Scene Guide'}
+        </h2>
+        <p class="kdh-section-sub">
+          {lang === 'kr' ? '영화 속 6개 핵심 장면을 실제 위치와 함께 만나보세요' : lang === 'ja' ? '映画の6つの主要シーンを実際の場所とともに' : lang === 'zh' ? '探索电影中6个关键场景的实际拍摄地' : 'Explore all 6 key scenes from the film mapped to their real locations'}
+        </p>
+      </div>
+
+      {KDH_SCENES.map((scene, i) => (
+        <div class="kdh-scene-section" id={`scene-${scene.id}`}>
+          <div class="kdh-scene-image-wrap">
+            <img
+              src={`/images/generated/${scene.imageId}-md.webp`}
+              srcset={`/images/generated/${scene.imageId}-sm.webp 375w,
+                      /images/generated/${scene.imageId}-md.webp 768w,
+                      /images/generated/${scene.imageId}-lg.webp 1200w`}
+              sizes="(max-width: 768px) 100vw, 50vw"
+              alt={scene.sceneTitle[lang] || scene.sceneTitle.en}
+              loading={i < 2 ? 'eager' : 'lazy'}
+              class="kdh-scene-image"
+            />
+          </div>
+          <div class="kdh-scene-text">
+            <span class="kdh-scene-number">{(lang === 'kr' ? '장면 ' : lang === 'ja' ? 'シーン ' : lang === 'zh' ? '场景 ' : 'Scene ') + (i + 1)}</span>
+            <h3 class="kdh-scene-title">{scene.sceneTitle[lang] || scene.sceneTitle.en}</h3>
+            <p class="kdh-scene-film-context">{scene.filmContext[lang] || scene.filmContext.en}</p>
+            <p class="kdh-scene-desc">{scene.sceneDescription[lang] || scene.sceneDescription.en}</p>
+            {scene.palaceLink && (
+              <a href={scene.palaceLink} class="btn btn-sm btn-outline">
+                {lang === 'kr' ? '궁궐 상세 보기' : lang === 'ja' ? '宮殿の詳細' : lang === 'zh' ? '查看宫殿详情' : 'View Palace Details'} &rarr;
+              </a>
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
 
   <div class="container">
 
@@ -307,15 +353,58 @@ const sectionSub: Record<string, string> = {
 
     <hr class="dancheong-divider" />
 
-    <div class="minhwa-divider-strip">
-      <img
-        src="/minhwa-tiger-magpie.jpeg"
-        alt="민화 호작도"
-        width="1200"
-        height="200"
-        loading="lazy"
-      />
-    </div>
+    <section class="kdh-timeline-section">
+      <div class="section-header">
+        <h2>
+          {lang === 'kr' ? '1일 성지순례 코스' : lang === 'ja' ? '1日聖地巡礼コース' : lang === 'zh' ? '一日圣地巡礼路线' : 'One-Day Pilgrimage Route'}
+        </h2>
+        <p>
+          {lang === 'kr' ? '경복궁에서 N서울타워까지 — 영화 속 그 장소를 하루에' : lang === 'ja' ? '景福宮からNソウルタワーまで' : lang === 'zh' ? '从景福宫到N首尔塔' : 'From Gyeongbokgung to N Seoul Tower — visit all locations in one day'}
+        </p>
+      </div>
+      <div class="route-steps">
+        <div class="route-step">
+          <div class="route-step-marker route-step-start"></div>
+          <div class="route-step-content">
+            <div class="route-step-time">09:00</div>
+            <h4>Gyeongbokgung</h4>
+            <p>2-3 hours</p>
+          </div>
+        </div>
+        <div class="route-step">
+          <div class="route-step-marker"></div>
+          <div class="route-step-content">
+            <div class="route-step-time">12:00</div>
+            <h4>Gwanghwamun → Insadong</h4>
+            <p>1.5 hours (walking distance)</p>
+          </div>
+        </div>
+        <div class="route-step">
+          <div class="route-step-marker"></div>
+          <div class="route-step-content">
+            <div class="route-step-time">14:00</div>
+            <h4>Bukchon Hanok Village</h4>
+            <p>1.5 hours</p>
+          </div>
+        </div>
+        <div class="route-step">
+          <div class="route-step-marker"></div>
+          <div class="route-step-content">
+            <div class="route-step-time">16:00</div>
+            <h4>Naksan Park</h4>
+            <p>2 hours (incl. hike)</p>
+          </div>
+        </div>
+        <div class="route-step">
+          <div class="route-step-marker route-step-end"></div>
+          <div class="route-step-content">
+            <div class="route-step-time">19:00</div>
+            <h4>N Seoul Tower</h4>
+            <p>Sunset view — 1.5 hours</p>
+          </div>
+        </div>
+      </div>
+    </section>
 
     <FAQSection items={faqItems} lang={lang} />
   </div>

@@ -11,84 +11,106 @@
    단청 네온 팔레트 — 2026 확장
    ═══════════════════════════════════════════════ */
 :root {
-  /* 오방색 (유지) */
-  --dancheong-blue:    #1B4FD8;
-  --neon-blue:         #00C8FF;
-  --dancheong-red:     #C8231E;
-  --neon-red:          #FF3B5C;
-  --dancheong-yellow:  #E8A020;
-  --neon-gold:         #FFD700;
-  --dancheong-white:   #F5F0E8;
-  --dancheong-black:   #0A0806;
+  /* Dancheong Pastel Interpretation */
+  --dancheong-blue-pastel:    #A8D0E6;    /* Dalbang (달방색) */
+  --dancheong-red-pastel:     #F5B7B1;    /* Eojang (어장색) */
+  --dancheong-yellow-pastel:  #FAD7A0;    /* Hanji (한지색) */
+  --dancheong-white-pastel:   #F8F4E3;    /* Sokpaltchi (석판치) */
+  --dancheong-black-pastel:   #8FBC8F;    /* Celadon (청자색) */
 
-  /* 2026 확장 팔레트 */
-  --neon-purple:       #A855F7;
-  --neon-cyan:         #22D3EE;
-  --neon-pink:         #EC4899;
-  --neon-orange:       #F97316;
-  --dancheong-teal:    #0EA5E9;
+  /* Neutral Base for Maximum Ma Effect */
+  --color-bg:                 #FFFFFF;    /* Pure white background */
+  --color-card:               #F8F4E3;    /* Sokpaltchi - warm off-white */
+  --color-card-hover:         #F0E8D8;    /* Slightly darker variant */
+  --color-text:               #2C3E50;    /* Deep slate for readability */
+  --color-text-light:         #7F8C8D;    /* Soft gray for tertiary info */
+  --color-text-muted:         #BDC3C7;    /* Lighter gray for hints */
+  --color-border:             #E8D8C3;    /* Subtle rice paper tone */
+  --color-border-light:       rgba(232, 216, 195, 0.3);
 
-  /* 배경 시스템 */
-  --bg-night:          #080510;
-  --bg-deep:           #0C0A14;
-  --bg-card:           #12101A;
-  --bg-card-hover:     #1A1726;
-  --bg-glass:          rgba(18, 16, 26, 0.6);
-  --bg-glass-border:   rgba(255, 215, 0, 0.08);
-  --bg-glass-hover:    rgba(18, 16, 26, 0.75);
+  /* Semantic Colors (mapped from pastels) */
+  --color-primary:            var(--dancheong-blue-pastel);
+  --color-accent:             var(--dancheong-red-pastel);
+  --color-success:            var(--dancheong-yellow-pastel);
+  --color-info:               var(--dancheong-blue-pastel);
+  --color-warning:            #F39C12;    /* Soft amber */
+  --color-error:              #E74C3C;    /* Soft red */
 
-  /* 글로우 (향상) */
-  --glow-blue:    0 0 20px rgba(0,200,255,0.6);
-  --glow-red:     0 0 20px rgba(255,59,92,0.6);
-  --glow-gold:    0 0 20px rgba(255,215,0,0.5);
-  --glow-gold-strong: 0 0 30px rgba(255,215,0,0.7), 0 0 60px rgba(255,215,0,0.3);
+  /* Shadows - Soft and Subtle for Ma Aesthetic */
+  --shadow-sm:  0 1px 3px rgba(0, 0, 0, 0.05);
+  --shadow-md:  0 4px 8px rgba(0, 0, 0, 0.08);
+  --shadow-lg:  0 8px 16px rgba(0, 0, 0, 0.10);
+  --shadow-xl:  0 12px 24px rgba(0, 0, 0, 0.12);
 
-  /* 시스템 */
-  --color-primary:      var(--dancheong-yellow);
-  --color-primary-dark: #C48A18;
-  --color-primary-light:#FFD700;
-  --color-bg:           var(--bg-night);
-  --color-card:         var(--bg-card);
-  --color-text:         var(--dancheong-white);
-  --color-text-light:   #B8AFA3;
-  --color-text-muted:   #6B6560;
-  --color-border:       #2A2530;
-  --color-border-light: rgba(255,215,0,0.12);
-  --color-accent:       var(--dancheong-yellow);
-  --color-hero-overlay: linear-gradient(180deg,
-      rgba(8,5,16,0.1) 0%,
-      rgba(8,5,16,0.4) 40%,
-      rgba(8,5,16,0.85) 80%,
-      rgba(8,5,16,0.95) 100%);
+  /* Glow Effects - Soft and Diffused */
+  --glow-blue:    0 0 12px rgba(168, 208, 230, 0.2);
+  --glow-red:     0 0 12px rgba(245, 183, 177, 0.2);
+  --glow-yellow:  0 0 12px rgba(250, 215, 160, 0.2);
+  --glow-green:   0 0 12px rgba(143, 188, 143, 0.2);
 
-  /* 섀도우 */
-  --shadow-sm:  0 2px 8px rgba(0,0,0,0.4);
-  --shadow-md:  0 4px 24px rgba(0,0,0,0.5);
-  --shadow-lg:  0 12px 48px rgba(0,0,0,0.6);
-  --shadow-xl:  0 24px 80px rgba(0,0,0,0.7);
-  --shadow-glass: 0 8px 32px rgba(0,0,0,0.3);
+  /* Dancheong Pattern Colors */
+  --dc-blue:    #A8D0E6;
+  --dc-red:     #F5B7B1;
+  --dc-yellow:  #FAD7A0;
+  --dc-white:   #F8F4E3;
+  --dc-black:   #8FBC8F;
 
-  /* 라디우스 */
-  --radius:     16px;
-  --radius-sm:  10px;
-  --radius-lg:  24px;
-  --radius-xl:  32px;
+  /* System */
+  --radius:     12px;
+  --radius-sm:  6px;
+  --radius-lg:  18px;
+  --radius-xl:  24px;
+  --transition: 0.3s ease;
+  --transition-bounce: 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 
-  /* 트랜지션 */
-  --transition: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-bounce: 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-  --transition-smooth: 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  /* Palace Representative Colors (Pastel Versions) */
+  --palace-gyeongbok:  var(--dancheong-blue-pastel);
+  --palace-changdeok:  var(--dancheong-red-pastel);
+  --palace-changgyeong:#C8A2C8;  /* Lavender pastel */
+  --palace-deoksu:     #A8E6CF;  /* Mint green pastel */
+  --palace-jongmyo:    var(--dancheong-yellow-pastel);
 
-  /* 궁궐별 대표색 */
-  --palace-gyeongbok:  var(--neon-blue);
-  --palace-changdeok:  var(--neon-red);
-  --palace-changgyeong:#9B59B6;
-  --palace-deoksu:     #27AE60;
-  --palace-jongmyo:    var(--neon-gold);
+  /* Bamboo-inspired Spacing System for Ma (8px base) */
+  --space-0:   0px;
+  --space-1:   4px;   /* half */
+  --space-2:   8px;   /* base */
+  --space-3:   12px;  /* 1.5x */
+  --space-4:   16px;  /* 2x */
+  --space-5:   20px;  /* 2.5x */
+  --space-6:   24px;  /* 3x */
+  --space-7:   28px;  /* 3.5x */
+  --space-8:   32px;  /* 4x */
+  --space-9:   36px;  /* 4.5x */
+  --space-10:  40px;  /* 5x */
+  --bento-gap: var(--space-6);
 
-  /* Bento Grid */
-  --bento-gap: 16px;
-  --bento-radius: 20px;
+  /* ── Cinematic Dark Theme (hero, nav, glass) ── */
+  --bg-night:           #080510;  /* 극도로 어두운 남색 */
+  --bg-card:            #12101A;  /* 다크 카드 배경 (shimmer 로딩 등) */
+  --bg-card-hover:      #1a1625;
+  --dancheong-white:    #F5F0E8;  /* 따뜻한 백 */
+  --dancheong-black:    #0A0806;  /* 깊은 흑 */
+
+  /* ── Neon Palette (오방색 글로우) ── */
+  --neon-blue:          #00C8FF;
+  --neon-red:           #FF3B5C;
+  --neon-gold:          #FFD700;
+  --neon-purple:        #B066FF;
+
+  /* ── Glow Effects ── */
+  --glow-gold:          0 0 20px rgba(255,215,0,0.4);
+
+  /* ── Traditional Dancheong (오방색 원형) ── */
+  --dancheong-blue:   #1B4FD8;  /* 전통 군청 */
+  --dancheong-red:    #C8231E;  /* 전통 주홍 */
+  --dancheong-yellow: #E8A020;  /* 전통 황금 */
+
+  /* ── Glassmorphism ── */
+  --bg-glass:           rgba(18, 16, 26, 0.55);
+  --bg-glass-border:    rgba(255, 255, 255, 0.08);
+
+  /* ── Hero ── */
+  --color-hero-overlay: linear-gradient(180deg, rgba(8,5,16,0.15) 0%, rgba(8,5,16,0.75) 100%);
 }
 
 /* ═══════════════════════════════════════════════
@@ -147,12 +169,238 @@ img { max-width: 100%; height: auto; }
 h1, h2, h3 { text-wrap: balance; }
 p, li { text-wrap: pretty; }
 
+/* ── Global Typography (v2 spec) ── */
+/* Heading scale — 컴포넌트별 clamp()가 우선 적용됨 */
+h1 { font-family: 'Noto Serif KR', serif; font-weight: 900; font-size: clamp(2.25rem, 6vw, 3.5rem); line-height: 1.15; letter-spacing: -0.02em; }
+h2 { font-family: 'Noto Serif KR', serif; font-weight: 700; font-size: clamp(1.5rem, 4vw, 2.2rem); line-height: 1.25; letter-spacing: -0.01em; }
+h3 { font-family: 'Noto Serif KR', serif; font-weight: 700; font-size: clamp(1.2rem, 3vw, 1.5rem); line-height: 1.35; }
+p  { font-size: 1rem; line-height: 1.8; }
+@media (max-width: 640px) {
+  h1 { font-size: clamp(1.75rem, 10vw, 2.5rem); }
+  h2 { font-size: clamp(1.3rem, 7vw, 1.75rem); }
+  p  { font-size: 0.95rem; }
+}
+
 ::selection {
   background: rgba(255,215,0,0.25);
   color: var(--dancheong-white);
 }
 
 .container { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+/* ═══════════════════════════════════════════════
+   컴포넌트 베이클라스 — 단청 파스텔 × 마
+   ═══════════════════════════════════════════════ */
+
+/* Base Card - Embodies ma through generous padding and subtle borders */
+.card-base {
+  background: var(--color-card);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  transition: all var(--transition);
+  /* Ma principle: generous internal spacing */
+  padding: var(--space-6);
+}
+
+/* Hover state - subtle elevation and color shift */
+.card-base:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--color-primary);
+  background: var(--color-card-hover);
+}
+
+/* Base Button - Soft and approachable */
+.btn-base {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  height: 3rem;
+  padding: 0 var(--space-4);
+  border-radius: var(--radius);
+  font-weight: 600;
+  font-size: 0.95rem;
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition);
+  text-decoration: none;
+}
+
+/* Primary Button - Uses pastel accent */
+.btn-primary {
+  background: var(--color-accent);
+  color: var(--color-bg);
+}
+
+.btn-primary:hover {
+  background: var(--color-accent);
+  opacity: 0.9;
+  transform: translateY(-1px);
+  box-shadow: var(--glow-red);
+}
+
+/* Secondary Button - Outline style */
+.btn-outline {
+  background: transparent;
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+}
+
+.btn-outline:hover {
+  background: var(--color-bg);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+/* Icon Button - For navigation and actions */
+.icon-btn {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+  transition: all var(--transition);
+}
+
+.icon-btn:hover {
+  background: var(--color-card-hover);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  transform: scale(1.05);
+}
+
+/* Badge - Small, informative markers */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 var(--space-2);
+  height: 1.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: var(--radius);
+}
+
+.badge-primary {
+  background: var(--color-primary);
+  color: var(--color-bg);
+}
+
+.badge-accent {
+  background: var(--color-accent);
+  color: var(--color-bg);
+}
+
+.badge-outline {
+  background: transparent;
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+}
+
+/* Input Fields - Clean and spacious */
+.input-base {
+  width: 100%;
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-size: 0.95rem;
+  transition: all var(--transition);
+}
+
+.input-base:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px rgba(168, 208, 230, 0.2);
+}
+
+.input-base::placeholder {
+  color: var(--color-text-light);
+  opacity: 0.7;
+}
+
+/* Textarea - Same principles as input */
+.textarea-base {
+  width: 100%;
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-size: 0.95rem;
+  resize: vertical;
+  min-height: 6rem;
+  transition: all var(--transition);
+}
+
+.textarea-base:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px rgba(168, 208, 230, 0.2);
+}
+
+/* Layout Containers - Emphasizing ma */
+.section-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--space-8) var(--space-4);
+}
+
+@media (max-width: 640px) {
+  .section-container { padding: var(--space-6) var(--space-3); }
+}
+
+.content-wrapper {
+  /* Encourages asymmetric layouts with breathing room */
+  display: grid;
+  gap: var(--space-6);
+}
+
+@media (min-width: 768px) {
+  .content-wrapper {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Asymmetric layout variants */
+.content-wrapper.asymmetric {
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 768px) {
+  .content-wrapper.asymmetric {
+    grid-template-columns: 1fr 1fr;
+  }
+  
+  /* Alternate sides for visual interest */
+  .content-wrapper.asymmetric > :nth-child(even) {
+    direction: rtl;
+  }
+  
+  .content-wrapper.asymmetric > :nth-child(even) > * {
+    direction: ltr;
+  }
+}
+
+/* Spacer - Explicit ma elements */
+.spacer-vertical {
+  height: var(--space-4);
+  width: 100%;
+  display: block;
+}
+
+.spacer-horizontal {
+  width: var(--space-4);
+  height: 100%;
+  display: block;
+}
 @media (max-width: 640px) { .container { padding: 0 16px; } }
 
 /* ═══════════════════════════════════════════════
@@ -1193,12 +1441,23 @@ footer a:hover { color: var(--neon-gold); }
   font-weight: 700;
   line-height: 1.3;
   margin-bottom: 12px;
+  color: var(--color-text);
 }
 .kdh-hook-sub {
   font-size: 1rem;
   color: var(--color-text-light);
-  margin-bottom: 28px;
+  margin-bottom: 16px;
   line-height: 1.7;
+}
+.kdh-hook-note {
+  font-size: 0.8rem;
+  color: rgba(255,215,0,0.55);
+  margin-bottom: 24px;
+  line-height: 1.5;
+  max-width: 560px;
+  margin-left: auto;
+  margin-right: auto;
+  font-style: italic;
 }
 
 /* ═══════════════════════════════════════════════

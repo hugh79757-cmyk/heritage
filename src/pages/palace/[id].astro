@@ -3,7 +3,7 @@ import Layout from '../../layouts/Layout.astro';
 import BreadcrumbNav from '../../components/BreadcrumbNav.astro';
 import DancheongPatterns from '../../components/DancheongPatterns.astro';
 import '../../styles/global.css';
-import { PALACES, getLang, getPalaceName, getPalaceDesc, fetchPalaceList, type Lang } from '../../lib/api';
+import { PALACES, getLang, getPalaceName, getPalaceDesc, getPalaceHook, fetchPalaceList, type Lang } from '../../lib/api';
 import { getSceneByLocation } from '../../data/kdh-scenes';
 
 const lang = getLang(Astro.url);
@@ -16,6 +16,7 @@ if (!palace) return Astro.redirect('/');
 const buildings = await fetchPalaceList(palaceId);
 const palaceName = getPalaceName(palace, lang);
 const palaceDesc = getPalaceDesc(palace, lang);
+const palaceHook = getPalaceHook(palace, lang);
 
 const palaceColors: Record<number, string> = {
   1: 'var(--palace-gyeongbok)',
@@ -28,6 +29,15 @@ const palaceHanja: Record<number, string> = {
   1: '景福宮', 2: '昌德宮', 3: '昌慶宮', 4: '德壽宮', 5: '宗廟',
 };
 const accentColor = palaceColors[palaceId] || 'var(--dancheong-yellow)';
+
+// Map palace IDs to generated pastel hero images
+const generatedHeroImages: Record<number, string> = {
+  1: '/images/generated/gyeongbok-hero-md.webp',
+  // 2: '/images/generated/changdeokgung-secret-md.webp', // pending AI generation
+  // 3: '/images/generated/gyeonghoeru-night-md.webp',     // pending AI generation
+  // 4: '/images/generated/deoksugung-modern-md.webp',     // pending AI generation
+  // 5: '/images/generated/jongno-joseon-md.webp',         // pending AI generation
+};
 
 // Maps palace IDs to KDH scene lookup keys
 const palaceToScene: Record<string, string> = {
@@ -69,18 +79,23 @@ const description = `${palaceName} ${countLabel[lang]}`;
   <section class="p2-cinematic-hero">
     <div class="p2-cinematic-bg">
       <img
-        src={palace.heroImage || palace.image}
+        src={generatedHeroImages[palaceId] || palace.heroImage || palace.image}
         alt={palaceName}
         fetchpriority="high"
+        width="768"
+        height="512"
+        style="aspect-ratio: 768/512; object-fit: cover;"
       />
     </div>
     <div class="hero-overlay"></div>
     <div class="p2-cinematic-content">
       <span class="p2-cinematic-badge">{palaceHanja[palaceId] || ''}</span>
       <h1 class="p2-cinematic-title">{palaceName}</h1>
-      <p class="p2-cinematic-subtitle">{palaceDesc}</p>
+      <p class="p2-cinematic-subtitle">{palaceHook}</p>
     </div>
   </section>
+
+  <p class="palace-lead">{palaceDesc}</p>
 
   <div class="container">
     <BreadcrumbNav items={[{ name: 'Home', url: '/' }, { name: palaceName }]} lang={lang} />
@@ -217,6 +232,21 @@ const description = `${palaceName} ${countLabel[lang]}`;
     font-size: 1rem;
     color: var(--color-text-light);
     margin-bottom: 24px;
+  }
+
+  .palace-lead {
+    font-family: 'Noto Serif KR', serif;
+    font-size: clamp(1.05rem, 2.5vw, 1.2rem);
+    line-height: 1.85;
+    color: var(--color-text);
+    max-width: 680px;
+    margin: 40px auto 0;
+    padding: 0 24px;
+    font-weight: 400;
+  }
+
+  @media (max-width: 640px) {
+    .palace-lead { margin-top: 28px; }
   }
 
   /* ── KDH Connection Section ── */

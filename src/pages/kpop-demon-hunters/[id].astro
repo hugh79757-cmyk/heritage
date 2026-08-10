@@ -19,6 +19,18 @@ const { scene } = Astro.props;
 const lang = getLang(Astro.url);
 const htmlLang = lang === 'kr' ? 'ko' : lang;
 
+function getTypeLabel(scene: typeof KDH_SCENES[0], lang: string): string {
+  const labels: Record<string, Record<string, string>> = {
+    kr: { scene: '장면 배경', inspiration: '건축적 영감', motif: '디자인 모티프' },
+    en: { scene: 'Scene Location', inspiration: 'Architectural Inspiration', motif: 'Design Motif' },
+    ja: { scene: 'シーンの舞台', inspiration: '建築的インスピレーション', motif: 'デザイン母題' },
+    zh: { scene: '场景背景', inspiration: '建筑灵感', motif: '设计灵感' },
+  };
+  const langMap = lang === 'kr' || lang === 'ko' ? 'kr' : lang === 'ja' ? 'ja' : lang === 'zh' ? 'zh' : 'en';
+  const type = scene.id === 'gyeongbokgung' ? 'inspiration' : scene.id === 'lotte-world-tower' ? 'motif' : 'scene';
+  return (labels[langMap] && labels[langMap][type]) || (labels.en[type]);
+}
+
 const pageTitle = `${scene.sceneTitle[lang] || scene.sceneTitle.en} | KPop Demon Hunters | K-Heritage`;
 const pageDesc = `${scene.sceneDescription[lang] || scene.sceneDescription.en} — 방문 정보, 가는 법, 사진 포인트까지.`;
 
@@ -26,10 +38,10 @@ const prevScene = KDH_SCENES.find(s => s.order === scene.order - 1);
 const nextScene = KDH_SCENES.find(s => s.order === scene.order + 1);
 
 const navLabels: Record<string, { prev: string; next: string; back: string; details: string }> = {
-  kr: { prev: '이전 장면', next: '다음 장면', back: '전체 촬영지', details: '궁궐 상세 보기' },
-  en: { prev: 'Previous Scene', next: 'Next Scene', back: 'All Locations', details: 'View Palace Details' },
-  ja: { prev: '前のシーン', next: '次のシーン', back: '全ロケ地', details: '宮殿詳細を見る' },
-  zh: { prev: '上一幕', next: '下一幕', back: '全部拍摄地', details: '查看宫殿详情' },
+  kr: { prev: '이전 장소', next: '다음 장소', back: '전체 장소', details: '궁궐 상세 보기' },
+  en: { prev: 'Previous Place', next: 'Next Place', back: 'All Places', details: 'View Palace Details' },
+  ja: { prev: '前の場所', next: '次の場所', back: '全場所', details: '宮殿詳細を見る' },
+  zh: { prev: '上一个地点', next: '下一个地点', back: '全部地点', details: '查看宫殿详情' },
 };
 const nav = navLabels[lang] || navLabels.en;
 
@@ -60,6 +72,7 @@ const breadcrumbItems = [
     </div>
     <div class="kdh-scene-hero-content">
       <span class="kdh-scene-badge">KPop Demon Hunters</span>
+      <span class="kdh-scene-type-badge">{getTypeLabel(scene, lang)}</span>
       <h1 class="kdh-scene-title">{scene.sceneTitle[lang] || scene.sceneTitle.en}</h1>
     </div>
   </section>
@@ -164,8 +177,17 @@ const breadcrumbItems = [
     border-radius: 20px;
     font-size: 0.75rem;
     font-weight: 600;
-    margin-bottom: 16px;
+    margin-bottom: 8px;
     letter-spacing: 0.05em;
+  }
+  .kdh-scene-type-badge {
+    display: inline-block;
+    font-size: 0.68rem;
+    font-weight: 500;
+    color: rgba(245,240,232,0.45);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
   }
   .kdh-scene-title {
     font-family: 'Noto Serif KR', serif;

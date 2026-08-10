@@ -1,7 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import MapExplore from '../components/MapExplore.astro';
-import TimeSlider from '../components/TimeSlider.astro';
+// import TimeSlider from '../components/TimeSlider.astro'; // disabled: need proper comparison images
 import DancheongCard from '../components/DancheongCard.astro';
 import DancheongPatterns from '../components/DancheongPatterns.astro';
 import '../styles/global.css';
@@ -68,22 +68,22 @@ const sec: Record<string, { h2: string; p: string }> = {
 const s = sec[lang];
 
 const kdhTitle: Record<string, string> = {
-  kr: '케이팝 데몬 헌터스\n속 그 장소',
-  en: 'Real Locations from\nKPop Demon Hunters',
-  ja: 'KPop Demon Hunters\nの実際のロケ地',
-  zh: 'KPop Demon Hunters\n实际拍摄地',
+  kr: '케이팝 데몬 헌터스\n영감의 장소들',
+  en: 'Seoul Inspirations of\nKPop Demon Hunters',
+  ja: 'KPop Demon Hunters\nインスピレーションの場所',
+  zh: 'KPop Demon Hunters\n灵感来源地',
 };
 const kdhSub: Record<string, string> = {
-  kr: '영화에 등장한 실제 서울 장소를 탐험하세요',
-  en: 'Explore the real Seoul locations featured in the film',
-  ja: '映画に登場するソウルの実際の場所を探索',
-  zh: '探索电影中出现的首尔实际场景',
+  kr: '애니메이션 영화 속 세계를 만든 서울의 실제 공간 —경복궁부터 N서울타워까지',
+  en: 'The real Seoul places that shaped an animated world — from Gyeongbokgung to N Seoul Tower',
+  ja: 'アニメーション映画の世界を形作ったソウルの実在空間 — 景福宮からNソウルタワーまで',
+  zh: '塑造动画电影世界的首尔实存空间 — 从景福宫到N首尔塔',
 };
 const kdhBtn: Record<string, string> = {
-  kr: '촬영지 보기',
-  en: 'View Locations',
-  ja: 'ロケ地を見る',
-  zh: '查看拍摄地',
+  kr: '영감의 장소 보기',
+  en: 'Explore Inspirations',
+  ja: 'インスピレーションを見る',
+  zh: '查看灵感地点',
 };
 
 const palaceColors = [
@@ -170,6 +170,7 @@ const palaceHanja = ['景福宮', '昌德宮', '昌慶宮', '徳寿宮', '宗廟
   <hr class="dancheong-divider" />
 
   <!-- ═══ 타임슬라이더 — 조선/현재 비교 ═══ -->
+  <!-- disabled: 적절한 비교 이미지 확보 후 활성화
   <div class="container reveal-up">
     <div class="section-header">
       <h2>{lang === 'kr' ? '시간을 넘나들다' : lang === 'ja' ? '時を超えて' : lang === 'zh' ? '穿越时光' : 'Through Time'}</h2>
@@ -181,6 +182,7 @@ const palaceHanja = ['景福宮', '昌德宮', '昌慶宮', '徳寿宮', '宗廟
       afterSrc="/tour-images/gyeongbokgung.jpg"
     />
   </div>
+  -->
 
   <hr class="dancheong-divider" />
 
@@ -264,6 +266,12 @@ const palaceHanja = ['景福宮', '昌德宮', '昌慶宮', '徳寿宮', '宗廟
         <span class="kdh-hook-badge">KPop Demon Hunters</span>
         <h2 class="kdh-hook-title" set:html={kdhTitle[lang]?.replace(/\n/g, '<br/>') || kdhTitle.en.replace(/\n/g, '<br/>')} />
         <p class="kdh-hook-sub">{kdhSub[lang] || kdhSub.en}</p>
+        <p class="kdh-hook-note">
+          {lang === 'kr' ? '※ KPop Demon Hunters는 애니메이션 영화입니다. 아래 장소는 실제 촬영지가 아니라 영화의 시각 세계관에 영감을 준 공간입니다.' :
+           lang === 'ja' ? '※ KPop Demon Huntersはアニメーション映画です。以下の場所は実撮影地ではなく、映画の視覚世界観にインスピレーションを与えた空間です。' :
+           lang === 'zh' ? '※ 《KPop Demon Hunters》是动画电影。以下地点并非实拍地，而是为电影视觉世界观提供灵感的空间。' :
+           '※ KPop Demon Hunters is an animated film. The locations below are not filming sites — they are real places that inspired the film\'s visual world.'}
+        </p>
         <a href={`/kpop-demon-hunters?lang=${lang}`} class="btn btn-primary btn-magnetic">{kdhBtn[lang] || kdhBtn.en} &rarr;</a>
       </div>
     </div>

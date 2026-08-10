@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * AI 이미지 생성기 — 단청 네온 스타일
+ * AI 이미지 생성기 — 단청 파스텔 스타일 (마 강조)
  * Hugging Face FLUX.1-schnell로 빌드타임 생성
  * 
  * 사용법:
@@ -20,6 +20,7 @@ config({ path: resolve(process.cwd(), '.env') });
 
 import { writeFileSync, mkdirSync, existsSync } from 'fs';
 import { execSync } from 'child_process';
+import { HfInference } from '@huggingface/inference';
 
 const HF_TOKEN = process.env.HF_TOKEN;
 if (!HF_TOKEN) {
@@ -28,35 +29,44 @@ if (!HF_TOKEN) {
   process.exit(1);
 }
 
+const hf = new HfInference(HF_TOKEN);
+
 const OUTPUT_DIR = new URL('../public/images/generated/', import.meta.url).pathname;
 mkdirSync(OUTPUT_DIR, { recursive: true });
 
-const STYLE_PREFIX = `Joseon Dynasty palace Korea, traditional dancheong colors (red, blue, gold, white), night scene, neon glow effect on traditional architecture, cinematic lighting, vibrant colors, KPop Demon Hunters animation style, ultra detailed, photorealistic`;
+const STYLE_PREFIX = `
+  Joseon Dynasty palace Korea, 
+  traditional dancheong pastel colors (dalbang, eojang, hanji, sokpaltchi, celadon),
+  soft morning light, gentle atmosphere,
+  Korean minimalist composition with ma (negative space),
+  serene and contemplative mood,
+  ultra detailed, photorealistic
+`;
 
 const IMAGES = [
   {
     id: 'gyeongbok-hero',
-    prompt: `${STYLE_PREFIX}, Gyeongbokgung Palace Geunjeongjeon main hall, full moon, golden lanterns, red and blue dancheong pillars glowing, 9:16 mobile portrait`,
+    prompt: `${STYLE_PREFIX}, Gyeongbokgung Palace Geunjeongjeon main hall at dawn, soft golden light bathing the dancheong pillars, mist gently rising from the courtyard, empty space inviting contemplation, traditional Korean architectural harmony, 9:16 mobile portrait`,
     size: '768x1344',
   },
   {
     id: 'gyeonghoeru-night',
-    prompt: `${STYLE_PREFIX}, Gyeonghoeru Pavilion reflected in moonlit pond, lotus flowers, teal neon water reflection, 9:16 mobile portrait`,
+    prompt: `${STYLE_PREFIX}, Gyeonghoeru Pavilion reflected in moonlit pond, lotus flowers, soft ripples, pastel-hued sky with gentle moonlight, tranquil ambiance, 9:16 mobile portrait`,
     size: '768x1344',
   },
   {
     id: 'changdeokgung-secret',
-    prompt: `${STYLE_PREFIX}, Changdeokgung Secret Garden pavilion surrounded by autumn foliage, warm golden lanterns, mysterious atmosphere, 9:16 mobile portrait`,
+    prompt: `${STYLE_PREFIX}, Changdeokgung Secret Garden pavilion surrounded by autumn foliage in muted pastel tones, quiet pathway with stone lanterns, diffused sunlight through trees, peaceful solitude, 9:16 mobile portrait`,
     size: '768x1344',
   },
   {
     id: 'jongno-joseon',
-    prompt: `${STYLE_PREFIX}, Joseon era Jongno street scene, merchants and nobles in colorful hanbok, traditional shop signs, lantern festival, 9:16 mobile portrait`,
+    prompt: `${STYLE_PREFIX}, Joseon era Jongno street scene, merchants and nobles in comfortable hanbok of pastel hues, traditional shop signs with subtle signage, lanterns providing soft glow, harmonious street life, 9:16 mobile portrait`,
     size: '768x1344',
   },
   {
     id: 'deoksugung-modern',
-    prompt: `${STYLE_PREFIX}, Deoksugung Palace Seokjojeon Western-style building at night, contrast of modern and traditional, neon street lights, 9:16 mobile portrait`,
+    prompt: `${STYLE_PREFIX}, Deoksugung Palace Seokjojeon Western-style building at night, contrast of traditional dancheong accents and Western architecture under soft moonlight, balanced composition, gentle illumination, 9:16 mobile portrait`,
     size: '768x1344',
   },
 
@@ -66,42 +76,75 @@ const IMAGES = [
 
   {
     id: 'kdh-hero',
-    prompt: `${STYLE_PREFIX}, Gyeongbokgung Palace Geunjeongjeon at night, KPop Demon Hunters main confrontation scene, dramatic action composition, red and blue neon lighting between dancheong pillars, heroic epic scale, action movie poster style, moonlight casting shadows, 9:16 mobile portrait`,
+    prompt: `${STYLE_PREFIX}, Gyeongbokgung Palace Geunjeongjeon at daybreak, dignified atmosphere with pastel dancheong pillars, soft light casting gentle shadows, open courtyard space evoking contemplation, traditional Korean architecture in serene morning light, 9:16 mobile portrait`,
     size: '768x1344',
   },
   {
     id: 'kdh-gyeongbokgung',
-    prompt: `${STYLE_PREFIX}, Gyeongbokgung Palace main courtyard at night, action sequence under full moon, characters facing off between dancheong pillars, neon blue and gold light beams cutting through darkness, traditional lanterns, dramatic composition, 9:16 mobile portrait`,
+    prompt: `${STYLE_PREFIX}, Gyeongbokgung Palace main courtyard at morning, spacious layout with pastel-colored buildings, quiet ambiance with subtle hints of activity, harmonious balance of structure and nature, 9:16 mobile portrait`,
     size: '768x1344',
   },
   {
     id: 'kdh-bukchon',
-    prompt: `${STYLE_PREFIX}, Bukchon Hanok Village narrow alleyway at night, chase scene through traditional Korean houses with curved tiled roofs, warm golden light spilling from hanok windows, neon pink accents, cinematic motion blur, dramatic perspective looking down alley, 9:16 mobile portrait`,
+    prompt: `${STYLE_PREFIX}, Bukchon Hanok Village alleyway in soft morning light, traditional houses with pastel-toned tiles and walls, gentle shadows creating depth, peaceful residential atmosphere, 9:16 mobile portrait`,
     size: '768x1344',
   },
   {
     id: 'kdh-naksan',
-    prompt: `${STYLE_PREFIX}, Naksan Park Seoul City Wall at night, rooftop chase along ancient fortress wall, Seoul skyline glowing in background, full moon, neon teal and gold lighting on stone wall, dramatic height perspective looking down at city, 9:16 mobile portrait`,
+    prompt: `${STYLE_PREFIX}, Naksan Park Seoul City Wall at sunrise, ancient stone wall with muted pastel lichen textures, distant cityscape in soft haze, contemplative mood with open sky, 9:16 mobile portrait`,
     size: '768x1344',
   },
   {
     id: 'kdh-nseoul-tower',
-    prompt: `${STYLE_PREFIX}, N Seoul Tower at night seen from below observation deck, climactic confrontation scene, neon pink and blue beams sweeping across night sky, Seoul city lights far below, cinematic wide angle, dramatic clouds, 9:16 mobile portrait`,
+    prompt: `${STYLE_PREFIX}, N Seoul Tower at twilight, soft illumination on tower structure, distant city lights appearing as gentle glows, harmonious blend of technology and tradition under pastel sky, 9:16 mobile portrait`,
     size: '768x1344',
   },
   {
     id: 'kdh-gwanghwamun',
-    prompt: `${STYLE_PREFIX}, Gwanghwamun Square at night with King Sejong statue silhouette, dramatic opening chase scene wide shot, street reflections on wet ground after rain, traffic light trails, government buildings lit in background, cinematic movie still, 9:16 mobile portrait`,
+    prompt: `${STYLE_PREFIX}, Gwanghwamun Square at morning, statues and architecture bathed in soft light, open square providing sense of space and tranquility, subtle activity of people in traditional attire, 9:16 mobile portrait`,
     size: '768x1344',
   },
   {
     id: 'kdh-insadong',
-    prompt: `${STYLE_PREFIX}, Insadong traditional street at night, bustling market scene, traditional Korean tea houses and art galleries with colorful signs, paper lanterns hanging overhead, warm neon glow on cobblestone street, cinematic depth with crowd activity, 9:16 mobile portrait`,
+    prompt: `${STYLE_PREFIX}, Insadong traditional street in soft daylight, shopfronts with pastel-colored signs, people leisurely browsing, gentle atmosphere encouraging reflection and appreciation of culture, 9:16 mobile portrait`,
     size: '768x1344',
   },
   {
     id: 'gyeongbok-hero',
-    prompt: `${STYLE_PREFIX}, Gyeongbokgung Palace Geunjeongjeon main hall at night, grand entrance view, full moon illuminating golden roof tiles, red and blue dancheong pillars glowing with neon light, palace courtyard with stone pavement, majestic cinematic wide shot, 9:16 mobile portrait`,
+    // Note: duplicate id; we keep the first one; this entry will be ignored or override? We'll keep unique.
+    // We'll rename this to gyeongbok-hero-alt to avoid duplicate.
+    id: 'gyeongbok-hero-alt',
+    prompt: `${STYLE_PREFIX}, Gyeongbokgung Palace Geunjeongjeon main hall view from courtyard, majestic architecture framed by open space, soft light highlighting details, serene and powerful presence, 9:16 mobile portrait`,
+    size: '768x1344',
+  },
+
+  // PHASE 2 v2 — 신규 KDH 5개 장소 (영화 스틸 톤)
+  // 스타일: 다큐멘터리 사진이 아닌 영화 스틸처럼 연출
+  // 골든아워/블루아워, 안개/조명 대비, 인물 없이 광각
+
+  {
+    id: 'kdh-jamsil',
+    prompt: `Seoul Jamsil Sports Complex Olympic stadium at blue hour, floodlights just turned on, dramatic wide angle from low angle, stadium architecture silhouetted against deep blue sky, cinematic lighting, empty grandstand, movie still composition, no people, ultra detailed, photorealistic, 9:16 mobile portrait`,
+    size: '768x1344',
+  },
+  {
+    id: 'kdh-cheongdam',
+    prompt: `Cheongdam Bridge Seoul over Han River at twilight, bridge structure with car light trails streaking below, river reflecting ambient city light, Hanyangdoseong in soft distance, cinematic blue hour atmosphere, mist hovering above water, no people, wide angle, movie still, ultra detailed, photorealistic, 9:16 mobile portrait`,
+    size: '768x1344',
+  },
+  {
+    id: 'kdh-coex',
+    prompt: `COEX K-POP Square Samsung Seoul at night, massive outdoor LED screen glowing with colorful light against dark building facade, Starfield COEX mall entrance illuminated, cool blue and warm gold tones, cinematic contrast between dark sky and screen glow, no crowds, wide architectural shot, movie still, ultra detailed, photorealistic, 9:16 mobile portrait`,
+    size: '768x1344',
+  },
+  {
+    id: 'kdh-myeongdong',
+    prompt: `Myeongdong shopping street Seoul at night, neon signs and shop lighting glowing warm gold and red, dense commercial streetscape with glowing signage, wet pavement reflecting lights suggesting recent rain, cinematic energy but no crowds, wide one-point perspective down the street, blue hour sky above, movie still, ultra detailed, photorealistic, 9:16 mobile portrait`,
+    size: '768x1344',
+  },
+  {
+    id: 'kdh-lotte',
+    prompt: `Lotte World Tower Seoul at blue hour, sleek glass tower rising into deep blue sky, top section illuminated with soft warm light, contrast between modern glass surface and low-rise historic city below, cinematic composition emphasizing verticality, no people, wide angle, movie still, ultra detailed, photorealistic, 9:16 mobile portrait`,
     size: '768x1344',
   },
 ];
@@ -185,7 +228,7 @@ async function generateImage(imageDef) {
 async function main() {
   console.log('═══════════════════════════════════════');
   console.log('  K-Heritage AI Image Generator');
-  console.log('  단청 네온 스타일 이미지 생성');
+  console.log('  단청 파스텔 스타일 이미지 생성 (마 강조)');
   console.log('═══════════════════════════════════════\n');
 
   let success = 0;

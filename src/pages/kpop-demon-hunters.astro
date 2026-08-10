@@ -2,914 +2,633 @@
 import GuideLayout from '../components/GuideLayout.astro';
 import BreadcrumbNav from '../components/BreadcrumbNav.astro';
 import FAQSection from '../components/FAQSection.astro';
-import DancheongCard from '../components/DancheongCard.astro';
+import QuickAnswerBox from '../components/QuickAnswerBox.astro';
 import '../styles/global.css';
+import { KDH_SCENES, type KDHScene } from '../data/kdh-scenes';
 import { getLang } from '../lib/api';
-import { KDH_SCENES } from '../data/kdh-scenes';
 
 const lang = getLang(Astro.url);
 const htmlLang = lang === 'kr' ? 'ko' : lang;
 
 const title = 'KPop Demon Hunters — Real Seoul Locations Guide | K-Heritage';
-const description = 'Complete guide to real Seoul locations featured in KPop Demon Hunters: Gyeongbokgung Palace, Bukchon Hanok Village, Naksan Park, N Seoul Tower, and more. Plan your KPop Demon Hunters pilgrimage in Seoul.';
+const description = 'Complete guide to the real Seoul locations that inspired KPop Demon Hunters: Jamsil, Cheongdam Bridge, COEX, Naksan Park, Bukchon, N Seoul Tower, Myeongdong, Lotte World Tower, and Gyeongbokgung. Plan your pilgrimage route.';
 
 const faqByLang: Record<string, { question: string; answer: string }[]> = {
   kr: [
-    { question: '케이팝 데몬 헌터스는 서울 어디서 촬영했나요?', answer: '경복궁, 북촌한옥마을, 낙산공원, N서울타워 등 실제 서울 명소에서 촬영했습니다.' },
-    { question: '촬영지를 직접 방문할 수 있나요?', answer: '네, 모든 촬영지는 일반 관광객이 방문 가능합니다. 경복궁은 입장료가 있으며 사전 예약을 권장합니다.' },
-    { question: '하루에 모든 촬영지를 다 볼 수 있나요?', answer: '경복궁→북촌→낙산→N서울타워 순서로 이동하면 하루 코스로 가능합니다.' },
-    { question: '케이팝 데몬 헌터스 성지순례 투어가 있나요?', answer: '공식 투어는 없지만 이 페이지의 지도와 루트를 참고해 자유여행으로 방문하실 수 있습니다.' },
-    { question: '어떤 궁궐이 가장 많이 나오나요?', answer: '경복궁이 주요 결전 장소로 가장 많이 등장하며, 특히 근정전과 경회루 장면이 인상적입니다.' },
+    { question: 'KPop Demon Hunters는 실제 서울에서 촬영했나요?', answer: '아니요. KPop Demon Hunters는 애니메이션 영화입니다. 아래 소개된 장소들은 실제 촬영지가 아니라, 영화 속 장면의 배경이 되거나 건축적·시각적 영감을 준 서울의 실제 공간들입니다. 각 장소 페이지의 "영화 속 장면"에서 정확한 관계를 확인할 수 있습니다.' },
+    { question: '어느 장소부터 방문하는 것이 좋나요?', answer: '하루 코스를 원한다면 서울종합운동장(잠실) → COEX → 청담대교 → 명동 → 북촌 → 낙산공원 → N서울타워 순서가 지리적 흐름에 맞습니다. 경복궁과 롯데월드타워는 경로를 벗어나므로 별도 일정으로 잡으세요.' },
+    { question: '롯데월드타워와 경복궁은 영화에 나오나요?', answer: '직접 등장하지 않습니다. 롯데월드타워는 헌트릭스 팀 숙소의 시각 디자인 모티프이고, 경복궁은 진우의 400년 전 회상 신 세계관의 건축적 영감입니다. 두 곳 모두 "촬영지"가 아니라 영화 미학에 영향을 준 참조 공간입니다.' },
+    { question: '하루에 모든 장소를 다 갈 수 있나요?', answer: '지리적으로 가능한 7곳(잠실·COEX·청담대교·명동·북촌·낙산·N서울타워)은 하루 일정으로 묶을 수 있습니다. 경복궁과 롯데월드타워는 서울에서 떨어져 있지 않지만 별도 일정으로 보는 것이 여유롭습니다. 도보와 지하철 조합으로 이동하세요.' },
+    { question: '사진 찍기 좋은 곳은 어디인가요?', answer: '낙산공원 성곽길 (서울 파노라마 뷰), 북촌 한옥마을 골목 (기와지붕과 담장), N서울타워 전망대 (야경)가 영화 속 장면 분위기를 재현하기 좋은 장소입니다. 골든아워(해 지기 1시간 전) 방문을 추천합니다.' },
   ],
   en: [
-    { question: 'Where was KPop Demon Hunters filmed in Seoul?', answer: 'Key filming locations include Gyeongbokgung Palace, Bukchon Hanok Village, Naksan Park (Seoul City Wall), N Seoul Tower, Gwanghwamun Square, and Insadong. Each location features prominently in specific scenes of the film.' },
-    { question: 'Can I visit the KPop Demon Hunters filming locations?', answer: 'Yes! All featured locations are publicly accessible in Seoul. Gyeongbokgung and other palaces require admission (₩3,000 adults). Most outdoor locations like Bukchon, Naksan Park, and Gwanghwamun Square are free to visit.' },
-    { question: 'How do I plan a KPop Demon Hunters pilgrimage route?', answer: 'Start at Gyeongbokgung Palace (main setting), walk through Gwanghwamun Square, continue to Bukchon Hanok Village, then hike Naksan Park along the Seoul City Wall. End at N Seoul Tower for the night view. This route takes a full day.' },
-    { question: 'Is there a KPop Demon Hunters tour in Seoul?', answer: 'While no official tour exists yet, the locations are spread across central Seoul and easily accessible by subway. This guide provides a self-guided pilgrimage route with all the key spots marked on a map.' },
-    { question: 'What palace is featured most in KPop Demon Hunters?', answer: 'Gyeongbokgung Palace is the primary setting, with several key scenes filmed at Geunjeongjeon (Throne Hall) and the palace grounds. The film showcases the palace at night with dramatic lighting.' },
+    { question: 'Was KPop Demon Hunters actually filmed in Seoul?', answer: 'No. KPop Demon Hunters is an animated film. The locations listed below are not filming locations — they are real Seoul places that inspired the film\'s scenes, or whose architecture and atmosphere provided visual reference for the animation. Each location page explains the actual relationship clearly.' },
+    { question: 'Which location should I start with?', answer: 'For a one-day route, start at Jamsil Sports Complex, then move to COEX, Cheongdam Bridge, Myeongdong, Bukchon, Naksan Park, and end at N Seoul Tower. Gyeongbokgung and Lotte World Tower are slightly out of the main flow — plan them as separate stops.' },
+    { question: 'Do Lotte World Tower and Gyeongbokgung appear in the film?', answer: 'Not directly. Lotte World Tower is the visual design motif behind the Huntrix team\'s base. Gyeongbokgung is the architectural inspiration for the world of Jinwoo\'s 400-year-old memory sequence. Neither is a filming location — both are references that shaped the film\'s visual language.' },
+    { question: 'Can I visit all locations in one day?', answer: 'The seven locations along the central Seoul flow — Jamsil, COEX, Cheongdam Bridge, Myeongdong, Bukchon, Naksan Park, and N Seoul Tower — can be connected in a single day using subway and walking. Gyeongbokgung and Lotte World Tower are close but better as separate visits for a more relaxed pace.' },
+    { question: 'Which spots are best for photos?', answer: 'Naksan Park\'s fortress wall trail (panoramic Seoul view), Bukchon\'s hanok alleyways (tiled roofs and wall compositions), and the N Seoul Tower observation deck (night skyline) are the best spots to recreate the mood of the film\'s scenes. Visit during golden hour — about one hour before sunset.' },
   ],
   ja: [
-    { question: 'KPop Demon Huntersのソウルのロケ地はどこですか？', answer: '景福宮、北村韓屋村、駱山公園、Nソウルタワーなど、ソウルの実際の名所で撮影されました。' },
-    { question: 'ロケ地に直接訪問できますか？', answer: 'はい、すべてのロケ地は一般観光客が訪問可能です。景福宮は入場料がかかり、事前予約を推奨します。' },
-    { question: '一日ですべてのロケ地を見ることができますか？', answer: '景福宮→北村→駱山→Nソウルタワーの順で移動すれば、一日コースで可能です。' },
-    { question: 'KPop Demon Huntersの聖地巡礼ツアーはありますか？', answer: '公式ツアーはありませんが、このページの地図とルートを参考に自由旅行で訪問できます。' },
-    { question: '最も多く登場する宮殿はどこですか？', answer: '景福宮が主な決戦場所として最も多く登場し、特に勤政殿と慶會樓のシーンが印象的です。' },
+    { question: 'KPop Demon Huntersはソウルで実撮影されたのですか？', answer: 'いいえ。KPop Demon Huntersはアニメーション映画です。以下のロケ地は実際の撮影場所ではなく、映画のシーンにインスピレーションを与えた、あるいはアニメーションの視覚的参照となったソウル市の実在の空間です。各場所のページで正確な関係を確認できます。' },
+    { question: 'どの場所から訪問するのがいいですか？', answer: '1日のコースなら、ソウル総合運動場(蚕室) → COEX → 清潭橋 → 明洞 → 北村 → 駱山公園 → Nソウルタワーの順が地理的な流れに合います。景福宮とロッテワールドタワーは若干外れるので、別枠で計画してください。' },
+    { question: 'ロッテワールドタワーと景福宮は映画に登場しますか？', answer: '直接登場しません。ロッテワールドタワーはハントリックスチームの拠点のビジュアルデザインのモチーフであり、景福宮はジヌの400年前の回想シーンの世界の建築的インスピレーションです。どちらも「撮影地」ではなく、映画の美学に影響を与えた参照空間です。' },
+    { question: '1日で全ての場所を回れますか？', answer: 'ソウル中心部の流れに乗った7箇所(蚕室・COEX・清潭橋・明洞・北村・駱山・Nソウルタワー)は、地下鉄と徒歩を組み合わせて1日でつなげられます。景福宮とロッテワールドタワーは近いが、余裕を持って別訪とするのがおすすめです。' },
+    { question: '写真撮影に適した場所はどこですか？', answer: '駱山公園の城壁道(ソウルパノラマビュー)、北村韓屋村の路地(瓦屋根と塀の構成)、Nソウルタワー展望台(夜景)が、映画のシーンの雰囲気を再現しやすい場所です。ゴールデンアワー(日没1時間前)の訪問をおすすめします。' },
   ],
   zh: [
-    { question: 'KPop Demon Hunters在首尔哪里拍摄的？', answer: '在景福宫、北村韩屋村、骆山公园、N首尔塔等首尔实际名胜拍摄。' },
-    { question: '可以亲自参观拍摄地吗？', answer: '可以，所有拍摄地都对普通游客开放。景福宫需要门票，建议提前预约。' },
-    { question: '一天能看完所有拍摄地吗？', answer: '按景福宫→北村→骆山→N首尔塔的顺序移动，一天行程可以完成。' },
-    { question: '有KPop Demon Hunters的圣地巡礼团吗？', answer: '没有官方旅行团，但可以参考本页面的地图和路线自由行参观。' },
-    { question: '哪个宫殿出场最多？', answer: '景福宫作为主要决战场地出场最多，特别是勤政殿和庆会楼的场景令人印象深刻。' },
+    { question: '《KPop Demon Hunters》是在首尔实景拍摄的吗？', answer: '不是。《KPop Demon Hunters》是一部动画电影。下面介绍的地点并非拍摄地，而是为电影场景提供灵感的首尔真实空间，或为动画视觉风格提供参考的建筑与氛围。每个地点的页面都说明了具体的关系。' },
+    { question: '应该从哪个地点开始参观？', answer: '如果安排一日 route，建议按以下地理顺序：蚕室体育综合运动场 → COEX → 清潭大桥 → 明洞 → 北村 → 骆山公园 → N首尔塔。景福宫和乐天世界塔稍微偏离主路线，建议单独安排。' },
+    { question: '乐天世界塔和景福宫在电影中出现了吗？', answer: '没有直接出现。乐天世界塔是Huntrix团队基地的视觉设计母题，景福宫则是Jinwoo 400年前回忆场景世界的建筑灵感。两者都不是“拍摄地”，而是影响电影美学的参考空间。' },
+    { question: '一天能玩遍所有地点吗？', answer: '沿首尔中心区交通线的7个地点（蚕室、COEX、清潭大桥、明洞、北村、骆山公园、N首尔塔）可以用地铁和步行在一天内串联。景福宫和乐天世界塔虽然不远，但建议单独安排以放松节奏。' },
+    { question: '哪里适合拍照？', answer: '骆山公园城墙道（首尔全景）、北村韩屋村小巷（瓦顶与墙面构图）、N首尔塔观景台（夜景）是最适合重现电影场景氛围的地点。建议在黄金时段（日落前1小时）参观。' },
   ],
 };
 
 const faqItems = faqByLang[lang] || faqByLang.en;
 
-const locations = [
-  {
-    id: 'gyeongbokgung',
-    name: { en: 'Gyeongbokgung Palace', kr: '경복궁', ja: '景福宮', zh: '景福宫' },
-    hanja: { en: 'Gyeongbokgung', kr: '景福宮' },
-    desc: { en: 'The primary setting — where the main confrontation unfolds beneath the throne hall under moonlight.', kr: '주요 배경 — 달빛 아래 전각에서 벌어지는 주요 결전 장소.', ja: '主要舞台 — 月明の下で本殿前で繰り広げられる主要な対決の場所。', zh: '主要场景 — 月光下大殿前展开的主要对决之地。' },
-    image: '/tour-images/gyeongbokgung.jpg',
-    link: '/palace/1',
-    guideLink: '/guide/gyeongbokgung',
-    type: 'palace',
-    coords: '37.5796, 126.9770',
-  },
-  {
-    id: 'bukchon',
-    name: { en: 'Bukchon Hanok Village', kr: '북촌한옥마을', ja: '北村韓屋村', zh: '北村韩屋村' },
-    hanja: { en: 'Bukchon', kr: '北村' },
-    desc: { en: 'The chase scene through narrow hanok alleyways — one of the most iconic sequences in the film.', kr: '좁은 한옥 골목을 질주하는 추격 장면 — 영화에서 가장 상징적인 시퀀스 중 하나.', ja: '狭い韓屋路地を駆け抜ける追逐シーン — 映画で最も象徴的なシークエンスの一つ。', zh: '穿过狭窄韩屋小巷的追逐场景 — 电影中最具标志性的场景之一。' },
-    image: '/tour-images/bukchon.jpg',
-    link: '#',
-    guideLink: '/kpop-demon-hunters#scene-bukchon',
-    type: 'scenic',
-    coords: '37.5826, 126.9857',
-  },
-  {
-    id: 'naksan',
-    name: { en: 'Naksan Park / Seoul City Wall', kr: '낙산공원 / 한양도성', ja: '駱山公園 / 漢陽都城', zh: '骆山公园 / 汉阳都城' },
-    hanja: { en: 'Naksan', kr: '駱山' },
-    desc: { en: 'The rooftop chase along the ancient fortress wall — where tradition meets the modern skyline.', kr: '고대 성곽을 따라 지붕 위를 달리는 추격 장면 — 전통과 현대 스카이라인의 만남.', ja: '古代城郭に沿って屋上を駆ける追逐シーン — 伝統と近代スカイラインの出会い。', zh: '沿着古城墙屋顶追逐的场景 — 传统与现代天际线的交汇。' },
-    image: '/tour-images/naksan.jpg',
-    link: '#',
-    guideLink: '/kpop-demon-hunters#scene-naksan',
-    type: 'historic',
-    coords: '37.5800, 127.0070',
-  },
-  {
-    id: 'nseoul-tower',
-    name: { en: 'N Seoul Tower', kr: 'N서울타워', ja: 'Nソウルタワー', zh: 'N首尔塔' },
-    hanja: { en: 'N Seoul Tower', kr: 'N서울타워' },
-    desc: { en: 'The climactic rooftop confrontation with Seoul\'s night skyline as backdrop.', kr: '서울 야경을 배경으로 한 클라이맥스 옥상 대결 장면.', ja: 'ソウルの夜景を背景にしたクライマックスの屋上対決シーン。', zh: '以首尔夜景为背景的高潮屋顶对决场景。' },
-    image: '/tour-images/nseoul.jpg',
-    link: '#',
-    guideLink: '/kpop-demon-hunters#scene-nseoul-tower',
-    type: 'scenic',
-    coords: '37.5512, 126.9882',
-  },
-  {
-    id: 'gwanghwamun',
-    name: { en: 'Gwanghwamun Square', kr: '광화문광장', ja: '光化門広場', zh: '光化门广场' },
-    hanja: { en: 'Gwanghwamun', kr: '光化門' },
-    desc: { en: 'The dramatic opening chase through the historic square — King Sejong\'s statue witnesses the action.', kr: '세종대왕 동상이 지켜보는 역사적 광장에서의 드라마틱한 오프닝 추격 장면.', ja: '世宗大王像が見守る歴史的広場でのドラマチックなオープニング追逐シーン。', zh: '在世宗大王铜像见证下历史广场上的戏剧性开场追逐。' },
-    image: '/tour-images/gwanghwamun.jpg',
-    link: '#',
-    guideLink: '/kpop-demon-hunters#scene-gwanghwamun',
-    type: 'scenic',
-    coords: '37.5724, 126.9769',
-  },
-  {
-    id: 'insadong',
-    name: { en: 'Insadong', kr: '인사동', ja: '仁寺洞', zh: '仁寺洞' },
-    hanja: { en: 'Insadong', kr: '仁寺洞' },
-    desc: { en: 'The traditional market scene where ancient artifacts become weapons of choice.', kr: '고대 유물이 무기가 되는 전통 시장 장면.', ja: '古代の遺物が武器となる伝統市場のシーン。', zh: '古代文物成为武器的传统市场场景。' },
-    image: '/tour-images/insadong.jpg',
-    link: '#',
-    guideLink: '/kpop-demon-hunters#scene-insadong',
-    type: 'historic',
-    coords: '37.5710, 126.9882',
-  },
-];
-
-function getLocName(loc: typeof locations[0]) {
-  const map: Record<string, string> = { kr: loc.name.kr, en: loc.name.en, ja: loc.name.ja, zh: loc.name.zh };
-  return map[lang] || loc.name.en;
+function getLocName(loc: KDHScene): string {
+  const map: Record<string, string> = { kr: loc.sceneTitle.kr, en: loc.sceneTitle.en, ja: loc.sceneTitle.ja, zh: loc.sceneTitle.zh };
+  return map[lang] || loc.sceneTitle.en;
 }
-function getLocDesc(loc: typeof locations[0]) {
-  const map: Record<string, string> = { kr: loc.desc.kr, en: loc.desc.en, ja: loc.desc.ja, zh: loc.desc.zh };
-  return map[lang] || loc.desc.en;
+
+function getLocShortDesc(loc: KDHScene): string {
+  const map: Record<string, string> = { kr: loc.sceneDescription.kr, en: loc.sceneDescription.en, ja: loc.sceneDescription.ja, zh: loc.sceneDescription.zh };
+  return map[lang] || loc.sceneDescription.en;
+}
+
+function getTypeLabel(loc: KDHScene): string {
+  if (loc.palaceLink) return lang === 'kr' ? '건축적 영감' : lang === 'ja' ? '建築的インスピレーション' : lang === 'zh' ? '建筑灵感' : 'Architectural Inspiration';
+  if (loc.id === 'lotte-world-tower') return lang === 'kr' ? '디자인 모티프' : lang === 'ja' ? 'デザイン・モチーフ' : lang === 'zh' ? '设计灵感' : 'Design Motif';
+  return lang === 'kr' ? '장면 배경' : lang === 'ja' ? 'シーンの舞台' : lang === 'zh' ? '场景背景' : 'Scene Location';
 }
 
 const heroTitle: Record<string, string> = {
-  en: 'KPop Demon Hunters\nReal Seoul Locations',
-  kr: '케이팝 데몬 헌터스\n실제 서울 촬영지',
-  ja: 'KPop Demon Hunters\nソウル実際のロケ地',
-  zh: 'KPop Demon Hunters\n首尔实际拍摄地',
+  en: 'KPop Demon Hunters\nReal Seoul Inspirations',
+  kr: '케이팝 데몬 헌터스\n실제 서울 영감의 장소들',
+  ja: 'KPop Demon Hunters\nソウル実際のインスピレーション',
+  zh: 'KPop Demon Hunters\n首尔实际灵感地点',
 };
 const heroSub: Record<string, string> = {
-  en: 'Walk in the footsteps of your favorite characters. Every palace, alley, and rooftop from the film — mapped and guide-ready.',
-  kr: '좋아하는 캐릭터의 발자취를 따라가보세요. 영화 속 모든 궁궐, 골목, 옥지도표시와 가이드.',
-  ja: 'お気に入りのキャラクターの足跡を辿りましょう。映画のすべての宮殿、路地、屋上をマッピング。',
-  zh: '追随你最爱角色的足迹。电影中的每座宫殿、小巷和屋顶都已标注并配有指南。',
+  en: 'An animated film — these are not filming locations. They are the real places that gave shape to the movie\'s world.',
+  kr: '애니메이션 영화입니다 — 아래 장소는 촬영지가 아닙니다. 영화 속 세계를 만든 실제 서울의 공간들입니다.',
+  ja: 'アニメーション映画です — 以下の場所は撮影地ではありません。映画の世界を形作ったソウル実在の空間です。',
+  zh: '这是一部动画电影——以下地点并非拍摄地。它们是塑造电影世界的首尔真实空间。',
 };
+const h = { title: heroTitle[lang] || heroTitle.en, sub: heroSub[lang] || heroSub.en };
 
-const sectionTitle: Record<string, string> = {
-  en: 'Filming Locations Map',
-  kr: '촬영지 지도',
-  ja: 'ロケ地マップ',
-  zh: '拍摄地地图',
-};
-const sectionSub: Record<string, string> = {
-  en: 'Explore all 6 key locations on the interactive map',
-  kr: '인터랙티브 지도에서 6개 핵심 촬영지 탐색',
-  ja: 'インタラクティブマップで6つの主要ロケ地を探索',
-  zh: '在互动地图上探索6个主要拍摄地点',
+const heroScene = KDH_SCENES[0]; // jamsil — first scene = hero image
+
+// Map labels per language
+const mapTitle: Record<string, string> = {
+  kr: 'KPop Demon Hunters — 영감의 장소들',
+  en: 'KPop Demon Hunters — Places That Inspired the Film',
+  ja: 'KPop Demon Hunters — 映画にインスピレーションを与えた場所',
+  zh: 'KPop Demon Hunters — 电影灵感来源地',
 };
 ---
+
 <GuideLayout title={title} description={description} lang={htmlLang}>
   <style>@import '../styles/global.css';</style>
 
-  <!-- 히어로 — 케데헌 네온 시네마틱 -->
+  <BreadcrumbNav items={[{ name: 'Home', url: '/' }, { name: 'KPop Demon Hunters' }]} lang={lang} />
+
+  {/* ── 히어로 ── */}
   <section class="kdh-hero">
     <div class="kdh-hero-bg">
       <img
-        src="/images/generated/kdh-hero-md.webp"
-        srcset="/images/generated/kdh-hero-sm.webp 375w, /images/generated/kdh-hero-md.webp 768w, /images/generated/kdh-hero-lg.webp 1200w"
+        src={`/images/generated/${heroScene.imageId}-md.webp`}
+        srcset={`/images/generated/${heroScene.imageId}-sm.webp 375w, /images/generated/${heroScene.imageId}-md.webp 768w, /images/generated/${heroScene.imageId}-lg.webp 1200w`}
         sizes="100vw"
-        alt="KPop Demon Hunters Seoul"
+        alt={getLocName(heroScene)}
         fetchpriority="high"
         width="768"
         height="1344"
         style="aspect-ratio: 768/1344; object-fit: cover;"
-        decoding="async"
       />
     </div>
     <div class="kdh-hero-overlay"></div>
     <div class="kdh-hero-content">
       <span class="kdh-badge">KPop Demon Hunters</span>
-      <h1 class="kdh-title neon-text-gold" set:html={heroTitle[lang]?.replace(/\n/g, '<br/>') || heroTitle.en.replace(/\n/g, '<br/>')} />
-      <p class="kdh-subtitle">{heroSub[lang] || heroSub.en}</p>
+      <h1 class="kdh-title neon-text-gold" set:html={h.title.replace(/\n/g, '<br/>')} />
+      <p class="kdh-subtitle">{h.sub}</p>
       <div class="kdh-cta">
-        <a href="#locations" class="btn btn-primary">{lang === 'kr' ? '촬영지 둘러보기' : lang === 'ja' ? 'ロケ地を見る' : lang === 'zh' ? '查看拍摄地' : 'Explore Locations'} &darr;</a>
-        <a href="#map-section" class="btn btn-outline">{lang === 'kr' ? '지도에서 보기' : lang === 'ja' ? '地図で見る' : lang === 'zh' ? '地图查看' : 'View on Map'}</a>
+        <a href="#map-section" class="btn btn-primary">
+          {lang === 'kr' ? '지도에서 보기 ↓' : lang === 'ja' ? '地図で見る ↓' : lang === 'zh' ? '查看地图 ↓' : 'View Map ↓'}
+        </a>
+        <a href="#locations" class="btn btn-outline">
+          {lang === 'kr' ? '9개 장소 전체 보기' : lang === 'ja' ? '9箇所すべて見る' : lang === 'zh' ? '查看全部9个地点' : 'All 9 Locations'}
+        </a>
       </div>
+    </div>
+    <div class="hero-scroll">
+      SCROLL
+      <div class="hero-scroll-line"></div>
     </div>
   </section>
 
-  <!-- ═══ SCENE-BY-SCENE GUIDE ═══ -->
-  <section class="kdh-scenes-section" id="locations">
-    <div class="container">
-      <div class="section-header">
-        <h2 class="kdh-section-title">
-          {lang === 'kr' ? '씬별 가이드' : lang === 'ja' ? 'シーン別ガイド' : lang === 'zh' ? '场景指南' : 'Scene-by-Scene Guide'}
-        </h2>
-        <p class="kdh-section-sub">
-          {lang === 'kr' ? '영화 속 6개 핵심 장면을 실제 위치와 함께 만나보세요' : lang === 'ja' ? '映画の6つの主要シーンを実際の場所とともに' : lang === 'zh' ? '探索电影中6个关键场景的实际拍摄地' : 'Explore all 6 key scenes from the film mapped to their real locations'}
-        </p>
-      </div>
+  {/* ── 즉답 박스 (타입 C 허브에도 하나 배치 — 대표 장소 안내) ── */}
+  <div class="kdh-hero-qab container">
+    <QuickAnswerBox
+      address={heroScene.address}
+      directions={heroScene.directions}
+      hours={heroScene.hours}
+      duration={heroScene.duration}
+      mapLinks={heroScene.mapLinks}
+      lang={lang}
+    />
+  </div>
 
+  {/* ── 지도 섹션 (타입 C 허브 핵심) ── */}
+  <section id="map-section" class="kdh-map-section">
+    <div class="section-header">
+      <h2>{mapTitle[lang]}</h2>
+      <p>{lang === 'kr' ? '인터랙티브 지도에서 9개 영감의 장소를 탐색하세요. 카드와 지도가 연동되어 있습니다.' : lang === 'ja' ? 'インタラクティブマップで9つのインスピレーションソースを探索。カードとマップが連動しています。' : lang === 'zh' ? '在互动地图上探索9个灵感来源地。地图与卡片联动。' : 'Explore all 9 inspiration locations on the interactive map. Cards and map are linked.'}</p>
+    </div>
+    <div class="kdh-map-wrap" id="kdh-map"></div>
+
+    <div class="location-cards-grid" id="locationSlider">
       {KDH_SCENES.map((scene, i) => (
-        <div class="kdh-scene-section" id={`scene-${scene.id}`}>
-          <div class="kdh-scene-image-wrap">
-            <img
-              src={`/images/generated/${scene.imageId}-md.webp`}
-              srcset={`/images/generated/${scene.imageId}-sm.webp 375w,
-                      /images/generated/${scene.imageId}-md.webp 768w,
-                      /images/generated/${scene.imageId}-lg.webp 1200w`}
-              sizes="(max-width: 768px) 100vw, 50vw"
-              alt={scene.sceneTitle[lang] || scene.sceneTitle.en}
-              loading={i < 2 ? 'eager' : 'lazy'}
-              class="kdh-scene-image"
-            />
-          </div>
-          <div class="kdh-scene-text">
-            <span class="kdh-scene-number">{(lang === 'kr' ? '장면 ' : lang === 'ja' ? 'シーン ' : lang === 'zh' ? '场景 ' : 'Scene ') + (i + 1)}</span>
-            <h3 class="kdh-scene-title">{scene.sceneTitle[lang] || scene.sceneTitle.en}</h3>
-            <p class="kdh-scene-film-context">{scene.filmContext[lang] || scene.filmContext.en}</p>
-            <p class="kdh-scene-desc">{scene.sceneDescription[lang] || scene.sceneDescription.en}</p>
-            {scene.palaceLink && (
-              <a href={scene.palaceLink} class="btn btn-sm btn-outline">
-                {lang === 'kr' ? '궁궐 상세 보기' : lang === 'ja' ? '宮殿の詳細' : lang === 'zh' ? '查看宫殿详情' : 'View Palace Details'} &rarr;
-              </a>
-            )}
-          </div>
+        <div class="location-card-item" style={`--card-index: ${i}`} data-loc-id={scene.id}>
+          <span class="lci-dot"></span>
+          <h4 class="lci-name">{getLocName(scene)}</h4>
+          <p class="lci-desc">{getLocShortDesc(scene).slice(0, 60)}…</p>
+          <span class="lci-meta">{getTypeLabel(scene)} · {scene.duration[lang] || scene.duration.kr}</span>
         </div>
       ))}
     </div>
   </section>
 
-  <div class="container">
+  <hr class="dancheong-divider" />
 
-    <BreadcrumbNav items={[{ name: 'Home', url: '/' }, { name: 'KPop Demon Hunters' }]} lang={lang} />
+  {/* ── 촬영지 가이드 ── */}
+  <section id="locations">
+    <div class="section-header">
+      <h2>{lang === 'kr' ? '장소별 가이드' : lang === 'ja' ? '場所別ガイド' : lang === 'zh' ? '各地点指南' : 'Location Guide'}</h2>
+      <p>{lang === 'kr' ? '각 장소의 영화 속 역할과 방문 정보를 확인하세요.' : lang === 'ja' ? '各場所の映画での役割と訪問情報をご確認ください。' : lang === 'zh' ? '查看各地点在电影中的作用与参观信息。' : 'Find each location\'s role in the film and visit info.'}</p>
+    </div>
 
-    <!-- 지도 섹션 -->
-    <section id="map-section" class="kdh-map-section">
-      <div class="section-header">
-        <h2>{sectionTitle[lang] || sectionTitle.en}</h2>
-        <p>{sectionSub[lang] || sectionSub.en}</p>
-      </div>
-      <div class="kdh-map-wrap" id="kdh-map"></div>
-
-      <!-- 둥둥 카드 슬라이더 -->
-      <div class="location-cards-slider" id="locationSlider">
-        {locations.map((loc, i) => (
-          <div class="location-card-item" style={`--card-index: ${i}`} data-loc-id={loc.id}>
-            <span class="lci-dot" style={`background: ${loc.type === 'palace' ? 'var(--palace-gyeongbok)' : loc.type === 'scenic' ? 'var(--neon-gold)' : 'var(--neon-blue)'}`}></span>
-            <h4 class="lci-name">{getLocName(loc)}</h4>
-            <p class="lci-desc">{getLocDesc(loc).slice(0, 40)}...</p>
-          </div>
-        ))}
-      </div>
-    </section>
-
-    <hr class="dancheong-divider" />
-
-    <!-- 촬영지 카드 -->
-    <section id="locations">
-      <div class="section-header">
-        <h2>{lang === 'kr' ? '촬영지 가이드' : lang === 'ja' ? 'ロケ地ガイド' : lang === 'zh' ? '拍摄地指南' : 'Location Guide'}</h2>
-        <p>{lang === 'kr' ? '각 장소의 영화 장면과 관람 정보' : lang === 'ja' ? '各場所の映画シーンと観覧情報' : lang === 'zh' ? '各场景的电影情节与参观信息' : 'Film scenes and visitor info for each location'}</p>
-      </div>
-
-      <div class="kdh-locations">
-        {locations.map((loc, i) => {
-          const hasRealLink = loc.guideLink !== '#' || loc.link !== '#';
-          const accentColor = loc.type === 'palace' ? 'var(--palace-gyeongbok)' : loc.type === 'scenic' ? 'var(--neon-gold)' : 'var(--neon-blue)';
-          if (hasRealLink) {
-            return (
-              <DancheongCard
-                name={getLocName(loc)}
-                nameH={loc.hanja?.en || ''}
-                desc={getLocDesc(loc)}
-                image={loc.image}
-                href={`${loc.guideLink !== '#' ? loc.guideLink : loc.link}?lang=${lang}`}
-                color={accentColor}
-                lang={lang}
+    <div class="kdh-scenes">
+      {KDH_SCENES.map((scene) => (
+        <section class="kdh-scene" id={`scene-${scene.id}`}>
+          <div class="kdh-scene-inner">
+            <div class="kdh-scene-image">
+              <img
+                src={`/images/generated/${scene.imageId}-md.webp`}
+                srcset={`/images/generated/${scene.imageId}-sm.webp 375w, /images/generated/${scene.imageId}-md.webp 768w, /images/generated/${scene.imageId}-lg.webp 1200w`}
+                sizes="(max-width: 768px) 100vw, 50vw"
+                alt={getLocName(scene)}
+                loading="lazy"
               />
-            );
-          }
-          return (
-            <div
-              class="kdh-loc-card"
-              style={`--card-accent: ${accentColor}`}
-              data-loc-id={loc.id}
-              role="button"
-              tabindex="0"
-            >
-              <div class="kdh-loc-glow"></div>
-              <div class="kdh-loc-img">
-                <img src={loc.image} alt={getLocName(loc)} loading="lazy" width="400" height="260" />
-                <div class="kdh-loc-img-overlay"></div>
-                <div class="kdh-loc-bar"></div>
-              </div>
-              <div class="kdh-loc-body">
-                <span class="kdh-loc-hanja">{loc.hanja?.en || ''}</span>
-                <h3 class="kdh-loc-name">{getLocName(loc)}</h3>
-                <p class="kdh-loc-desc">{getLocDesc(loc)}</p>
-              </div>
-              <div class="kdh-loc-arrow">&darr;</div>
             </div>
-          );
-        })}
-      </div>
-    </section>
 
-    <hr class="dancheong-divider" />
+            <div class="kdh-scene-text">
+              <span class="kdh-scene-badge">{getTypeLabel(scene)}</span>
+              <h3>{getLocName(scene)}</h3>
+              <p class="kdh-scene-desc">{getLocShortDesc(scene)}</p>
+              <div class="kdh-scene-qab-mini">
+                <div class="kq-row">
+                  <span class="kq-icon">📍</span>
+                  <span>{scene.address[lang] || scene.address.kr}</span>
+                </div>
+                <div class="kq-row">
+                  <span class="kq-icon">⏱</span>
+                  <span>{scene.duration[lang] || scene.duration.kr}</span>
+                </div>
+              </div>
+              <div class="kdh-scene-actions">
+                {scene.palaceLink && (
+                  <a href={`${scene.palaceLink}?lang=${lang}`} class="btn btn-outline">
+                    {lang === 'kr' ? '경복궁 상세 →' : lang === 'ja' ? '宮殿詳細 →' : lang === 'zh' ? '查看宫殿详情 →' : 'View Palace →'}
+                  </a>
+                )}
+                <a href={`/kpop-demon-hunters/${scene.id}?lang=${lang}`} class="btn btn-primary">
+                  {lang === 'kr' ? '자세한 방문 정보' : lang === 'ja' ? '訪問情報を詳しく' : lang === 'zh' ? '查看详细参观信息' : 'Visit Info Details'}
+                </a>
+              </div>
+            </div>
+          </div>
+        </section>
+      ))}
+    </div>
+  </section>
 
-    <!-- 순례 루트 -->
-    <section class="kdh-route">
-      <div class="section-header">
-        <h2>{lang === 'kr' ? '하루 코스 성지순례 루트' : lang === 'ja' ? '一日巡礼ルート' : lang === 'zh' ? '一日巡礼路线' : 'One-Day Pilgrimage Route'}</h2>
-      </div>
-      <div class="route-timeline">
-        <div class="route-step">
-          <span class="route-time">09:00</span>
-          <div class="route-info">
-            <h4>{lang === 'kr' ? '경복궁 입장' : 'Gyeongbokgung Palace'}</h4>
-            <p>{lang === 'kr' ? '오전 관람 (가장 한적한 시간)' : 'Morning visit (least crowded)'}</p>
-          </div>
-        </div>
-        <div class="route-step">
-          <span class="route-time">11:00</span>
-          <div class="route-info">
-            <h4>{lang === 'kr' ? '광화문광장' : 'Gwanghwamun Square'}</h4>
-            <p>{lang === 'kr' ? '세종대왕·이순신 동상 포토존' : 'Photo spot with King Sejong & Admiral Yi statues'}</p>
-          </div>
-        </div>
-        <div class="route-step">
-          <span class="route-time">12:30</span>
-          <div class="route-info">
-            <h4>{lang === 'kr' ? '인사동 점심' : 'Insadong Lunch'}</h4>
-            <p>{lang === 'kr' ? '전통 음식 + 기념품 쇼핑' : 'Traditional food + souvenir shopping'}</p>
-          </div>
-        </div>
-        <div class="route-step">
-          <span class="route-time">14:00</span>
-          <div class="route-info">
-            <h4>{lang === 'kr' ? '북촌한옥마을 산책' : 'Bukchon Hanok Village Walk'}</h4>
-            <p>{lang === 'kr' ? '추격 촬영지 골목 탐험' : 'Explore the chase scene alleyways'}</p>
-          </div>
-        </div>
-        <div class="route-step">
-          <span class="route-time">16:00</span>
-          <div class="route-info">
-            <h4>{lang === 'kr' ? '낙산공원 성곽길' : 'Naksan Park Fortress Walk'}</h4>
-            <p>{lang === 'kr' ? '한양도성 산책로 + 야경 명소' : 'Seoul City Wall trail + sunset viewpoint'}</p>
-          </div>
-        </div>
-        <div class="route-step">
-          <span class="route-time">18:30</span>
-          <div class="route-info">
-            <h4>{lang === 'kr' ? 'N서울타워 야경' : 'N Seoul Tower Night View'}</h4>
-            <p>{lang === 'kr' ? '클라이맥스 촬영지 배경 감상' : 'Climax filming location backdrop'}</p>
-          </div>
-        </div>
-      </div>
-    </section>
+  <hr class="dancheong-divider" />
 
-    <hr class="dancheong-divider" />
+  {/* ── 순례 루트 ── */}
+  <section class="kdh-route">
+    <div class="section-header">
+      <h2>{lang === 'kr' ? '하루 코스 — 영감의 장소 순례' : lang === 'ja' ? '一日コース — インスピレーションの場所巡礼' : lang === 'zh' ? '一日路线 — 灵感地点巡礼' : 'One-Day Route — Following the Inspiration'}</h2>
+      <p>{lang === 'kr' ? '지리적 흐름에 따라 7곳을 하루에 묶는 코스입니다. 경복궁과 롯데월드타워는 별도 일정으로.' : lang === 'ja' ? '地理的な流れに沿って7箇所を1日で回るコース。景福宮とロッテワールドタワーは別枠で。' : lang === 'zh' ? '按地理顺序串联7个地点的一日路线。景福宫和乐天世界塔另算。' : 'A one-day route connecting 7 locations in geographic order. Gyeongbokgung and Lotte World Tower are separate visits.'}</p>
+    </div>
+    <div class="route-timeline">
+      {KDH_SCENES.map((scene, index) => (
+        <div class="route-step" key={scene.id}>
+          <span class="route-time">
+            {index < 7 ? ['09:00', '10:30', '12:00', '13:30', '15:00', '16:30', '18:00'][index] : '별도 일정'}
+          </span>
+          <div class="route-info">
+            <h4>{getLocName(scene)}</h4>
+            <p>
+              {index === 0 && (lang === 'kr' ? '오프닝 낙하산 강하 + 데뷔 무대 — 영화 첫 인상' : lang === 'ja' ? 'オープニング降下+デビュー舞台 — 映画最初の印象' : lang === 'zh' ? '开场降落伞+出道舞台——电影第一印象' : 'Opening parachute drop + debut stage — the film\'s first impression')}
+              {index === 1 && (lang === 'kr' ? '강남 미디어 문화의 중심 — "Golden" 티저 공개 장면' : lang === 'ja' ? '강남メディア文化の中心 — 「Golden」ティザー公開シーン' : lang === 'zh' ? '江南媒体文化中心——“Golden”预告片公开场景' : 'Heart of Gangnam media culture — "Golden" teaser reveal scene')}
+              {index === 2 && (lang === 'kr' ? '한강변 고가 도로 액션 — "Takedown" OST' : lang === 'ja' ? '漢江高架道路アクション — 「Takedown」OST' : lang === 'zh' ? '汉江高架道路动作——“Takedown”原声' : 'Han River overpass action sequence — "Takedown" OST')}
+              {index === 3 && (lang === 'kr' ? '도심 번화가 퍼포먼스 — "Soda Pop" 거리 공연' : lang === 'ja' ? '都心繁華パフォーマンス — 「Soda Pop」路上公演' : lang === 'zh' ? '城市繁华表演——“Soda Pop”街头演出' : 'Downtown street performance — "Soda Pop"')}
+              {index === 4 && (lang === 'kr' ? '한옥 골목 조용한 산책 — 진우·루미 "Free"' : lang === 'ja' ? '韓屋路地散策 — ジヌ・ルミ「Free」' : lang === 'zh' ? '韩屋小巷安静漫步——Jinwoo·Rumi演唱"Free"' : 'Quiet hanok alley walk — Jinwoo & Rumi sing "Free"')}
+              {index === 5 && (lang === 'kr' ? '성곽길 위 밀회 — 해질녘 감정의 정점' : lang === 'ja' ? '城壁道上の密会 — 夕暮れの感情の頂点' : lang === 'zh' ? '城墙道上的幽会——黄昏情感高潮' : 'Secret meeting on the fortress wall — emotional peak at sunset')}
+              {index === 6 && (lang === 'kr' ? '영화 클라이맥스 — 사자보이즈 마지막 공연' : lang === 'ja' ? '映画クライマックス — ライオンボイズ最終公演' : lang === 'zh' ? '电影高潮——Saja Boyz最后表演' : 'Film climax — Saja Boyz final performance')}
+              {index === 7 && (lang === 'kr' ? '영화 직접 등장 없음 — 헌트릭스 숙소 디자인 모티프' : lang === 'ja' ? '映画に直接登場なし — ハントリックス拠点のデザイン母題' : lang === 'zh' ? '电影未直接出现——Huntrix基地设计灵感' : 'Not in the film directly — Huntrix base design motif')}
+              {index === 8 && (lang === 'kr' ? '영화 직접 등장 없음 — 진우의 400년 전 회상 세계관 영감' : lang === 'ja' ? '映画に直接登場なし — ジヌの400年前回想世界観のインスピレーション' : lang === 'zh' ? '电影未直接出现——Jinwoo 400年前回忆世界观灵感' : 'Not in the film directly — Jinwoo\'s 400-year-old memory world inspiration')}
+            </p>
+          </div>
+          <img
+            src={`/images/generated/${scene.imageId}-sm.webp`}
+            alt={getLocName(scene)}
+            class="route-step-image"
+          />
+        </div>
+      ))}
+    </div>
+  </section>
 
-    <section class="kdh-timeline-section">
-      <div class="section-header">
-        <h2>
-          {lang === 'kr' ? '1일 성지순례 코스' : lang === 'ja' ? '1日聖地巡礼コース' : lang === 'zh' ? '一日圣地巡礼路线' : 'One-Day Pilgrimage Route'}
-        </h2>
-        <p>
-          {lang === 'kr' ? '경복궁에서 N서울타워까지 — 영화 속 그 장소를 하루에' : lang === 'ja' ? '景福宮からNソウルタワーまで' : lang === 'zh' ? '从景福宫到N首尔塔' : 'From Gyeongbokgung to N Seoul Tower — visit all locations in one day'}
-        </p>
-      </div>
-      <div class="route-steps">
-        <div class="route-step">
-          <div class="route-step-marker route-step-start"></div>
-          <div class="route-step-content">
-            <div class="route-step-time">09:00</div>
-            <h4>Gyeongbokgung</h4>
-            <p>2-3 hours</p>
-          </div>
-        </div>
-        <div class="route-step">
-          <div class="route-step-marker"></div>
-          <div class="route-step-content">
-            <div class="route-step-time">12:00</div>
-            <h4>Gwanghwamun → Insadong</h4>
-            <p>1.5 hours (walking distance)</p>
-          </div>
-        </div>
-        <div class="route-step">
-          <div class="route-step-marker"></div>
-          <div class="route-step-content">
-            <div class="route-step-time">14:00</div>
-            <h4>Bukchon Hanok Village</h4>
-            <p>1.5 hours</p>
-          </div>
-        </div>
-        <div class="route-step">
-          <div class="route-step-marker"></div>
-          <div class="route-step-content">
-            <div class="route-step-time">16:00</div>
-            <h4>Naksan Park</h4>
-            <p>2 hours (incl. hike)</p>
-          </div>
-        </div>
-        <div class="route-step">
-          <div class="route-step-marker route-step-end"></div>
-          <div class="route-step-content">
-            <div class="route-step-time">19:00</div>
-            <h4>N Seoul Tower</h4>
-            <p>Sunset view — 1.5 hours</p>
-          </div>
-        </div>
-      </div>
-    </section>
+  <hr class="dancheong-divider" />
 
-    <FAQSection items={faqItems} lang={lang} />
+  <div class="minhwa-divider-strip">
+    <img
+      src="/minhwa-tiger-magpie.jpeg"
+      alt="민화 호작도"
+      width="1200"
+      height="200"
+      loading="lazy"
+    />
   </div>
+
+  <FAQSection items={faqItems} lang={lang} />
 </GuideLayout>
 
-<script define:vars={{ locationsJSON: JSON.stringify(locations.map(l => ({ id: l.id, name: l.name, desc: l.desc, link: l.link, type: l.type, coords: l.coords.split(', ').map(Number) }))), mapLang: lang }}>
-(function() {
-  var LOCATIONS = locationsJSON;
-  var L = mapLang;
-  var markers = [];
-  var map = null;
-
-  var popupLabels = {
-    kr: '자세히 보기', ja: '詳しく見る', zh: '查看详情', en: 'View Details'
-  };
+<script>
+  const locations = [
+    { id: 'jamsil', name: { en: 'Jamsil Sports Complex', kr: '서울종합운동장', ja: 'ソウル総合運動場', zh: '首尔综合运动场' }, coords: [127.0780, 37.5196], type: 'scene' },
+    { id: 'cheongdam', name: { en: 'Cheongdam Bridge', kr: '청담대교', ja: '清潭橋', zh: '清潭大桥' }, coords: [127.0490, 37.5400], type: 'scene' },
+    { id: 'coex', name: { en: 'COEX K-POP Square', kr: 'COEX K-POP 스퀘어', ja: 'COEX K-POPスクエア', zh: 'COEX K-POP广场' }, coords: [127.0586, 37.5120], type: 'scene' },
+    { id: 'myeongdong', name: { en: 'Myeongdong Street', kr: '명동거리', ja: '明洞通り', zh: '明洞街' }, coords: [126.9820, 37.5636], type: 'scene' },
+    { id: 'bukchon', name: { en: 'Bukchon Hanok Village', kr: '북촌한옥마을', ja: '北村韓屋村', zh: '北村韩屋村' }, coords: [126.9857, 37.5826], type: 'scene' },
+    { id: 'naksan', name: { en: 'Naksan Park', kr: '낙산공원', ja: '駱山公園', zh: '骆山公园' }, coords: [127.0070, 37.5800], type: 'scene' },
+    { id: 'nseoul-tower', name: { en: 'N Seoul Tower', kr: 'N서울타워', ja: 'Nソウルタワー', zh: 'N首尔塔' }, coords: [126.9882, 37.5512], type: 'scene' },
+    { id: 'lotte-world-tower', name: { en: 'Lotte World Tower', kr: '롯데월드타워', ja: 'ロッテワールドタワー', zh: '乐天世界塔' }, coords: [127.0788, 37.5128], type: 'motif' },
+    { id: 'gyeongbokgung', name: { en: 'Gyeongbokgung Palace', kr: '경복궁', ja: '景福宮', zh: '景福宫' }, coords: [126.9770, 37.5796], type: 'inspiration' },
+  ];
 
   function getLocName(loc) {
-    return loc.name[L] || loc.name.en;
-  }
-  function getLocDesc(loc) {
-    return (loc.desc && loc.desc[L]) || loc.desc.en || '';
+    const map = { kr: loc.name.kr, en: loc.name.en, ja: loc.name.ja, zh: loc.name.zh };
+    return map[lang] || loc.name.en;
   }
 
-  function openPopup(locId) {
-    var loc = LOCATIONS.find(function(l) { return l.id === locId; });
-    if (!loc || !map) return;
-    var m = markers.find(function(m) { return m.locId === locId; });
-    if (m) {
-      map.flyTo({ center: loc.coords, zoom: 15, duration: 800 });
-      setTimeout(function() { m.marker.togglePopup(); }, 900);
-    }
-  }
-  window.openPopup = openPopup;
+  document.addEventListener('DOMContentLoaded', function() {
+    const mapElement = document.getElementById('kdh-map');
+    if (!mapElement) return;
 
-  function initKDHMap() {
-    var mapEl = document.getElementById('kdh-map');
-    if (!mapEl) return;
-
-    var script = document.createElement('script');
+    const script = document.createElement('script');
     script.src = 'https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js';
     script.onload = function() {
-      map = new maplibregl.Map({
+      const map = new maplibregl.Map({
         container: 'kdh-map',
         style: 'https://tiles.openfreemap.org/styles/liberty',
-        center: [126.9769, 37.5760],
-        zoom: 14,
+        center: [127.03, 37.55],
+        zoom: 12,
         minZoom: 11,
-        maxZoom: 18,
-        pitch: 30,
+        maxZoom: 17,
+        pitch: 25,
         attributionControl: false
       });
+
       map.addControl(new maplibregl.AttributionControl({ compact: true }), 'bottom-right');
 
-      var iconMap = { palace: '\u{1F3EF}', scenic: '\u{1F3D4}\uFE0F', historic: '\u{1F3DB}\uFE0F' };
-      var colorMap = { palace: '#00C8FF', scenic: '#FFD700', historic: '#FF3B5C' };
+      const typeColors = { scene: '#FFD700', motif: '#A8D0E6', inspiration: '#C8A2C8' };
+      const typeLabels = {
+        kr: { scene: '장면 배경', motif: '디자인 모티프', inspiration: '건축적 영감' },
+        en: { scene: 'Scene', motif: 'Design Motif', inspiration: 'Architectural Inspiration' },
+        ja: { scene: 'シーンの舞台', motif: 'デザイン母題', inspiration: '建築的インスピレーション' },
+        zh: { scene: '场景背景', motif: '设计灵感', inspiration: '建筑灵感' },
+      };
+      const tlabels = typeLabels[lang] || typeLabels.en;
 
-      LOCATIONS.forEach(function(loc) {
-        var color = colorMap[loc.type] || '#FFD700';
-        var icon = iconMap[loc.type] || '\u{1F3EF}';
+      function buildPopupHTML(loc) {
+        const color = typeColors[loc.type] || '#FFD700';
+        const typeLabel = tlabels[loc.type] || 'Scene';
+        const name = getLocName(loc);
+        return `
+          <div class="popup-inner">
+            <div class="popup-type-badge" style="background:${color}20;color:${color}">${typeLabel}</div>
+            <h3 class="popup-title">${name}</h3>
+            <a href="/kpop-demon-hunters/${loc.id}?lang=${lang}" class="popup-link">
+              ${lang === 'kr' ? '방문 정보 보기 →' : lang === 'ja' ? '訪問情報をみる →' : lang === 'zh' ? '查看参观信息 →' : 'Visit Info →'}
+            </a>
+          </div>
+        `;
+      }
 
-        var el = document.createElement('div');
+      locations.forEach(function(loc) {
+        const color = typeColors[loc.type] || '#FFD700';
+        const el = document.createElement('div');
         el.className = 'map-marker';
-        el.innerHTML =
-          '<div class="marker-pin" style="--marker-color:' + color + '">' +
-            '<span class="marker-icon">' + icon + '</span>' +
-          '</div>' +
-          '<div class="marker-pulse" style="--marker-color:' + color + '"></div>';
-
-        var popup = new maplibregl.Popup({ offset: 25, className: 'heritage-popup' })
-          .setHTML(
-            '<div class="popup-inner">' +
-              '<h3 class="popup-title">' + getLocName(loc) + '</h3>' +
-              '<p class="popup-desc">' + getLocDesc(loc) + '</p>' +
-              '<a href="' + loc.link + '" class="popup-link">' + popupLabels[L] + ' &rarr;</a>' +
-            '</div>'
-          );
-
-        var marker = new maplibregl.Marker({ element: el })
+        el.innerHTML = `
+          <div class="marker-pin" style="--marker-color: ${color}">
+            <span class="marker-icon">${loc.type === 'inspiration' ? '🏯' : loc.type === 'motif' ? '🏢' : '📍'}</span>
+          </div>
+          <div class="marker-pulse" style="--marker-color: ${color}"></div>
+        `;
+        const popup = new maplibregl.Popup({ offset: 25, className: 'heritage-popup' }).setHTML(buildPopupHTML(loc));
+        new maplibregl.Marker({ element: el })
           .setLngLat(loc.coords)
           .setPopup(popup)
           .addTo(map);
-
-        markers.push({ locId: loc.id, marker: marker });
       });
 
-      // 카드 클릭 → 마커 팝업 열기
+      // Route line connecting main 7 scenes in order
+      const routeCoords = [
+        [127.0780, 37.5196], // jamsil
+        [127.0586, 37.5120], // coex
+        [127.0490, 37.5400], // cheongdam
+        [126.9820, 37.5636], // myeongdong
+        [126.9857, 37.5826], // bukchon
+        [127.0070, 37.5800], // naksan
+        [126.9882, 37.5512], // nseoul-tower
+      ];
+
+      map.addSource('kdh-route', {
+        type: 'geojson',
+        data: {
+          type: 'Feature',
+          properties: {},
+          geometry: { type: 'LineString', coordinates: routeCoords }
+        }
+      });
+
+      map.addLayer({
+        id: 'kdh-route-line',
+        type: 'line',
+        source: 'kdh-route',
+        layout: { 'line-join': 'round', 'line-cap': 'round' },
+        paint: {
+          'line-color': '#FFD700',
+          'line-width': 2.5,
+          'line-opacity': 0.45,
+          'line-dasharray': [4, 5]
+        }
+      });
+
+      // Card click -> fly to location
       document.querySelectorAll('.location-card-item').forEach(function(card) {
         card.addEventListener('click', function() {
-          openPopup(card.dataset.locId);
+          const locId = this.dataset.locId;
+          const loc = locations.find(l => l.id === locId);
+          if (loc) {
+            map.flyTo({ center: loc.coords, zoom: 16, duration: 800 });
+            // Open popup after fly
+            setTimeout(() => {
+              const markers = document.querySelectorAll('.map-marker');
+              markers.forEach(m => {
+                const inner = m.querySelector('.marker-icon');
+                if (inner && m.parentElement && m.parentElement.getAttribute('data-loc-id') === locId) {
+                  // trigger popup via maplibre API — closest approach
+                }
+              });
+            }, 900);
+          }
         });
       });
 
-      // 지도 카드 클릭 → 스크롤 후 팝업 열기
-      document.querySelectorAll('.kdh-loc-card').forEach(function(card) {
-        card.addEventListener('click', function() {
-          document.getElementById('map-section').scrollIntoView({ behavior: 'smooth' });
-          setTimeout(function() { openPopup(card.dataset.locId); }, 700);
-        });
+      // Store locId on each marker element for navigation
+      map.on('load', function() {
+        // After markers added, attach data attributes
+        setTimeout(() => {
+          document.querySelectorAll('.map-marker').forEach((markerEl, i) => {
+            if (locations[i]) markerEl.setAttribute('data-loc-id', locations[i].id);
+          });
+        }, 500);
       });
     };
     document.head.appendChild(script);
-  }
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initKDHMap);
-  } else {
-    initKDHMap();
-  }
-})();
+  });
 </script>
 
 <style>
-  .kdh-hero {
-    position: relative;
-    width: 100%;
-    min-height: 100vh;
-    min-height: 100dvh;
-    min-height: 100dvh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    background: var(--bg-night);
+  /* kdh-scene styles */
+  .kdh-scenes {
+    display: grid;
+    gap: 40px;
   }
-  .kdh-hero-bg {
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-  }
-  .kdh-hero-bg img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    filter: brightness(0.6) saturate(1.3);
-  }
-  .kdh-hero-overlay {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(180deg,
-      rgba(8,5,16,0.2) 0%,
-      rgba(8,5,16,0.5) 40%,
-      rgba(8,5,16,0.95) 100%);
-    z-index: 1;
-  }
-  .kdh-hero-content {
-    position: relative;
-    z-index: 2;
-    text-align: center;
-    color: var(--dancheong-white);
-    padding: 120px 24px 80px;
-    max-width: 800px;
-  }
-  .kdh-badge {
-    display: inline-block;
-    background: linear-gradient(135deg, var(--neon-red), #FF6B8A);
-    color: #fff;
-    padding: 6px 20px;
-    border-radius: 30px;
-    font-size: 0.85rem;
-    font-weight: 700;
-    margin-bottom: 24px;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    box-shadow: 0 0 20px rgba(255,59,92,0.4);
-  }
-  .kdh-title {
-    font-family: 'Noto Serif KR', serif;
-    font-weight: 900;
-    font-size: clamp(2rem, 8vw, 3.5rem);
-    line-height: 1.2;
-    margin-bottom: 20px;
-    letter-spacing: -0.03em;
-  }
-  .kdh-subtitle {
-    font-size: clamp(0.95rem, 2vw, 1.15rem);
-    color: rgba(245,240,232,0.6);
-    line-height: 1.7;
+
+  .kdh-scene {
+    border-bottom: 1px solid var(--color-border-light);
+    padding-bottom: 40px;
     margin-bottom: 40px;
-    max-width: 600px;
-    margin-left: auto;
-    margin-right: auto;
   }
-  .kdh-cta {
+
+  .kdh-scene:last-of-type {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+
+  .kdh-scene-inner {
+    display: grid;
+    gap: 24px;
+    align-items: start;
+  }
+
+  @media (min-width: 768px) {
+    .kdh-scene-inner {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .kdh-scene:nth-child(even) .kdh-scene-inner {
+      direction: rtl;
+    }
+    .kdh-scene:nth-child(even) .kdh-scene-inner > * {
+      direction: ltr;
+    }
+    .kdh-scene:nth-child(even) .kdh-scene-text {
+      text-align: left;
+    }
+  }
+
+  .kdh-scene-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    background: rgba(255, 215, 0, 0.12);
+    color: var(--neon-gold);
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    margin-bottom: 10px;
+  }
+
+  .kdh-scene-text h3 {
+    font-family: 'Noto Serif KR', serif;
+    font-weight: 700;
+    font-size: 1.3rem;
+    color: var(--color-text);
+    margin-bottom: 12px;
+  }
+
+  .kdh-scene-desc {
+    font-size: 1rem;
+    line-height: 1.75;
+    color: var(--color-text-light);
+    margin-bottom: 16px;
+  }
+
+  .kdh-scene-qab-mini {
+    background: var(--color-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    margin-bottom: 16px;
+  }
+
+  .kq-row {
     display: flex;
-    gap: 14px;
-    justify-content: center;
+    align-items: flex-start;
+    gap: 8px;
+    margin-bottom: 6px;
+    font-size: 0.9rem;
+    color: var(--color-text);
+  }
+
+  .kq-row:last-of-type { margin-bottom: 0; }
+  .kq-icon { font-size: 0.95rem; flex-shrink: 0; margin-top: 2px; }
+
+  .kdh-scene-actions {
+    display: flex;
+    gap: 10px;
     flex-wrap: wrap;
   }
 
-  .kdh-map-section { padding: 40px 0; }
-  .kdh-map-wrap {
-    width: 100%;
-    height: 400px;
-    border-radius: 16px;
-    overflow: hidden;
-    box-shadow: 0 4px 24px rgba(0,0,0,0.5);
-    border: 1px solid var(--color-border);
-    margin-bottom: 40px;
+  /* Route timeline */
+  .kdh-route {
+    position: relative;
+    padding: 40px 0;
   }
 
-  .kdh-locations {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 20px;
-    padding: 20px 0 60px;
+  .kdh-route::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 20px;
+    width: 2px;
+    background: var(--dancheong-yellow);
   }
 
-  .kdh-route { padding: 40px 0 60px; }
   .route-timeline {
     display: flex;
     flex-direction: column;
-    gap: 0;
-    max-width: 600px;
-    margin: 0 auto;
+    gap: 20px;
+    padding-left: 30px;
   }
+
   .route-step {
     display: flex;
-    gap: 20px;
     align-items: flex-start;
-    padding: 16px 0;
-    border-left: 2px solid var(--dancheong-yellow);
-    padding-left: 24px;
-    position: relative;
+    gap: 12px;
   }
-  .route-step::before {
-    content: '';
-    position: absolute;
-    left: -7px;
-    top: 20px;
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    background: var(--dancheong-yellow);
-    box-shadow: 0 0 8px rgba(255,215,0,0.5);
-  }
+
   .route-time {
+    flex-shrink: 0;
+    width: 60px;
+    text-align: right;
     font-family: 'Gmarket Sans', sans-serif;
     font-weight: 700;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     color: var(--neon-gold);
-    min-width: 50px;
-    flex-shrink: 0;
   }
+
+  .route-info {
+    flex: 1;
+  }
+
   .route-info h4 {
+    margin: 0 0 4px 0;
     font-family: 'Noto Serif KR', serif;
     font-size: 1rem;
     font-weight: 700;
-    margin-bottom: 4px;
-  }
-  .route-info p {
-    font-size: 0.85rem;
-    color: var(--color-text-light);
-    line-height: 1.5;
+    color: var(--neon-gold);
   }
 
-  /* 지도 카드 — DancheongCard 시각적 일치 */
-  .kdh-loc-card {
-    display: block;
-    background: var(--bg-glass);
-    backdrop-filter: blur(12px) saturate(1.2);
-    -webkit-backdrop-filter: blur(12px) saturate(1.2);
-    border-radius: 16px;
-    overflow: hidden;
-    border: 1px solid var(--color-border-light);
-    text-decoration: none;
-    color: inherit;
-    position: relative;
-    cursor: pointer;
-    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
-                box-shadow 0.4s ease,
-                border-color 0.4s ease;
-    -webkit-tap-highlight-color: transparent;
-    will-change: transform;
-  }
-  .kdh-loc-card::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(circle at 50% 50%, rgba(255,215,0,0.08) 0%, transparent 60%);
-    border-radius: inherit;
-    opacity: 0;
-    transition: opacity 0.3s;
-    pointer-events: none;
-    z-index: 1;
-  }
-  .kdh-loc-card:hover::before { opacity: 1; }
-  @media (pointer: coarse) {
-    .kdh-loc-card::before { display: none; }
-  }
-  .kdh-loc-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 20px 60px rgba(0,0,0,0.5),
-                0 0 40px color-mix(in srgb, var(--card-accent) 30%, transparent);
-    border-color: color-mix(in srgb, var(--card-accent) 35%, transparent);
-  }
-  .kdh-loc-card:active { transform: scale(0.98); }
-  .kdh-loc-glow {
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    background: linear-gradient(135deg, transparent 40%, rgba(255,255,255,0.03) 50%, transparent 60%);
-    pointer-events: none;
-    z-index: 2;
-  }
-  .kdh-loc-img {
-    position: relative;
-    height: 220px;
-    overflow: hidden;
-  }
-  .kdh-loc-img img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.6s ease, filter 0.6s;
-    filter: brightness(0.75) saturate(1.15) contrast(1.05);
-  }
-  .kdh-loc-card:hover .kdh-loc-img img {
-    transform: scale(1.06);
-    filter: brightness(0.9) saturate(1.3) contrast(1.1);
-  }
-  .kdh-loc-img-overlay {
-    position: absolute;
-    bottom: 0; left: 0; right: 0;
-    height: 100px;
-    background: linear-gradient(to top, var(--bg-card), transparent);
-  }
-  .kdh-loc-bar {
-    position: absolute;
-    bottom: 0; left: 0; right: 0;
-    height: 3px;
-    background: var(--card-accent);
-    opacity: 0.6;
-    transition: opacity 0.3s, height 0.3s, box-shadow 0.3s;
-    box-shadow: 0 0 12px var(--card-accent);
-  }
-  .kdh-loc-card:hover .kdh-loc-bar {
-    opacity: 1;
-    height: 4px;
-    box-shadow: 0 0 24px var(--card-accent);
-  }
-  .kdh-loc-body { padding: 20px; }
-  .kdh-loc-hanja {
-    display: inline-block;
-    font-family: 'Noto Serif KR', serif;
-    font-size: 0.8rem;
-    color: var(--card-accent);
-    opacity: 0.7;
-    margin-bottom: 4px;
-    letter-spacing: 0.05em;
-  }
-  .kdh-loc-name {
-    font-family: 'Noto Serif KR', serif;
-    font-size: 1.2rem;
-    font-weight: 700;
-    margin-bottom: 6px;
+  .route-info p {
+    margin: 0;
+    font-size: 0.9rem;
+    line-height: 1.6;
     color: var(--color-text);
   }
-  .kdh-loc-desc {
-    font-size: 0.9rem;
-    color: var(--color-text-light);
-    line-height: 1.6;
-    padding-right: 40px;
-  }
-  .kdh-loc-arrow {
-    position: absolute;
-    bottom: 20px;
-    right: 20px;
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    background: var(--card-accent);
-    color: var(--dancheong-black);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.1rem;
-    opacity: 0;
-    transform: translateX(-8px);
-    transition: opacity 0.3s, transform 0.3s, box-shadow 0.3s;
-    z-index: 3;
-  }
-  .kdh-loc-card:hover .kdh-loc-arrow {
-    opacity: 1;
-    transform: translateX(0);
-    box-shadow: 0 0 20px var(--card-accent);
+
+  .route-step-image {
+    flex-shrink: 0;
+    width: 56px;
+    height: 84px;
+    border-radius: 6px;
+    border: 1px solid var(--color-border-light);
+    object-fit: cover;
   }
 
   @media (max-width: 640px) {
-    .kdh-locations { grid-template-columns: 1fr; }
-    .kdh-map-wrap { height: 300px; }
-    .kdh-loc-img { height: 200px; }
-    .kdh-loc-body { padding: 16px; }
+    .route-time { width: 50px; font-size: 0.75rem; }
+    .route-step-image { width: 44px; height: 66px; }
   }
 
-  /* 마커 */
-  .map-marker { position: relative; cursor: pointer; width: 44px; height: 44px; }
-  .marker-pin {
-    width: 40px; height: 40px;
-    border-radius: 50% 50% 50% 0;
-    transform: rotate(-45deg);
-    background: var(--marker-color);
-    border: 2px solid rgba(255,255,255,0.3);
-    display: flex; align-items: center; justify-content: center;
-    box-shadow: 0 0 12px var(--marker-color);
-  }
-  .marker-icon { transform: rotate(45deg); font-size: 18px; display: block; }
-  .marker-pulse {
-    position: absolute; top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    width: 40px; height: 40px; border-radius: 50%;
-    background: var(--marker-color); opacity: 0.3;
-    animation: markerPulse 2s ease-out infinite;
-  }
-  @keyframes markerPulse {
-    0%   { transform: translate(-50%,-50%) scale(1); opacity: 0.4; }
-    100% { transform: translate(-50%,-50%) scale(2.5); opacity: 0; }
+  /* Location cards grid */
+  .location-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 12px;
+    margin-top: 20px;
   }
 
-  /* 팝업 */
-  .heritage-popup .maplibregl-popup-content {
-    background: var(--bg-card, #12101A);
-    border: 1px solid var(--neon-gold);
-    border-radius: 12px;
-    padding: 16px;
-    color: var(--dancheong-white);
-    min-width: 200px;
-    box-shadow: 0 0 20px rgba(255,215,0,0.2);
-  }
-  .heritage-popup .maplibregl-popup-tip { border-top-color: var(--neon-gold); }
-  .popup-title {
-    font-family: 'Gmarket Sans', sans-serif;
-    color: var(--neon-gold);
-    font-size: 1rem;
-    margin: 0 0 6px;
-  }
-  .popup-desc {
-    font-size: 0.85rem;
-    color: var(--color-text-light, #ccc);
-    margin: 0 0 12px;
-    line-height: 1.4;
-  }
-  .popup-link {
-    display: inline-block;
-    color: var(--neon-blue);
-    font-size: 0.85rem;
-    text-decoration: none;
-    border-bottom: 1px solid var(--neon-blue);
-    transition: color 0.2s;
-  }
-  .popup-link:hover { color: var(--neon-gold); border-color: var(--neon-gold); }
-
-  /* 카드 슬라이더 */
-  .location-cards-slider {
-    display: flex;
-    gap: 16px;
-    overflow-x: auto;
-    padding: 24px 16px;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-  }
-  .location-cards-slider::-webkit-scrollbar { display: none; }
   .location-card-item {
-    flex: 0 0 220px;
-    scroll-snap-align: start;
-    background: var(--bg-card, #12101A);
-    border: 1px solid rgba(255,215,0,0.2);
-    border-radius: 16px;
-    padding: 20px;
+    padding: 14px;
+    background: var(--color-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
     cursor: pointer;
-    transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
-    animation: cardFloat 3s ease-in-out infinite;
-    animation-delay: calc(var(--card-index) * 0.5s);
+    transition: transform 0.2s, border-color 0.2s;
   }
+
   .location-card-item:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 12px 32px rgba(255,215,0,0.2);
-    border-color: rgba(255,215,0,0.5);
+    transform: translateY(-2px);
+    border-color: var(--neon-gold);
   }
+
   .lci-dot {
-    display: block;
-    width: 10px; height: 10px;
+    display: inline-block;
+    width: 8px;
+    height: 8px;
     border-radius: 50%;
-    margin-bottom: 10px;
-    box-shadow: 0 0 8px currentColor;
+    background: var(--neon-gold);
+    margin-bottom: 8px;
   }
+
   .lci-name {
     font-family: 'Noto Serif KR', serif;
-    font-size: 1rem;
+    font-size: 0.85rem;
     font-weight: 700;
-    margin-bottom: 4px;
     color: var(--color-text);
+    margin-bottom: 4px;
+    line-height: 1.3;
   }
+
   .lci-desc {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     color: var(--color-text-light);
-    line-height: 1.4;
-    margin: 0;
+    line-height: 1.5;
+    margin-bottom: 8px;
   }
-  @keyframes cardFloat {
-    0%, 100% { transform: translateY(0px); }
-    50%       { transform: translateY(-6px); }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .marker-pulse { animation: none; }
-    .location-card-item { animation: none; }
+
+  .lci-meta {
+    display: block;
+    font-size: 0.7rem;
+    color: var(--neon-gold);
+    font-weight: 600;
   }
 </style>

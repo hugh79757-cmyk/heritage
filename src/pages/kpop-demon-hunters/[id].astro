@@ -1,0 +1,287 @@
+---
+export const prerender = true;
+
+import GuideLayout from '../../components/GuideLayout.astro';
+import BreadcrumbNav from '../../components/BreadcrumbNav.astro';
+import QuickAnswerBox from '../../components/QuickAnswerBox.astro';
+import '../../styles/global.css';
+import { KDH_SCENES, getSceneByLocation } from '../../data/kdh-scenes';
+import { getLang } from '../../lib/api';
+
+export function getStaticPaths() {
+  return KDH_SCENES.map(scene => ({
+    params: { id: scene.id },
+    props: { scene },
+  }));
+}
+
+const { scene } = Astro.props;
+const lang = getLang(Astro.url);
+const htmlLang = lang === 'kr' ? 'ko' : lang;
+
+const pageTitle = `${scene.sceneTitle[lang] || scene.sceneTitle.en} | KPop Demon Hunters | K-Heritage`;
+const pageDesc = `${scene.sceneDescription[lang] || scene.sceneDescription.en} — 방문 정보, 가는 법, 사진 포인트까지.`;
+
+const prevScene = KDH_SCENES.find(s => s.order === scene.order - 1);
+const nextScene = KDH_SCENES.find(s => s.order === scene.order + 1);
+
+const navLabels: Record<string, { prev: string; next: string; back: string; details: string }> = {
+  kr: { prev: '이전 장면', next: '다음 장면', back: '전체 촬영지', details: '궁궐 상세 보기' },
+  en: { prev: 'Previous Scene', next: 'Next Scene', back: 'All Locations', details: 'View Palace Details' },
+  ja: { prev: '前のシーン', next: '次のシーン', back: '全ロケ地', details: '宮殿詳細を見る' },
+  zh: { prev: '上一幕', next: '下一幕', back: '全部拍摄地', details: '查看宫殿详情' },
+};
+const nav = navLabels[lang] || navLabels.en;
+
+const breadcrumbItems = [
+  { name: 'Home', url: '/' },
+  { name: 'KPop Demon Hunters', url: `/kpop-demon-hunters?lang=${lang}` },
+  { name: scene.sceneTitle[lang] || scene.sceneTitle.en },
+];
+---
+
+<GuideLayout title={pageTitle} description={pageDesc} lang={htmlLang}>
+  <style>@import '../../styles/global.css';</style>
+
+  {/* ── 영웅 섹션 (인지 단계: 0~3초) ── */}
+  <section class="kdh-scene-hero">
+    <div class="kdh-scene-bg">
+      <img
+        src={`/images/generated/${scene.imageId}-md.webp`}
+        srcset={`/images/generated/${scene.imageId}-sm.webp 375w, /images/generated/${scene.imageId}-md.webp 768w, /images/generated/${scene.imageId}-lg.webp 1200w`}
+        sizes="100vw"
+        alt={scene.sceneTitle[lang] || scene.sceneTitle.en}
+        fetchpriority="high"
+        width="768"
+        height="1344"
+        style="aspect-ratio: 768/1344; object-fit: cover;"
+      />
+      <div class="kdh-scene-overlay"></div>
+    </div>
+    <div class="kdh-scene-hero-content">
+      <span class="kdh-scene-badge">KPop Demon Hunters</span>
+      <h1 class="kdh-scene-title">{scene.sceneTitle[lang] || scene.sceneTitle.en}</h1>
+    </div>
+  </section>
+
+  <div class="kdh-scene-body container">
+
+    {/* ── 즉답 정보 (3~30초 단계) ── */}
+    <QuickAnswerBox
+      address={scene.address}
+      directions={scene.directions}
+      hours={scene.hours}
+      duration={scene.duration}
+      mapLinks={scene.mapLinks}
+      lang={lang}
+    />
+
+    <hr class="section-divider" />
+
+    {/* ── 영화 맥락 (몰입 단계: 30초~3분) ── */}
+    <section class="kdh-scene-context-section">
+      <div class="section-label">영화 속 장면</div>
+      <h2>{scene.sceneTitle[lang] || scene.sceneTitle.en}</h2>
+      <p class="kdh-hook-quote">"{scene.sceneDescription[lang] || scene.sceneDescription.en}"</p>
+      <div class="kdh-context-body">
+        <p>{scene.filmContext[lang] || scene.filmContext.en}</p>
+      </div>
+    </section>
+
+    <hr class="section-divider" />
+
+    {/* ── 행동 단계: 네비게이션 ── */}
+    <nav class="kdh-scene-nav">
+      {scene.palaceLink && (
+        <a href={`${scene.palaceLink}?lang=${lang}`} class="btn btn-primary">
+          {nav.details}
+        </a>
+      )}
+      <div class="kdh-nav-links">
+        <a href={`/kpop-demon-hunters?lang=${lang}`} class="btn btn-outline">
+          &larr; {nav.back}
+        </a>
+      </div>
+    </nav>
+
+    {prevScene && (
+      <nav class="kdh-scene-nav-block">
+        <span class="kdh-nav-label">{nav.prev}</span>
+        <a href={`/kpop-demon-hunters/${prevScene.id}?lang=${lang}`} class="btn btn-outline">
+          {prevScene.sceneTitle[lang] || prevScene.sceneTitle.en}
+        </a>
+      </nav>
+    )}
+    {nextScene && (
+      <nav class="kdh-scene-nav-block">
+        <span class="kdh-nav-label">{nav.next}</span>
+        <a href={`/kpop-demon-hunters/${nextScene.id}?lang=${lang}`} class="btn btn-outline">
+          {nextScene.sceneTitle[lang] || nextScene.sceneTitle.en}
+        </a>
+      </nav>
+    )}
+
+  </div>
+</GuideLayout>
+
+<style>
+  .kdh-scene-hero {
+    position: relative;
+    min-height: 50vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: var(--bg-night, #080510);
+    padding: 60px 24px;
+  }
+  .kdh-scene-bg {
+    position: absolute;
+    inset: 0;
+  }
+  .kdh-scene-bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.7;
+  }
+  .kdh-scene-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(8,5,16,0.1) 0%, rgba(8,5,16,0.7) 100%);
+  }
+  .kdh-scene-hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    max-width: 640px;
+  }
+  .kdh-scene-badge {
+    display: inline-block;
+    padding: 4px 14px;
+    background: rgba(255,215,0,0.15);
+    color: var(--neon-gold, #FFD700);
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-bottom: 16px;
+    letter-spacing: 0.05em;
+  }
+  .kdh-scene-title {
+    font-family: 'Noto Serif KR', serif;
+    font-weight: 900;
+    font-size: clamp(1.8rem, 5vw, 3rem);
+    line-height: 1.2;
+    color: var(--dancheong-white-pastel, #F8F4E3);
+    margin-bottom: 8px;
+  }
+
+  .kdh-scene-body {
+    padding-top: 32px;
+    padding-bottom: 64px;
+  }
+
+  .kdh-scene-context-section {
+    padding: 32px 0;
+  }
+  .section-label {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--neon-gold, #FFD700);
+    margin-bottom: 8px;
+  }
+  .kdh-scene-context-section h2 {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--color-text, #2C3E50);
+    margin-bottom: 20px;
+  }
+  .kdh-hook-quote {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1.2rem;
+    line-height: 1.6;
+    color: var(--color-text-light, #7F8C8D);
+    padding: 20px 24px;
+    border-left: 3px solid var(--neon-gold, #FFD700);
+    background: rgba(255,215,0,0.05);
+    border-radius: 0 var(--radius, 12px) var(--radius, 12px) 0;
+    margin-bottom: 24px;
+  }
+  .kdh-context-body p {
+    font-size: 1rem;
+    line-height: 1.8;
+    color: var(--color-text, #2C3E50);
+  }
+
+  .section-divider {
+    border: none;
+    height: 1px;
+    background: var(--color-border-light, rgba(232,216,195,0.3));
+    margin: 32px 0;
+  }
+
+  .kdh-scene-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    padding-top: 16px;
+  }
+  .kdh-nav-links {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .kdh-scene-nav-block {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 16px 0;
+    border-top: 1px solid var(--color-border-light, rgba(232,216,195,0.2));
+  }
+  .kdh-nav-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted, #95a5a6);
+  }
+
+  @media (max-width: 640px) {
+    .kdh-scene-hero {
+      min-height: 40vh;
+      padding: 50px 20px;
+    }
+    .kdh-scene-nav {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .kdh-nav-links {
+      justify-content: center;
+    }
+    .kdh-scene-nav-block {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+    }
+  }
+
+  .dark .kdh-scene-context-section h2 {
+    color: var(--dancheong-white);
+  }
+  .dark .kdh-context-body p {
+    color: rgba(245,240,232,0.8);
+  }
+  .dark .kdh-hook-quote {
+    color: rgba(245,240,232,0.75);
+    background: rgba(255,215,0,0.08);
+  }
+</style>

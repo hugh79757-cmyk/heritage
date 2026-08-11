@@ -517,8 +517,8 @@ export const KDH_SCENES: KDHScene[] = [
 
 /* ── Helper Functions ── */
 
-// Image generation pending for these scenes (HF_TOKEN not yet available)
-const MISSING_IMAGES = new Set(['kdh-jamsil', 'kdh-cheongdam', 'kdh-coex', 'kdh-myeongdong', 'kdh-lotte']);
+// All scene images are now generated — no missing images
+const MISSING_IMAGES = new Set<string>([]);
 
 export function hasSceneImage(scene: KDHScene): boolean {
   return !MISSING_IMAGES.has(scene.imageId);

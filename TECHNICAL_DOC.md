@@ -134,6 +134,18 @@ URL 파라미터: ?lang=kr | en | ja | zh
 - `<link rel="alternate" hreflang="...">`으로 SEO hreflang 태그 생성
 - 언어 선택 UI: 네비게이션 바의 국기 버튼
 
+**⚠️ 프리렌더 함정 (2026-08-11 실전 교훈):**
+
+- `output: 'server'`에서 `export const prerender = true` + `getStaticPaths`를 쓰는 페이지는 빌드 시점에 **정적 HTML로 미리 생성**되어 Cloudflare Assets이 그대로 서빙한다. 이 경우 `Astro.url`에 쿼리스트링이 없어 `getLang`이 항상 `'kr'`로 폴백 → **언어 전환이 동작하지 않는다**.
+- 동적 라우트(`/kpop-demon-hunters/[id]` 등)는 `getStaticPaths` 없이 `Astro.params.id`로 직접 조회하는 순수 SSR로 유지할 것. (`palace/[id].astro` 패턴)
+- 없는 id 접근은 `KDH_SCENES.find(...)` 후 `if (!scene) return Astro.redirect('/')`로 처리 (200+폴백 금지).
+
+**⚠️ Cloudflare 엣지 캐시 언어 오염 (2026-08-11):**
+
+- `?lang=` 쿼리 응답에 `Cache-Control` 헤더가 없으면 Cloudflare가 HTML을 캐시해 **다른 언어 응답이 서로 덮어쓸 수 있다** (예: `?lang=en`에 한국어 페이지가 캐시됨).
+- `src/middleware.ts`가 `?lang=` 쿼리가 있는 HTML 응답에 `Cache-Control: private, no-cache`를 설정해 방지한다. 새 페이지 추가 시 미들웨어는 전역 적용되므로 별도 작업 불필요.
+- 클라이언트 `<script>`에서 `lang` 등을 쓸 때는 반드시 `<script define:vars={{ lang }}>`로 전달할 것. 미전달 시 `lang is not defined` 런타임 에러가 난다.
+
 ### 4.3 다크모드
 
 - `localStorage.getItem('theme')` + `prefers-color-scheme` 미디어 쿼리 기반

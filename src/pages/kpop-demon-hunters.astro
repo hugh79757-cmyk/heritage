@@ -4,7 +4,7 @@ import BreadcrumbNav from '../components/BreadcrumbNav.astro';
 import FAQSection from '../components/FAQSection.astro';
 import QuickAnswerBox from '../components/QuickAnswerBox.astro';
 import '../styles/global.css';
-import { KDH_SCENES, type KDHScene } from '../data/kdh-scenes';
+import { KDH_SCENES, hasSceneImage, type KDHScene } from '../data/kdh-scenes';
 import { getLang } from '../lib/api';
 
 const lang = getLang(Astro.url);
@@ -103,18 +103,20 @@ const mapTitle: Record<string, string> = {
   <BreadcrumbNav items={[{ name: 'Home', url: '/' }, { name: 'KPop Demon Hunters' }]} lang={lang} />
 
   {/* ── 히어로 ── */}
-  <section class="kdh-hero">
+  <section class={`kdh-hero${hasSceneImage(heroScene) ? '' : ' kdh-hero-noimg'}`}>
     <div class="kdh-hero-bg">
-      <img
-        src={`/images/generated/${heroScene.imageId}-md.webp`}
-        srcset={`/images/generated/${heroScene.imageId}-sm.webp 375w, /images/generated/${heroScene.imageId}-md.webp 768w, /images/generated/${heroScene.imageId}-lg.webp 1200w`}
-        sizes="100vw"
-        alt={getLocName(heroScene)}
-        fetchpriority="high"
-        width="768"
-        height="1344"
-        style="aspect-ratio: 768/1344; object-fit: cover;"
-      />
+      {hasSceneImage(heroScene) && (
+        <img
+          src={`/images/generated/${heroScene.imageId}-md.webp`}
+          srcset={`/images/generated/${heroScene.imageId}-sm.webp 375w, /images/generated/${heroScene.imageId}-md.webp 768w, /images/generated/${heroScene.imageId}-lg.webp 1200w`}
+          sizes="100vw"
+          alt={getLocName(heroScene)}
+          fetchpriority="high"
+          width="768"
+          height="1344"
+          style="aspect-ratio: 768/1344; object-fit: cover;"
+        />
+      )}
     </div>
     <div class="kdh-hero-overlay"></div>
     <div class="kdh-hero-content">
@@ -180,16 +182,18 @@ const mapTitle: Record<string, string> = {
     <div class="kdh-scenes">
       {KDH_SCENES.map((scene) => (
         <section class="kdh-scene" id={`scene-${scene.id}`}>
-          <div class="kdh-scene-inner">
-            <div class="kdh-scene-image">
-              <img
-                src={`/images/generated/${scene.imageId}-md.webp`}
-                srcset={`/images/generated/${scene.imageId}-sm.webp 375w, /images/generated/${scene.imageId}-md.webp 768w, /images/generated/${scene.imageId}-lg.webp 1200w`}
-                sizes="(max-width: 768px) 100vw, 50vw"
-                alt={getLocName(scene)}
-                loading="lazy"
-              />
-            </div>
+          <div class={`kdh-scene-inner${hasSceneImage(scene) ? '' : ' kdh-scene-noimg'}`}>
+            {hasSceneImage(scene) && (
+              <div class="kdh-scene-image">
+                <img
+                  src={`/images/generated/${scene.imageId}-md.webp`}
+                  srcset={`/images/generated/${scene.imageId}-sm.webp 375w, /images/generated/${scene.imageId}-md.webp 768w, /images/generated/${scene.imageId}-lg.webp 1200w`}
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  alt={getLocName(scene)}
+                  loading="lazy"
+                />
+              </div>
+            )}
 
             <div class="kdh-scene-text">
               <span class="kdh-scene-badge">{getTypeLabel(scene)}</span>
@@ -250,11 +254,13 @@ const mapTitle: Record<string, string> = {
               {index === 8 && (lang === 'kr' ? '영화 직접 등장 없음 — 진우의 400년 전 회상 세계관 영감' : lang === 'ja' ? '映画に直接登場なし — ジヌの400年前回想世界観のインスピレーション' : lang === 'zh' ? '电影未直接出现——Jinwoo 400年前回忆世界观灵感' : 'Not in the film directly — Jinwoo\'s 400-year-old memory world inspiration')}
             </p>
           </div>
-          <img
-            src={`/images/generated/${scene.imageId}-sm.webp`}
-            alt={getLocName(scene)}
-            class="route-step-image"
-          />
+          {hasSceneImage(scene) && (
+            <img
+              src={`/images/generated/${scene.imageId}-sm.webp`}
+              alt={getLocName(scene)}
+              class="route-step-image"
+            />
+          )}
         </div>
       ))}
     </div>
@@ -424,6 +430,163 @@ const mapTitle: Record<string, string> = {
 </script>
 
 <style>
+  /* ── KDH 히어로 ── */
+  .kdh-hero {
+    position: relative;
+    width: 100%;
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: #12101A;
+  }
+  .kdh-hero-noimg {
+    background: linear-gradient(160deg, #1C1925 0%, #12101A 55%, #0A0810 100%);
+  }
+  .kdh-hero-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+  .kdh-hero-bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.55);
+  }
+  .kdh-hero-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: linear-gradient(180deg, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.5) 60%, rgba(0,0,0,0.7) 100%);
+  }
+  .kdh-hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    color: #fff;
+    padding: 120px 24px 80px;
+    max-width: 800px;
+  }
+  .kdh-badge {
+    display: inline-block;
+    background: var(--color-accent);
+    color: var(--color-text);
+    padding: 6px 18px;
+    border-radius: 30px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+  }
+  .kdh-title {
+    font-family: 'Noto Serif KR', serif;
+    font-weight: 900;
+    font-size: clamp(2rem, 7vw, 3.5rem);
+    line-height: 1.2;
+    color: #fff;
+    margin-bottom: 12px;
+    letter-spacing: -0.02em;
+  }
+  .kdh-subtitle {
+    font-size: clamp(0.95rem, 2vw, 1.15rem);
+    color: rgba(255,255,255,0.85);
+    line-height: 1.7;
+    margin-bottom: 32px;
+    max-width: 620px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .kdh-cta {
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .kdh-cta .btn-outline {
+    color: #fff;
+    border-color: rgba(255,255,255,0.6);
+  }
+  .kdh-cta .btn-outline:hover {
+    background: rgba(255,255,255,0.15);
+  }
+  .kdh-hero-qab {
+    margin-top: 0;
+  }
+
+  /* ── 지도 섹션 ── */
+  .kdh-map-section {
+    padding: 40px 0;
+  }
+  .kdh-map-wrap {
+    position: relative;
+    width: 100%;
+    height: 520px;
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid var(--color-border);
+    background: var(--color-card);
+  }
+
+  /* 마커 */
+  .map-marker {
+    position: relative;
+  }
+  .marker-pin {
+    width: 34px;
+    height: 34px;
+    border-radius: 50% 50% 50% 0;
+    transform: rotate(-45deg);
+    background: var(--marker-color, var(--color-primary));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--shadow-md);
+  }
+  .marker-icon {
+    transform: rotate(45deg);
+    font-size: 0.9rem;
+  }
+  .marker-pulse {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--marker-color, var(--color-primary));
+    opacity: 0.35;
+    animation: marker-pulse 2s ease-out infinite;
+  }
+  @keyframes marker-pulse {
+    0% { transform: scale(0.6); opacity: 0.5; }
+    100% { transform: scale(2); opacity: 0; }
+  }
+
+  /* 팝업 */
+  .heritage-popup .popup-inner {
+    padding: 8px;
+    max-width: 240px;
+  }
+  .popup-type-badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .popup-title {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .popup-link {
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+
   /* kdh-scene styles */
   .kdh-scenes {
     display: grid;
@@ -442,21 +605,43 @@ const mapTitle: Record<string, string> = {
     padding-bottom: 0;
   }
 
+  .kdh-scene-image {
+    position: relative;
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid var(--color-border);
+    background: var(--color-card);
+  }
+  .kdh-scene-image img {
+    width: 100%;
+    height: auto;
+    display: block;
+    aspect-ratio: 3 / 4;
+    object-fit: cover;
+  }
+
   .kdh-scene-inner {
     display: grid;
     gap: 24px;
     align-items: start;
   }
 
+  /* No-image scenes: text takes full width */
+  .kdh-scene-inner.kdh-scene-noimg {
+    grid-template-columns: 1fr;
+    max-width: 720px;
+    margin: 0 auto;
+  }
+
   @media (min-width: 768px) {
-    .kdh-scene-inner {
+    .kdh-scene-inner:not(.kdh-scene-noimg) {
       grid-template-columns: 1fr 1fr;
     }
 
-    .kdh-scene:nth-child(even) .kdh-scene-inner {
+    .kdh-scene:nth-child(even) .kdh-scene-inner:not(.kdh-scene-noimg) {
       direction: rtl;
     }
-    .kdh-scene:nth-child(even) .kdh-scene-inner > * {
+    .kdh-scene:nth-child(even) .kdh-scene-inner:not(.kdh-scene-noimg) > * {
       direction: ltr;
     }
     .kdh-scene:nth-child(even) .kdh-scene-text {
@@ -468,7 +653,7 @@ const mapTitle: Record<string, string> = {
     display: inline-block;
     padding: 3px 10px;
     background: var(--color-primary);
-    color: var(--color-text);
+    color: #fff;
     border-radius: 20px;
     font-size: 0.7rem;
     font-weight: 700;
@@ -622,7 +807,7 @@ const mapTitle: Record<string, string> = {
 
   .lci-name {
     font-family: 'Noto Serif KR', serif;
-    font-size: 0.85rem;
+    font-size: 0.9rem;
     font-weight: 700;
     color: var(--color-text);
     margin-bottom: 4px;
@@ -630,16 +815,17 @@ const mapTitle: Record<string, string> = {
   }
 
   .lci-desc {
-    font-size: 0.75rem;
-    color: var(--color-text-light);
+    font-size: 0.78rem;
+    color: var(--color-text);
+    opacity: 0.8;
     line-height: 1.5;
     margin-bottom: 8px;
   }
 
   .lci-meta {
     display: block;
-    font-size: 0.7rem;
-    color: var(--color-primary);
+    font-size: 0.72rem;
+    color: var(--color-text-light);
     font-weight: 600;
   }
 </style>

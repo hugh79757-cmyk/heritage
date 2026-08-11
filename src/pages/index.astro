@@ -94,6 +94,15 @@ const palaceColors = [
 ];
 
 const palaceHanja = ['景福宮', '昌德宮', '昌慶宮', '徳寿宮', '宗廟'];
+
+// Map palace IDs to generated local images (reliable, no external dependency)
+const palaceImages: Record<number, string> = {
+  1: '/images/generated/gyeongbok-hero-md.webp',
+  2: '/images/generated/changdeokgung-secret-md.webp',
+  3: '/images/generated/gyeonghoeru-night-md.webp',
+  4: '/images/generated/deoksugung-modern-md.webp',
+  5: '/images/generated/jongno-joseon-md.webp',
+};
 ---
 <Layout title={titles[lang]} description={descs[lang]} lang={htmlLang}>
   <style>@import '../styles/global.css';</style>
@@ -162,7 +171,7 @@ const palaceHanja = ['景福宮', '昌德宮', '昌慶宮', '徳寿宮', '宗廟
           name={getPalaceName(PALACES[0], lang)}
           nameH={palaceHanja[0]}
           desc={getPalaceDesc(PALACES[0], lang)}
-          image={PALACES[0].image}
+          image={palaceImages[1]}
           href={`/palace/${PALACES[0].id}?lang=${lang}`}
           color={palaceColors[0]}
           lang={lang}
@@ -171,7 +180,7 @@ const palaceHanja = ['景福宮', '昌德宮', '昌慶宮', '徳寿宮', '宗廟
           name={getPalaceName(PALACES[1], lang)}
           nameH={palaceHanja[1]}
           desc={getPalaceDesc(PALACES[1], lang)}
-          image={PALACES[1].image}
+          image={palaceImages[2]}
           href={`/palace/${PALACES[1].id}?lang=${lang}`}
           color={palaceColors[1]}
           lang={lang}
@@ -180,7 +189,7 @@ const palaceHanja = ['景福宮', '昌德宮', '昌慶宮', '徳寿宮', '宗廟
           name={getPalaceName(PALACES[2], lang)}
           nameH={palaceHanja[2]}
           desc={getPalaceDesc(PALACES[2], lang)}
-          image={PALACES[2].image}
+          image={palaceImages[3]}
           href={`/palace/${PALACES[2].id}?lang=${lang}`}
           color={palaceColors[2]}
           lang={lang}
@@ -189,7 +198,7 @@ const palaceHanja = ['景福宮', '昌德宮', '昌慶宮', '徳寿宮', '宗廟
           name={getPalaceName(PALACES[3], lang)}
           nameH={palaceHanja[3]}
           desc={getPalaceDesc(PALACES[3], lang)}
-          image={PALACES[3].image}
+          image={palaceImages[4]}
           href={`/palace/${PALACES[3].id}?lang=${lang}`}
           color={palaceColors[3]}
           lang={lang}
@@ -198,7 +207,7 @@ const palaceHanja = ['景福宮', '昌德宮', '昌慶宮', '徳寿宮', '宗廟
           name={getPalaceName(PALACES[4], lang)}
           nameH={palaceHanja[4]}
           desc={getPalaceDesc(PALACES[4], lang)}
-          image={PALACES[4].image}
+          image={palaceImages[5]}
           href={`/palace/${PALACES[4].id}?lang=${lang}`}
           color={palaceColors[4]}
           lang={lang}

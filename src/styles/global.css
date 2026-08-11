@@ -28,9 +28,9 @@
   --color-border:             #E8D8C3;
   --color-border-light:       rgba(232, 216, 195, 0.5);
 
-  /* Semantic Colors (mapped from pastels) */
-  --color-primary:            var(--dancheong-blue-pastel);
-  --color-accent:             var(--dancheong-red-pastel);
+  /* Semantic Colors (mapped from pastels — strong for readability) */
+  --color-primary:            #3D7EAA;
+  --color-accent:             #C0504A;
   --color-success:            var(--dancheong-yellow-pastel);
   --color-info:               var(--dancheong-blue-pastel);
   --color-warning:            #F39C12;
@@ -252,7 +252,7 @@ p  { font-size: 1rem; line-height: 1.8; }
 
 .btn-primary {
   background: var(--color-primary);
-  color: var(--color-text);
+  color: #fff;
 }
 .btn-primary:hover {
   background: var(--color-text);
@@ -281,8 +281,8 @@ p  { font-size: 1rem; line-height: 1.8; }
   font-weight: 600;
   border-radius: var(--radius);
 }
-.badge-primary { background: var(--color-primary); color: var(--color-text); }
-.badge-accent  { background: var(--color-accent); color: var(--color-text); }
+.badge-primary { background: var(--color-primary); color: #fff; }
+.badge-accent  { background: var(--color-accent); color: #fff; }
 .badge-outline { background: transparent; color: var(--color-text); border: 1px solid var(--color-border); }
 
 /* ═══════════════════════════════════════════════

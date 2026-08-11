@@ -5,7 +5,7 @@ import GuideLayout from '../../components/GuideLayout.astro';
 import BreadcrumbNav from '../../components/BreadcrumbNav.astro';
 import QuickAnswerBox from '../../components/QuickAnswerBox.astro';
 import '../../styles/global.css';
-import { KDH_SCENES, getSceneByLocation } from '../../data/kdh-scenes';
+import { KDH_SCENES, getSceneByLocation, hasSceneImage } from '../../data/kdh-scenes';
 import { getLang } from '../../lib/api';
 
 export function getStaticPaths() {
@@ -62,18 +62,20 @@ const breadcrumbItems = [
   <style>@import '../../styles/global.css';</style>
 
   {/* ── 영웅 섹션 (인지 단계: 0~3초) ── */}
-  <section class="kdh-scene-hero">
+  <section class={`kdh-scene-hero${hasSceneImage(scene) ? '' : ' kdh-scene-hero-noimg'}`}>
     <div class="kdh-scene-bg">
-      <img
-        src={`/images/generated/${scene.imageId}-md.webp`}
-        srcset={`/images/generated/${scene.imageId}-sm.webp 375w, /images/generated/${scene.imageId}-md.webp 768w, /images/generated/${scene.imageId}-lg.webp 1200w`}
-        sizes="100vw"
-        alt={scene.sceneTitle[lang] || scene.sceneTitle.en}
-        fetchpriority="high"
-        width="768"
-        height="1344"
-        style="aspect-ratio: 768/1344; object-fit: cover;"
-      />
+      {hasSceneImage(scene) && (
+        <img
+          src={`/images/generated/${scene.imageId}-md.webp`}
+          srcset={`/images/generated/${scene.imageId}-sm.webp 375w, /images/generated/${scene.imageId}-md.webp 768w, /images/generated/${scene.imageId}-lg.webp 1200w`}
+          sizes="100vw"
+          alt={scene.sceneTitle[lang] || scene.sceneTitle.en}
+          fetchpriority="high"
+          width="768"
+          height="1344"
+          style="aspect-ratio: 768/1344; object-fit: cover;"
+        />
+      )}
       <div class="kdh-scene-overlay"></div>
     </div>
     <div class="kdh-scene-hero-content">
@@ -153,6 +155,9 @@ const breadcrumbItems = [
     overflow: hidden;
     background: #12101A;
     padding: 60px 24px;
+  }
+  .kdh-scene-hero-noimg {
+    background: linear-gradient(160deg, #1C1925 0%, #12101A 55%, #0A0810 100%);
   }
   .kdh-scene-bg {
     position: absolute;

@@ -517,6 +517,13 @@ export const KDH_SCENES: KDHScene[] = [
 
 /* ── Helper Functions ── */
 
+// Image generation pending for these scenes (HF_TOKEN not yet available)
+const MISSING_IMAGES = new Set(['kdh-jamsil', 'kdh-cheongdam', 'kdh-coex', 'kdh-myeongdong', 'kdh-lotte']);
+
+export function hasSceneImage(scene: KDHScene): boolean {
+  return !MISSING_IMAGES.has(scene.imageId);
+}
+
 export function getSceneByLocation(locId: string): KDHScene | undefined {
   return KDH_SCENES.find(scene => scene.id === locId);
 }

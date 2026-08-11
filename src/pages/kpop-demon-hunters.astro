@@ -88,6 +88,20 @@ const h = { title: heroTitle[lang] || heroTitle.en, sub: heroSub[lang] || heroSu
 
 const heroScene = KDH_SCENES[0]; // jamsil — first scene = hero image
 
+// Scene icon per location (used when no AI image is available)
+const sceneIcons: Record<string, string> = {
+  jamsil: '🏟️',
+  cheongdam: '🌉',
+  coex: '🖥️',
+  myeongdong: '🛍️',
+  lotte: '🗼',
+  naksan: '🧱',
+  bukchon: '🏠',
+  'nseoul-tower': '📡',
+  gyeongbokgung: '🏯',
+};
+const getSceneIcon = (scene: KDHScene) => sceneIcons[scene.id] || '📍';
+
 // Map labels per language
 const mapTitle: Record<string, string> = {
   kr: 'KPop Demon Hunters — 영감의 장소들',
@@ -160,12 +174,17 @@ const mapTitle: Record<string, string> = {
 
     <div class="location-cards-grid" id="locationSlider">
       {KDH_SCENES.map((scene, i) => (
-        <div class="location-card-item" style={`--card-index: ${i}`} data-loc-id={scene.id}>
+        <a
+          class="location-card-item"
+          style={`--card-index: ${i}`}
+          data-loc-id={scene.id}
+          href={`/kpop-demon-hunters/${scene.id}?lang=${lang}`}
+        >
           <span class="lci-dot"></span>
           <h4 class="lci-name">{getLocName(scene)}</h4>
           <p class="lci-desc">{getLocShortDesc(scene).slice(0, 60)}…</p>
           <span class="lci-meta">{getTypeLabel(scene)} · {scene.duration[lang] || scene.duration.kr}</span>
-        </div>
+        </a>
       ))}
     </div>
   </section>
@@ -183,7 +202,7 @@ const mapTitle: Record<string, string> = {
       {KDH_SCENES.map((scene) => (
         <section class="kdh-scene" id={`scene-${scene.id}`}>
           <div class={`kdh-scene-inner${hasSceneImage(scene) ? '' : ' kdh-scene-noimg'}`}>
-            {hasSceneImage(scene) && (
+            {hasSceneImage(scene) ? (
               <div class="kdh-scene-image">
                 <img
                   src={`/images/generated/${scene.imageId}-md.webp`}
@@ -192,6 +211,11 @@ const mapTitle: Record<string, string> = {
                   alt={getLocName(scene)}
                   loading="lazy"
                 />
+              </div>
+            ) : (
+              <div class="kdh-scene-placeholder" aria-hidden="true">
+                <span class="ksp-icon">{getSceneIcon(scene)}</span>
+                <span class="ksp-name">{getLocName(scene)}</span>
               </div>
             )}
 
@@ -392,27 +416,6 @@ const mapTitle: Record<string, string> = {
           'line-opacity': 0.45,
           'line-dasharray': [4, 5]
         }
-      });
-
-      // Card click -> fly to location
-      document.querySelectorAll('.location-card-item').forEach(function(card) {
-        card.addEventListener('click', function() {
-          const locId = this.dataset.locId;
-          const loc = locations.find(l => l.id === locId);
-          if (loc) {
-            map.flyTo({ center: loc.coords, zoom: 16, duration: 800 });
-            // Open popup after fly
-            setTimeout(() => {
-              const markers = document.querySelectorAll('.map-marker');
-              markers.forEach(m => {
-                const inner = m.querySelector('.marker-icon');
-                if (inner && m.parentElement && m.parentElement.getAttribute('data-loc-id') === locId) {
-                  // trigger popup via maplibre API — closest approach
-                }
-              });
-            }, 900);
-          }
-        });
       });
 
       // Store locId on each marker element for navigation
@@ -620,6 +623,31 @@ const mapTitle: Record<string, string> = {
     object-fit: cover;
   }
 
+  /* No-image scene placeholder */
+  .kdh-scene-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    aspect-ratio: 3 / 4;
+    border-radius: 16px;
+    border: 1px solid var(--color-border);
+    background: linear-gradient(160deg, var(--color-card) 0%, var(--color-card-hover) 100%);
+    text-align: center;
+    padding: 24px;
+  }
+  .ksp-icon {
+    font-size: 3rem;
+    line-height: 1;
+  }
+  .ksp-name {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--color-text-light);
+  }
+
   .kdh-scene-inner {
     display: grid;
     gap: 24px;
@@ -783,17 +811,20 @@ const mapTitle: Record<string, string> = {
   }
 
   .location-card-item {
+    display: block;
     padding: 14px;
     background: var(--color-card);
     border: 1px solid var(--color-border);
     border-radius: var(--radius);
     cursor: pointer;
-    transition: transform 0.2s, border-color 0.2s;
+    text-decoration: none;
+    transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
   }
 
   .location-card-item:hover {
     transform: translateY(-2px);
     border-color: var(--color-primary);
+    box-shadow: var(--shadow-sm);
   }
 
   .lci-dot {

@@ -361,8 +361,31 @@ npm run build    # → dist/
 
 ### 10.2 Cloudflare Workers 배포
 
+> **중요**: 배포는 환경변수 토큰이 아닌 **wrangler 프로필 인증**을 사용한다.
+> `~/.env.common`의 `CLOUDFLARE_API_TOKEN`은 배포 권한이 없어 `Authentication error [code: 10000]`로 실패한다.
+> 배포 전 반드시 아래 env 토큰들을 unset해야 한다 (5000 프로젝트 agent.md 규칙과 동일).
+
 ```bash
+# 1) 빌드
+npm run build          # → dist/
+
+# 2) env 토큰 unset 후 프로필 인증으로 배포
+unset CLOUDFLARE_API_TOKEN CLOUDFLARE_ACCOUNT_ID CF_DNS_TOKEN CLOUDFLARE_WORKERS_AI_API_TOKEN R2_ENDPOINT
 npx wrangler deploy
+```
+
+**배포 인증 정보:**
+- 활성 프로필: `hugh79757` (토큰 위치: `~/.wrangler/config/hugh79757.toml`)
+- 계정: `fac9808c757df31d797190c529aaa71a` (hugh79757@gmail.com)
+- 프로필 토큰 권한: `workers:write`, `workers_routes:write`, `d1:write`, `pages:write`, `zone:read` 등 (DNS 쓰기 없음)
+- **주의**: `npx wrangler`를 셸 함수 없이 직접 실행하면 `CLOUDFLARE_API_TOKEN` env가 우선해서 인증 실패한다.
+  `~/.zshrc`의 `wrangler` 셸 함수는 env를 자동 unset하므로 `wrangler deploy`로 실행해도 된다.
+
+**배포 확인:**
+```
+Uploaded heritage (9.27 sec)
+Deployed heritage triggers (3.32 sec)
+  heritage.aikorea24.kr (custom domain)
 ```
 
 `wrangler.jsonc` 설정:

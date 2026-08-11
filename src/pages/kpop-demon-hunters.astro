@@ -10,8 +10,18 @@ import { getLang } from '../lib/api';
 const lang = getLang(Astro.url);
 const htmlLang = lang === 'kr' ? 'ko' : lang;
 
-const title = 'KPop Demon Hunters — Real Seoul Locations Guide | K-Heritage';
-const description = 'Complete guide to the real Seoul locations that inspired KPop Demon Hunters: Jamsil, Cheongdam Bridge, COEX, Naksan Park, Bukchon, N Seoul Tower, Myeongdong, Lotte World Tower, and Gyeongbokgung. Plan your pilgrimage route.';
+const titles: Record<string, string> = {
+  kr: '케이팝 데몬 헌터스 — 실제 서울 영감 장소 가이드 | K-Heritage',
+  en: 'KPop Demon Hunters — Real Seoul Locations Guide | K-Heritage',
+  ja: 'KPop Demon Hunters — ソウル実際のインスピレーション場所ガイド | K-Heritage',
+  zh: 'KPop Demon Hunters — 首尔实际灵感地点指南 | K-Heritage',
+};
+const descriptions: Record<string, string> = {
+  kr: '케이팝 데몬 헌터스에 영감을 준 서울 장소 완전 가이드: 잠실종합운동장, 청담대교, COEX, 낙산공원, 북촌, N서울타워, 명동, 롯데월드타워, 경복궁. 순례 루트 안내.',
+  en: 'Complete guide to the real Seoul locations that inspired KPop Demon Hunters: Jamsil, Cheongdam Bridge, COEX, Naksan Park, Bukchon, N Seoul Tower, Myeongdong, Lotte World Tower, and Gyeongbokgung. Plan your pilgrimage route.',
+  ja: 'KPop Demon Huntersにインスピレーションを与えたソウル実在の場所の完全ガイド：蚕室、清潭橋、COEX、駱山公園、北村、Nソウルタワー、明洞、ロッテワールドタワー、景福宮。巡礼ルートのご案内。',
+  zh: 'KPop Demon Hunters灵感来源首尔真实地点完全指南：蚕室、清潭大桥、COEX、骆山公园、北村、N首尔塔、明洞、乐天世界塔、景福宫。朝圣路线推荐。',
+};
 
 const faqByLang: Record<string, { question: string; answer: string }[]> = {
   kr: [
@@ -87,7 +97,7 @@ const mapTitle: Record<string, string> = {
 };
 ---
 
-<GuideLayout title={title} description={description} lang={htmlLang}>
+<GuideLayout title={titles[lang] || titles.en} description={descriptions[lang] || descriptions.en} lang={htmlLang}>
   <style>@import '../styles/global.css';</style>
 
   <BreadcrumbNav items={[{ name: 'Home', url: '/' }, { name: 'KPop Demon Hunters' }]} lang={lang} />
@@ -109,7 +119,7 @@ const mapTitle: Record<string, string> = {
     <div class="kdh-hero-overlay"></div>
     <div class="kdh-hero-content">
       <span class="kdh-badge">KPop Demon Hunters</span>
-      <h1 class="kdh-title neon-text-gold" set:html={h.title.replace(/\n/g, '<br/>')} />
+      <h1 class="kdh-title">{h.title}</h1>
       <p class="kdh-subtitle">{h.sub}</p>
       <div class="kdh-cta">
         <a href="#map-section" class="btn btn-primary">
@@ -160,7 +170,7 @@ const mapTitle: Record<string, string> = {
 
   <hr class="dancheong-divider" />
 
-  {/* ── 촬영지 가이드 ── */}
+  {/* ── 장소별 가이드 ── */}
   <section id="locations">
     <div class="section-header">
       <h2>{lang === 'kr' ? '장소별 가이드' : lang === 'ja' ? '場所別ガイド' : lang === 'zh' ? '各地点指南' : 'Location Guide'}</h2>
@@ -224,16 +234,16 @@ const mapTitle: Record<string, string> = {
       {KDH_SCENES.map((scene, index) => (
         <div class="route-step" key={scene.id}>
           <span class="route-time">
-            {index < 7 ? ['09:00', '10:30', '12:00', '13:30', '15:00', '16:30', '18:00'][index] : '별도 일정'}
+            {index < 7 ? ['09:00', '10:30', '12:00', '13:30', '15:00', '16:30', '18:00'][index] : (lang === 'kr' ? '별도 일정' : lang === 'ja' ? '別枠' : lang === 'zh' ? '另行安排' : 'Separate')}
           </span>
           <div class="route-info">
             <h4>{getLocName(scene)}</h4>
             <p>
               {index === 0 && (lang === 'kr' ? '오프닝 낙하산 강하 + 데뷔 무대 — 영화 첫 인상' : lang === 'ja' ? 'オープニング降下+デビュー舞台 — 映画最初の印象' : lang === 'zh' ? '开场降落伞+出道舞台——电影第一印象' : 'Opening parachute drop + debut stage — the film\'s first impression')}
-              {index === 1 && (lang === 'kr' ? '강남 미디어 문화의 중심 — "Golden" 티저 공개 장면' : lang === 'ja' ? '강남メディア文化の中心 — 「Golden」ティザー公開シーン' : lang === 'zh' ? '江南媒体文化中心——“Golden”预告片公开场景' : 'Heart of Gangnam media culture — "Golden" teaser reveal scene')}
-              {index === 2 && (lang === 'kr' ? '한강변 고가 도로 액션 — "Takedown" OST' : lang === 'ja' ? '漢江高架道路アクション — 「Takedown」OST' : lang === 'zh' ? '汉江高架道路动作——“Takedown”原声' : 'Han River overpass action sequence — "Takedown" OST')}
-              {index === 3 && (lang === 'kr' ? '도심 번화가 퍼포먼스 — "Soda Pop" 거리 공연' : lang === 'ja' ? '都心繁華パフォーマンス — 「Soda Pop」路上公演' : lang === 'zh' ? '城市繁华表演——“Soda Pop”街头演出' : 'Downtown street performance — "Soda Pop"')}
-              {index === 4 && (lang === 'kr' ? '한옥 골목 조용한 산책 — 진우·루미 "Free"' : lang === 'ja' ? '韓屋路地散策 — ジヌ・ルミ「Free」' : lang === 'zh' ? '韩屋小巷安静漫步——Jinwoo·Rumi演唱"Free"' : 'Quiet hanok alley walk — Jinwoo & Rumi sing "Free"')}
+              {index === 1 && (lang === 'kr' ? '한강변 고가 도로 액션 — "Takedown" OST' : lang === 'ja' ? '漢江高架道路アクション — 「Takedown」OST' : lang === 'zh' ? '汉江高架道路动作——“Takedown”原声' : 'Han River overpass action sequence — "Takedown" OST')}
+              {index === 2 && (lang === 'kr' ? '강남 미디어 문화의 중심 — "Golden" 티저 공개 장면' : lang === 'ja' ? '강남メディア文化の中心 — 「Golden」ティザー公開シーン' : lang === 'zh' ? '江南媒体文化中心——“Golden”预告片公开场景' : 'Heart of Gangnam media culture — "Golden" teaser reveal scene')}
+              {index === 3 && (lang === 'kr' ? '한옥 골목 조용한 산책 — 진우·루미 "Free"' : lang === 'ja' ? '韓屋路地散策 — ジヌ・ルミ「Free」' : lang === 'zh' ? '韩屋小巷安静漫步——Jinwoo·Rumi演唱"Free"' : 'Quiet hanok alley walk — Jinwoo & Rumi sing "Free"')}
+              {index === 4 && (lang === 'kr' ? '도심 번화가 퍼포먼스 — "Soda Pop" 거리 공연' : lang === 'ja' ? '都心繁華パフォーマンス — 「Soda Pop」路上公演' : lang === 'zh' ? '城市繁华表演——“Soda Pop”街头演出' : 'Downtown street performance — "Soda Pop"')}
               {index === 5 && (lang === 'kr' ? '성곽길 위 밀회 — 해질녘 감정의 정점' : lang === 'ja' ? '城壁道上の密会 — 夕暮れの感情の頂点' : lang === 'zh' ? '城墙道上的幽会——黄昏情感高潮' : 'Secret meeting on the fortress wall — emotional peak at sunset')}
               {index === 6 && (lang === 'kr' ? '영화 클라이맥스 — 사자보이즈 마지막 공연' : lang === 'ja' ? '映画クライマックス — ライオンボイズ最終公演' : lang === 'zh' ? '电影高潮——Saja Boyz最后表演' : 'Film climax — Saja Boyz final performance')}
               {index === 7 && (lang === 'kr' ? '영화 직접 등장 없음 — 헌트릭스 숙소 디자인 모티프' : lang === 'ja' ? '映画に直接登場なし — ハントリックス拠点のデザイン母題' : lang === 'zh' ? '电影未直接出现——Huntrix基地设计灵感' : 'Not in the film directly — Huntrix base design motif')}
@@ -298,12 +308,13 @@ const mapTitle: Record<string, string> = {
         minZoom: 11,
         maxZoom: 17,
         pitch: 25,
-        attributionControl: false
+        attributionControl: false,
+        scrollZoom: false
       });
 
       map.addControl(new maplibregl.AttributionControl({ compact: true }), 'bottom-right');
 
-      const typeColors = { scene: '#FFD700', motif: '#A8D0E6', inspiration: '#C8A2C8' };
+      const typeColors = { scene: '#E8A020', motif: '#A8D0E6', inspiration: '#C8A2C8' };
       const typeLabels = {
         kr: { scene: '장면 배경', motif: '디자인 모티프', inspiration: '건축적 영감' },
         en: { scene: 'Scene', motif: 'Design Motif', inspiration: 'Architectural Inspiration' },
@@ -313,7 +324,7 @@ const mapTitle: Record<string, string> = {
       const tlabels = typeLabels[lang] || typeLabels.en;
 
       function buildPopupHTML(loc) {
-        const color = typeColors[loc.type] || '#FFD700';
+        const color = typeColors[loc.type] || '#E8A020';
         const typeLabel = tlabels[loc.type] || 'Scene';
         const name = getLocName(loc);
         return `
@@ -328,7 +339,7 @@ const mapTitle: Record<string, string> = {
       }
 
       locations.forEach(function(loc) {
-        const color = typeColors[loc.type] || '#FFD700';
+        const color = typeColors[loc.type] || '#E8A020';
         const el = document.createElement('div');
         el.className = 'map-marker';
         el.innerHTML = `
@@ -370,7 +381,7 @@ const mapTitle: Record<string, string> = {
         source: 'kdh-route',
         layout: { 'line-join': 'round', 'line-cap': 'round' },
         paint: {
-          'line-color': '#FFD700',
+          'line-color': '#A8D0E6',
           'line-width': 2.5,
           'line-opacity': 0.45,
           'line-dasharray': [4, 5]
@@ -456,8 +467,8 @@ const mapTitle: Record<string, string> = {
   .kdh-scene-badge {
     display: inline-block;
     padding: 3px 10px;
-    background: rgba(255, 215, 0, 0.12);
-    color: var(--neon-gold);
+    background: var(--color-primary);
+    color: var(--color-text);
     border-radius: 20px;
     font-size: 0.7rem;
     font-weight: 700;
@@ -519,7 +530,7 @@ const mapTitle: Record<string, string> = {
     bottom: 0;
     left: 20px;
     width: 2px;
-    background: var(--dancheong-yellow);
+    background: var(--color-primary);
   }
 
   .route-timeline {
@@ -539,10 +550,10 @@ const mapTitle: Record<string, string> = {
     flex-shrink: 0;
     width: 60px;
     text-align: right;
-    font-family: 'Gmarket Sans', sans-serif;
+    font-family: 'Pretendard', sans-serif;
     font-weight: 700;
     font-size: 0.85rem;
-    color: var(--neon-gold);
+    color: var(--color-primary);
   }
 
   .route-info {
@@ -554,7 +565,7 @@ const mapTitle: Record<string, string> = {
     font-family: 'Noto Serif KR', serif;
     font-size: 1rem;
     font-weight: 700;
-    color: var(--neon-gold);
+    color: var(--color-primary);
   }
 
   .route-info p {
@@ -597,7 +608,7 @@ const mapTitle: Record<string, string> = {
 
   .location-card-item:hover {
     transform: translateY(-2px);
-    border-color: var(--neon-gold);
+    border-color: var(--color-primary);
   }
 
   .lci-dot {
@@ -605,7 +616,7 @@ const mapTitle: Record<string, string> = {
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background: var(--neon-gold);
+    background: var(--color-primary);
     margin-bottom: 8px;
   }
 
@@ -628,7 +639,7 @@ const mapTitle: Record<string, string> = {
   .lci-meta {
     display: block;
     font-size: 0.7rem;
-    color: var(--neon-gold);
+    color: var(--color-primary);
     font-weight: 600;
   }
 </style>

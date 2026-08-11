@@ -2,8 +2,10 @@
 import Layout from '../../../layouts/Layout.astro';
 import BreadcrumbNav from '../../../components/BreadcrumbNav.astro';
 import AudioGuide from '../../../components/AudioGuide.astro';
+import QuickAnswerBox from '../../../components/QuickAnswerBox.astro';
 import '../../../styles/global.css';
 import { PALACES, getLang, getPalaceName, fetchBuildingDetail, type Lang } from '../../../lib/api';
+import palaceV2 from '../../../lib/palace_v2_content.json';
 
 const lang = getLang(Astro.url);
 const htmlLang = lang === 'kr' ? 'ko' : lang;
@@ -26,15 +28,22 @@ const palaceColors: Record<number, string> = {
   4: 'var(--palace-deoksu)',
   5: 'var(--palace-jongmyo)',
 };
-const accentColor = palaceColors[palaceId] || 'var(--dancheong-yellow)';
+const accentColor = palaceColors[palaceId] || 'var(--color-primary)';
 
 function getName(lang: Lang) {
   const map: Record<Lang, string> = { kr: detail!.nameKr, en: detail!.nameEn, ja: detail!.nameJa, zh: detail!.nameZh };
   return map[lang] || detail!.nameKr;
 }
 function getExplanation(lang: Lang) {
-  const map: Record<Lang, string> = { kr: detail!.explanationKr, en: detail!.explanationEn, ja: detail!.explanationJa, zh: detail!.explanationZh };
-  return map[lang] || detail!.explanationKr;
+  const v2Kr = palaceV2.content.kr[String(detail.serialNumber)];
+  const v2En = palaceV2.content.en[String(detail.serialNumber)];
+  const v2Ja = palaceV2.content.ja[String(detail.serialNumber)];
+  const v2Zh = palaceV2.content.zh[String(detail.serialNumber)];
+  if (lang === 'kr') return v2Kr || detail!.explanationKr;
+  if (lang === 'en') return v2En || detail!.explanationEn;
+  if (lang === 'ja') return v2Ja || detail!.explanationJa;
+  if (lang === 'zh') return v2Zh || detail!.explanationZh;
+  return detail!.explanationKr;
 }
 function getVideoUrl(v: typeof detail.videos[0], lang: Lang) {
   const map: Record<Lang, string> = { kr: v.urlKr, en: v.urlEn, ja: v.urlJa, zh: v.urlZh };
@@ -52,6 +61,72 @@ const labels: Record<string, { photos: string; videos: string }> = {
   ja: { photos: '写真ギャラリー', videos: '動画' },
   zh: { photos: '照片集', videos: '视频' },
 };
+
+// 궁궐별 기본 방문 정보 (QuickAnswerBox용)
+const palaceVisitInfo: Record<number, {
+  address: Record<string, string>;
+  directions: Record<string, string>;
+  hours: Record<string, string>;
+  duration: Record<string, string>;
+  mapLinks: { naver?: string; kakao?: string; google?: string };
+}> = {
+  1: {
+    address: { kr: '서울특별시 종로구 사직로 161', en: '161 Sajik-ro, Jongno-gu, Seoul', ja: 'ソウル特別市 鍾路区 社稷路 161', zh: '首尔特别市钟路区社稷路161号' },
+    directions: { kr: '지하철 3호선 경복궁역 5번 출구 도보 5분', en: '5 min walk from Exit 5, Gyeongbokgung Stn (Line 3)', ja: '地下鉄3号線 景福宮駅 5番出口から徒歩5分', zh: '地铁3号线景福宫站5号出口步行5分钟' },
+    hours: { kr: '09:00–18:00 (화요일 휴궁, 3~10월 ~18:30)', en: '09:00–18:00 (closed Tue, until 18:30 Mar–Oct)', ja: '09:00–18:00 (火曜休宮、3〜10月は〜18:30)', zh: '09:00–18:00（周二闭宫，3-10月至18:30）' },
+    duration: { kr: '약 2시간', en: 'About 2 hours', ja: '約2時間', zh: '约2小时' },
+    mapLinks: {
+      naver: 'https://map.naver.com/p/search/%EA%B2%BD%EB%B3%B5%EA%B6%81',
+      kakao: 'https://map.kakao.com/?q=경복궁',
+      google: 'https://www.google.com/maps/search/?api=1&query=Gyeongbokgung+Palace',
+    },
+  },
+  2: {
+    address: { kr: '서울특별시 종로구 율곡로 99', en: '99 Yulgok-ro, Jongno-gu, Seoul', ja: 'ソウル特別市 鍾路区 栗谷路 99', zh: '首尔特别市钟路区栗谷路99号' },
+    directions: { kr: '지하철 3호선 안국역 3번 출구 도보 5분', en: '5 min walk from Exit 3, Anguk Stn (Line 3)', ja: '地下鉄3号線 安国駅 3番出口から徒歩5分', zh: '地铁3号线安国站3号出口步行5分钟' },
+    hours: { kr: '09:00–18:00 (월요일 휴궁)', en: '09:00–18:00 (closed Mon)', ja: '09:00–18:00 (月曜休宮)', zh: '09:00–18:00（周一闭宫）' },
+    duration: { kr: '약 2시간 30분', en: 'About 2.5 hours', ja: '約2時間30分', zh: '约2.5小时' },
+    mapLinks: {
+      naver: 'https://map.naver.com/p/search/%EC%B0%BD%EB%8D%95%EA%B6%81',
+      kakao: 'https://map.kakao.com/?q=창덕궁',
+      google: 'https://www.google.com/maps/search/?api=1&query=Changdeokgung+Palace',
+    },
+  },
+  3: {
+    address: { kr: '서울특별시 종로구 창경궁로 185', en: '185 Changgyeonggung-ro, Jongno-gu, Seoul', ja: 'ソウル特別市 鍾路区 昌慶宮路 185', zh: '首尔特别市钟路区昌庆宫路185号' },
+    directions: { kr: '지하철 4호선 혜화역 4번 출구 도보 20분', en: '20 min walk from Exit 4, Hyehwa Stn (Line 4)', ja: '地下鉄4号線 恵化駅 4番出口から徒歩20分', zh: '地铁4号线惠化站4号出口步行20分钟' },
+    hours: { kr: '09:00–18:00 (월요일 휴궁)', en: '09:00–18:00 (closed Mon)', ja: '09:00–18:00 (月曜休宮)', zh: '09:00–18:00（周一闭宫）' },
+    duration: { kr: '약 1시간 30분', en: 'About 1.5 hours', ja: '約1時間30分', zh: '约1.5小时' },
+    mapLinks: {
+      naver: 'https://map.naver.com/p/search/%EC%B0%BD%EA%B2%BD%EA%B6%81',
+      kakao: 'https://map.kakao.com/?q=창경궁',
+      google: 'https://www.google.com/maps/search/?api=1&query=Changgyeonggung+Palace',
+    },
+  },
+  4: {
+    address: { kr: '서울특별시 중구 세종대로 99', en: '99 Sejong-daero, Jung-gu, Seoul', ja: 'ソウル特別市 中区 世宗大路 99', zh: '首尔特别市中区世宗大路99号' },
+    directions: { kr: '지하철 1·2호선 시청역 2번 출구 도보 2분', en: '2 min walk from Exit 2, City Hall Stn (Lines 1 & 2)', ja: '地下鉄1・2号線 市庁駅 2番出口から徒歩2分', zh: '地铁1·2号线市厅站2号出口步行2分钟' },
+    hours: { kr: '09:00–18:00 (월요일 휴궁)', en: '09:00–18:00 (closed Mon)', ja: '09:00–18:00 (月曜休宮)', zh: '09:00–18:00（周一闭宫）' },
+    duration: { kr: '약 1시간', en: 'About 1 hour', ja: '約1時間', zh: '约1小时' },
+    mapLinks: {
+      naver: 'https://map.naver.com/p/search/%EB%8D%95%EC%88%98%EA%B6%81',
+      kakao: 'https://map.kakao.com/?q=덕수궁',
+      google: 'https://www.google.com/maps/search/?api=1&query=Deoksugung+Palace',
+    },
+  },
+  5: {
+    address: { kr: '서울특별시 종로구 종로 157', en: '157 Jong-ro, Jongno-gu, Seoul', ja: 'ソウル特別市 鍾路区 鍾路 157', zh: '首尔特别市钟路区钟路157号' },
+    directions: { kr: '지하철 1·3·5호선 종로3가역 8번 출구 도보 5분', en: '5 min walk from Exit 8, Jongno 3-ga Stn (Lines 1, 3 & 5)', ja: '地下鉄1・3・5号線 鍾路3街駅 8番出口から徒歩5分', zh: '地铁1·3·5号线钟路3街站8号出口步行5分钟' },
+    hours: { kr: '09:00–18:00 (화요일 휴묘)', en: '09:00–18:00 (closed Tue)', ja: '09:00–18:00 (火曜休廟)', zh: '09:00–18:00（周二闭庙）' },
+    duration: { kr: '약 1시간 (해설 예약제)', en: 'About 1 hour (guided tour only)', ja: '約1時間 (解説予約制)', zh: '约1小时（仅限导览预约）' },
+    mapLinks: {
+      naver: 'https://map.naver.com/p/search/%EC%A2%85%EB%AC%98',
+      kakao: 'https://map.kakao.com/?q=종묘',
+      google: 'https://www.google.com/maps/search/?api=1&query=Jongmyo+Shrine',
+    },
+  },
+};
+const visit = palaceVisitInfo[palaceId] || palaceVisitInfo[1];
 ---
 <Layout title={title} description={description} lang={htmlLang}>
   <style>@import '../../../styles/global.css';</style>
@@ -78,7 +153,17 @@ const labels: Record<string, { photos: string; videos: string }> = {
     ]} lang={lang} />
 
     <article class="bld-content">
-      <div class="description" set:html={explanation.replace(/\r\n/g, "<br/>").replace(/\n/g, "<br/>")} />
+      <!-- 즉답 정보 (방문 전 필수 정보) -->
+      <QuickAnswerBox
+        lang={lang}
+        address={visit.address}
+        directions={visit.directions}
+        hours={visit.hours}
+        duration={visit.duration}
+        mapLinks={visit.mapLinks}
+      />
+
+      <div class="description" set:html={explanation.replace(/\n/g, "<br/>")} />
 
       <!-- 오디오 가이드 -->
       <AudioGuide
@@ -88,10 +173,10 @@ const labels: Record<string, { photos: string; videos: string }> = {
         lang={lang}
         name={buildingName}
         explanation={JSON.stringify({
-          kr: detail.explanationKr,
-          en: detail.explanationEn,
-          ja: detail.explanationJa,
-          zh: detail.explanationZh,
+          kr: detail.explanationKr.replace(/\r\n/g, ' '),
+          en: detail.explanationEn.replace(/\r\n/g, ' '),
+          ja: detail.explanationJa.replace(/\r\n/g, ' '),
+          zh: detail.explanationZh.replace(/\r\n/g, ' '),
         })}
       />
 
@@ -161,7 +246,7 @@ const labels: Record<string, { photos: string; videos: string }> = {
     align-items: flex-end;
     justify-content: center;
     overflow: hidden;
-    background: var(--bg-night);
+    background: #12101A;
   }
   .bld-hero-bg {
     position: absolute;
@@ -178,7 +263,7 @@ const labels: Record<string, { photos: string; videos: string }> = {
     position: absolute;
     inset: 0;
     z-index: 1;
-    background: linear-gradient(180deg, rgba(8,5,16,0.1) 0%, rgba(8,5,16,0.7) 60%, var(--bg-night) 100%);
+    background: linear-gradient(180deg, rgba(8,5,16,0.1) 0%, rgba(8,5,16,0.7) 60%, #12101A 100%);
   }
   .bld-hero-content {
     position: relative;
@@ -199,8 +284,8 @@ const labels: Record<string, { photos: string; videos: string }> = {
     font-family: 'Noto Serif KR', serif;
     font-weight: 900;
     font-size: clamp(1.8rem, 5vw, 2.8rem);
-    color: var(--dancheong-white);
-    text-shadow: 0 0 12px rgba(255,215,0,0.25);
+    color: #fff;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.4);
   }
   .bld-content {
     max-width: 800px;

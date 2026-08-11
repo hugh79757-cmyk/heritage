@@ -8,37 +8,56 @@ import { getLang } from '../../lib/api';
 const lang = getLang(Astro.url);
 const htmlLang = lang === 'kr' ? 'ko' : lang;
 
-const title = 'Seoul Palace Night Tour Guide 2026 | K-Heritage';
-const description = 'Complete guide to Seoul palace night tours (야간개장): Gyeongbokgung, Changdeokgung, Changgyeonggung night tour schedules, reservation tips, and what to expect in 2026.';
+const titles: Record<string, string> = {
+  kr: '서울 궁궐 야간개장 완전 가이드 2026 — K-Heritage',
+  en: 'Seoul Palace Night Tour Guide 2026 | K-Heritage',
+  ja: 'ソウル宮殿 夜間開場 完全ガイド 2026 — K-Heritage',
+  zh: '首尔宫殿夜间开放完全指南 2026 — K-Heritage',
+};
+const descriptions: Record<string, string> = {
+  kr: '서울 궁궐 야간개장(야간개장) 완전 안내: 경복궁·창덕궁·창경궁 야간개장 일정, 예약 팁, 2026년 정보',
+  en: 'Complete guide to Seoul palace night tours (야간개장): Gyeongbokgung, Changdeokgung, Changgyeonggung night tour schedules, reservation tips, and what to expect in 2026.',
+  ja: 'ソウル宮殿夜間開場の完全ガイド：景福宮、昌德宮、昌慶宮の夜間開場スケジュール、予約のコツ、2026年最新情報',
+  zh: '首尔宫殿夜间开放完全指南：景福宫、昌德宫、昌庆宫夜间开放日程、预约技巧、2026年最新信息',
+};
 
 const faqByLang: Record<string, { question: string; answer: string }[]> = {
   kr: [
-    { question: "이 내용은 아직 준비 중입니다", answer: "영어 버전을 참조해주세요." },
+    { question: '야간개장 대상 궁궐은?', answer: '경복궁, 창덕궁, 창경궁이 특별 야간개장을 개최합니다. 덕수궁은 별도 야간개장 없이 매일 밤 9시까지 개방됩니다.' },
+    { question: '야간개장 티켓은 어떻게 예약하나요?', answer: '국가유산청 홈페이지(heritage.go.kr)에서 예약합니다. 행사 2~3주 전에 티켓이 오픈되며 몇 시간 내에 매진됩니다. 알림 설정을 하고 오픈 즉시 예약하세요.' },
+    { question: '야간개장 티켓 가격은?', answer: '야간개장 티켓은 일반적으로 일반 입장료와 동일하게 성인 ₩3,000, 청소년 ₩1,500입니다. 특별 행사에 따라 가격이 달라질 수 있습니다.' },
+    { question: '야간개장은 언제 열리나요?', answer: '봄(4~5월)과 가을(9~11월)에 열립니다. 정확한 날짜는 2~3주 전에 공지됩니다. 각 궁궐은 계절당 보통 2~4회 야간개장을 개최합니다.' },
+    { question: '야간개장 방문 시 무엇을 챙겨야 하나요?', answer: '저녁에는 쌀쌀하므로 가벼운 겉옷, 편안한 신발, 사진 촬영을 위한 완충된 휴대폰을 챙기세요. 플래시 촬영은 제한될 수 있으며, 삼각대는 보통 허용되지 않습니다.' },
+    { question: '야간개장은 worth it 한가요?', answer: '물론입니다. 밤에 조명을 받은 궁궐은 낮과는 완전히 다른 마법 같은 분위기를 자아냅니다. 특히 창경궁 달빛기행은 lanterns 들고 정원을 걷는 체험으로 유명합니다.' },
   ],
   en: [
-  { question: 'Which palaces offer night tours?', answer: 'Three palaces host special night tours: Gyeongbokgung, Changdeokgung, and Changgyeonggung. Deoksugung is regularly open until 9 PM and doesn\'t need a separate night tour event.' },
-  { question: 'How do I reserve night tour tickets?', answer: 'Reserve through the Korea Heritage Service website (heritage.go.kr). Tickets are released 2-3 weeks before each event and sell out within hours. Set alerts and book immediately when released.' },
-  { question: 'How much are night tour tickets?', answer: 'Night tour tickets are typically ₩3,000 for adults and ₩1,500 for youth, the same as regular admission. Some special events may have different pricing.' },
-  { question: 'When do night tours happen?', answer: 'Night tours are held during spring (April–May) and autumn (September–November). Exact dates are announced 2-3 weeks in advance. Each palace typically hosts 2-4 events per season.' },
-  { question: 'What should I bring to a night tour?', answer: 'Bring a light jacket (evenings are cool), comfortable shoes, and a fully charged phone for photos. Flash photography may be restricted. Tripods are usually not allowed.' },
-  { question: 'Is the night tour worth it?', answer: 'Absolutely. The illuminated palaces at night create a magical atmosphere completely different from daytime visits. The Changgyeonggung Moonlight Tour is particularly famous for its lantern-lit paths through the garden.' },
-],
+    { question: 'Which palaces offer night tours?', answer: 'Three palaces host special night tours: Gyeongbokgung, Changdeokgung, and Changgyeonggung. Deoksugung is regularly open until 9 PM and doesn\'t need a separate night tour event.' },
+    { question: 'How do I reserve night tour tickets?', answer: 'Reserve through the Korea Heritage Service website (heritage.go.kr). Tickets are released 2-3 weeks before each event and sell out within hours. Set alerts and book immediately when released.' },
+    { question: 'How much are night tour tickets?', answer: 'Night tour tickets are typically ₩3,000 for adults and ₩1,500 for youth, the same as regular admission. Some special events may have different pricing.' },
+    { question: 'When do night tours happen?', answer: 'Night tours are held during spring (April–May) and autumn (September–November). Exact dates are announced 2-3 weeks in advance. Each palace typically hosts 2-4 events per season.' },
+    { question: 'What should I bring to a night tour?', answer: 'Bring a light jacket (evenings are cool), comfortable shoes, and a fully charged phone for photos. Flash photography may be restricted. Tripods are usually not allowed.' },
+    { question: 'Is the night tour worth it?', answer: 'Absolutely. The illuminated palaces at night create a magical atmosphere completely different from daytime visits. The Changgyeonggung Moonlight Tour is particularly famous for its lantern-lit paths through the garden.' },
+  ],
+  ja: [
+    { question: '夜間営業対象の宮殿は？', answer: '景福宮、昌徳宮、昌慶宮が特別な夜間営業を開催します。徳寿宮は別途夜間営業なしで毎日夜9時まで開いています。' },
+    { question: '夜間営業チケットはどう予約する？', answer: '韓國遺産廳のウェブサイト（heritage.go.kr）で予約。イベントの2〜3週間前にチケットが発売され、数時間で完売。アラートを設定して発売直後に予約を。' },
+    { question: '夜間営業チケットの料金は？', answer: '夜間営業チケットは通常、大人₩3,000、青少年₩1,500で、通常入場料と同じです。特別イベントによっては価格が異なる場合も。' },
+    { question: '夜間営業はいつ開催される？', answer: '春（4〜5月）と秋（9〜11月）に開催。正確な日付は2〜3週間前に発表。各宮殿はシーズンあたり通常2〜4回の夜間営業を開催。' },
+    { question: '夜間営業には何を持っていくべき？', answer: '夕方は肌寒いので軽い上着、快適な靴、写真撮影用の充電されたスマホを。フラッシュ撮影は制限される場合あり、三脚は通常不可。' },
+    { question: '夜間営業は行く価値ある？', answer: 'もちろんです。夜間照明された宮殿は昼間とは全く異なる魔法のような雰囲気。昌慶宮の月光ツアーは特に、ランタンを持って庭を歩く体験で有名。' },
+  ],
+  zh: [
+    { question: '夜间开放対象宫殿有哪些？', answer: '景福宫、昌德宫、昌庆宫举办特别夜间开放。德寿宫无需特别夜间开放，毎天晚上9点前都会开放。' },
+    { question: '夜间开放门票怎么预约？', answer: '在韩国遗产厅网站（heritage.go.kr）预约。活动前2-3周开售，几小时内售罄。设置提醒并在开售后立即预约。' },
+    { question: '夜间开放门票价格？', answer: '夜间开放门票通常与普通门票价格相同：成人₩3,000，青少年₩1,500。特殊活动可能会有不同定价。' },
+    { question: '夜间开放什么时候举办？', answer: '春季（4-5月）和秋季（9-11月）举办。确切日期提前2-3周公布。每个宫殿每季通常举办2-4次夜间开放。' },
+    { question: '夜间开放需要带什么？', answer: '晚上天气转凉，建议带件轻薄外套、穿舒适的鞋子、手机保持充足电量以供拍照。闪光摄影可能受限，三脚架通常不允许。' },
+    { question: '夜间开放值得去吗？', answer: '绝对值得。夜间灯光照射的宫殿营造出与白天完全不同的魔幻氛围。昌庆宫月光 tour 因手持灯笼穿行花园的体验而尤其著名。' },
+  ],
 };
 const faqItems = faqByLang[lang] || faqByLang.en;
 
-const h: Record<string, any> = {
-  en: {
-    h1: 'Seoul Palace Night Tour Guide 2026',
-    intro: 'Seoul palace night tours (야간개장) offer a magical experience — walking through illuminated royal palaces under the stars. These limited-time events, held during spring and autumn, transform the familiar palace grounds into an enchanting nighttime wonderland. Each event is unique, with special lighting, performances, and cultural programs.',
-    h2_1: 'Night Tour Overview',
-    h2_2: 'Gyeongbokgung Night Tour',
-    h2_3: 'Changdeokgung Night Tour',
-    h2_4: 'Changgyeonggung Moonlight Tour (달빛기행)',
-    h2_5: 'Deoksugung — Open Until 9 PM',
-    h2_6: 'Reservation Tips',
-    h2_7: 'What to Expect',
-    cta: 'Explore palace details →',
-  },
+const content = {
   kr: {
     h1: '궁궐 야간개장 완전 가이드 2026',
     intro: '궁궐 야간개장은 조명이 켜진 궁궐을 밤하늘 아래 걸어보는 특별한 경험을 선사합니다. 봄과 가을에 한정된 기간 동안 열리는 이 이벤트는 낮과는 완전히 다른 궁궐의 모습을 보여줍니다.',
@@ -49,23 +68,98 @@ const h: Record<string, any> = {
     h2_5: '덕수궁 — 밤 9시까지 개방',
     h2_6: '예약 팁',
     h2_7: '현장 안내',
+    overview: '<strong>시즌:</strong> 봄(4~5월) 및 가을(9~11월)<br><strong>티켓:</strong> 성인 ₩3,000 / 청소년 ₩1,500<br><strong>예약:</strong> heritage.go.kr, 행사 2~3주 전 오픈<br><strong>경쟁률:</strong> 극히 제한적 — 몇 시간 내 매진',
+    gyeongbokgung_desc: '경복궁 야간개장은 서울에서 가장 인기 있는 문화 행사 중 하나입니다. 투어는 주요 전각을 지나는 특별 경로를 따라 진행되며, 근정전과 경회루가 밤하늘을 배경으로 조명 아래 빛납니다. 경회루에서는 전통 음악 공연이 함께 열리기도 합니다.',
+    gyeongbokgung_info: '<strong>소요시간:</strong> 약 70분 · <strong>수용인원:</strong> 행사당 약 3,000명 · <strong>회차:</strong> 보통 행사 당일 2회차(19:00, 20:30)',
+    changdeokgung_desc: '창덕궁 야간개장은 건축과 자연의 조화로운 통합에 초점을 맞춥니다. 조명 아래 궁궐 건물들이 연못과 개천에 아름답게 반사됩니다. 비원이 일부 특별 야간 이벤트에 포함될 수 있어, 유네스코 지정 유산을 밤 시간대에 볼 수 있는 귀한 기회입니다.',
+    changgyeonggung_desc: '창경궁 달빛기행(달빛기행)은 모든 야간개장 중 가장 분위기 있는 체험일 것입니다. 방문객들은 랜턴 불빛 아래 궁궐 마당을 걸으며, 연못에 비친 달빛 조명 누각의 모습을 마주합니다.',
+    changgyeonggung_info: '<strong>소요시간:</strong> 약 90분 · <strong>수용인원:</strong> 회당 약 500명으로 제한 — 모든 야간개장 중 가장 배타적인 체험.',
+    deoksugung_desc: '덕수궁은 별도 야간개장이 필요 없습니다 — 여름철(3~10월)에는 매일 밤 9시까지 개방됩니다. 황혼에 조명이 켜진 궁궐과 유명한 돌담길이 마법 같은 저녁 체험을 만들어냅니다. 여름 저녁 어느 날이든 방문해 야간 궁궐의 매력을 느껴보세요.',
+    tips: [
+      { label: '티켓 오픈 즉시 예약', text: 'heritage.go.kr 티켓 오픈 시간에 휴대폰 알람 설정' },
+      { label: '평일이 더 여유로움', text: '주말보다 평일 야간개장 매진 속도가 느림' },
+      { label: '현장 구매 가능성', text: '온라인 예약 실패 시 궁궐 입구에서 당일 잔여 티켓 확인 가능(제한적)' },
+      { label: '통합관람권 활용', text: '주간 방문은 통합관람권(₩10,000)으로, 야간개장은 별도 예약' },
+      { label: '달빛기행이 가장 어려움', text: '창경궁 달빛기행이 가장 예약하기 어려우니 여러 날짜 시도' },
+    ],
+    on_site: [
+      { label: '복장', text: '편안한 걷기 신발, 가벼운 겉옷(저녁엔 쌀쌀할 수 있음)' },
+      { label: '촬영', text: '대부분 구역 촬영 가능하나 플래시·삼각대 금지' },
+      { label: '음식', text: '궁궐 내 음식 제공 없음 — 방문 전 식사 권장' },
+      { label: '이동 수단', text: '대중교통 이용 — 주차 공간 극히 제한적' },
+      { label: '접근성', text: '일부 구간 고르지 않은 바닥; 휠체어 접근성은 궁궐별로 상이' },
+    ],
     cta: '궁궐 상세 보기 →',
+  },
+  en: {
+    h1: 'Seoul Palace Night Tour Guide 2026',
+    intro: 'Seoul palace night tours (야간개장) offer a magical experience — walking through illuminated royal palaces under the stars. These limited-time events, held during spring and autumn, transform the familiar palace grounds into an enchanting nighttime wonderland.',
+    h2_1: 'Night Tour Overview',
+    h2_2: 'Gyeongbokgung Night Tour',
+    h2_3: 'Changdeokgung Night Tour',
+    h2_4: 'Changgyeonggung Moonlight Tour (달빛기행)',
+    h2_5: 'Deoksugung — Open Until 9 PM',
+    h2_6: 'Reservation Tips',
+    h2_7: 'What to Expect',
+    overview: '<strong>Season:</strong> Spring (April–May) and Autumn (September–November)<br><strong>Tickets:</strong> ₩3,000 adults / ₩1,500 youth<br><strong>Booking:</strong> heritage.go.kr, 2-3 weeks before each event<br><strong>Availability:</strong> Extremely limited — sells out in hours',
+    gyeongbokgung_desc: 'Gyeongbokgung\'s night tour is one of the most popular cultural events in Seoul. The tour follows a special route through the main palace buildings, with Geunjeongjeon and Gyeonghoeru Pavilion illuminated against the night sky. Special traditional music performances are often held at Gyeonghoeru.',
+    gyeongbokgung_info: '<strong>Duration:</strong> Approximately 70 minutes · <strong>Capacity:</strong> ~3,000 per event · <strong>Sessions:</strong> Usually 2 time slots per event night (7:00 PM and 8:30 PM).',
+    changdeokgung_desc: 'Changdeokgung\'s night tour focuses on the harmonious integration of architecture and nature. The illuminated palace buildings reflect beautifully in the ponds and streams. The Secret Garden may be included in some special night events — a rare opportunity to see this UNESCO site after dark.',
+    changgyeonggung_desc: 'The Changgyeonggung Moonlight Tour (달빛기행) is perhaps the most atmospheric of all night tours. Visitors walk through the palace grounds by lantern light, passing through Changgyeongwon Garden where the reflections of moonlit pavilions on the pond create an unforgettable scene.',
+    changgyeonggung_info: '<strong>Duration:</strong> Approximately 90 minutes · <strong>Capacity:</strong> Limited to ~500 per session — the most exclusive of all night tours.',
+    deoksugung_desc: 'Deoksugung doesn\'t need a special night tour — it\'s <strong>open until 9 PM every day</strong> during summer (March–October). The palace illuminated at dusk, combined with the famous Stone Wall Road at sunset, creates a magical evening experience. Visit on any summer evening for a taste of nighttime palace magic.',
+    tips: [
+      { label: 'Book immediately', text: 'Set a phone alarm for heritage.go.kr ticket release time' },
+      { label: 'Weekdays less crowded', text: 'Weekend night tours sell out faster than weekdays' },
+      { label: 'Check for same-day tickets', text: 'If online booking fails, check for limited same-day availability at the palace entrance' },
+      { label: 'Combine with integrated ticket', text: 'Use the integrated ticket (₩10,000) for daytime visits, then book night tours separately' },
+      { label: 'Moonlight Tour hardest to get', text: 'Changgyeonggung\'s Moonlight Tour is the hardest to book — try multiple dates' },
+    ],
+    on_site: [
+      { label: 'What to wear', text: 'Comfortable walking shoes, light layers (evenings can be cool)' },
+      { label: 'Photography', text: 'Allowed in most areas, but no flash or tripods' },
+      { label: 'Food', text: 'Not available inside — eat before arriving' },
+      { label: 'Getting there', text: 'Use public transport — parking is extremely limited' },
+      { label: 'Accessibility', text: 'Some paths may be uneven; wheelchair accessibility varies by palace' },
+    ],
+    cta: 'Explore palace details →',
   },
   ja: {
     h1: 'ソウル宮殿 夜間営業ガイド 2026',
     intro: '宮殿の夜間営業は、星空の下で照明された宮殿を散策する魔法のような体験を提供します。春と秋に開催されるこの期間限定イベントは、昼間とは全く異なる宮殿の姿を見せます。',
     h2_1: '夜間営業概要',
     h2_2: '景福宮 夜間営業',
-    h2_3: '昌德宮 夜間営業',
+    h2_3: '昌徳宮 夜間営業',
     h2_4: '昌慶宮 月光ツアー',
     h2_5: '徳寿宮 — 夜9時まで営業',
     h2_6: '予約ヒント',
     h2_7: '現地ガイド',
+    overview: '<strong>シーズン:</strong> 春（4〜5月）および秋（9〜11月）<br><strong>チケット:</strong> 大人₩3,000 / 青少年₩1,500<br><strong>予約:</strong> heritage.go.kr、イベントの2〜3週間前に発売<br><strong>競争率:</strong> 極めて限定的 — 数時間で完売',
+    gyeongbokgung_desc: '景福宮夜間営業はソウルで最も人気のある文化イベントの一つ。ツアーは主要な建物を通る特別な経路で進み、勤政殿と慶會楼が夜空を背景に照明で輝きます。慶會楼では伝統音楽の公演が行われることもあります。',
+    gyeongbokgung_info: '<strong>所要時間:</strong> 約70分・<strong>収容人数:</strong> イベントあたり約3,000人・<strong>回数:</strong> 通常イベント当日2回（19:00、20:30）',
+    changdeokgung_desc: '昌徳宮夜間営業は建築と自然の調和に焦点を当てています。照明された宮殿の建物が池や小川に美しく映り込みます。秘苑が特別な夜間イベントに含まれることもあり、ユネスコ遺産を夜に鑑賞できる貴重な機会です。',
+    changgyeonggung_desc: '昌慶宮月光ツアー（달빛기행）は夜間営業の中でも最も雰囲気のある体験かもしれません。訪問者はランタンの光の下、宮殿の敷地を歩き、池に映る月明かりに照らされた亭閣の姿を目にします。',
+    changgyeonggung_info: '<strong>所要時間:</strong> 約90分・<strong>収容人数:</strong> 回あたり約500名に制限 — すべての夜間営業で最も限定적인体験。',
+    deoksugung_desc: '徳寿宮は特別な夜間営業が必要ありません—夏季（3〜10月）は毎日夜9時まで開館しています。夕暮れに照明された宮殿と有名な石垣道が魔法のような夜の体験を作り出します。夏の夕方、ぜひ訪れてナイトパレスマジックを味わってください。',
+    tips: [
+      { label: '発売即予約', text: 'heritage.go.krチケット発売時間に電話のアラームをセット' },
+      { label: '平日の方が空いている', text: '週末より平日夜間営業の完売が遅い' },
+      { label: '当日券の可能性', text: 'オンライン予約失敗時は宮殿入り口で当日残り券を確認（限定的）' },
+      { label: '統合券の活用', text: ' daytimeは統合観覧券（₩10,000）、夜間営業は別途予約' },
+      { label: '月光ツアーが最も難しい', text: '昌慶宮月光ツアーが最も予約が困難 — 複数日付を試す' },
+    ],
+    on_site: [
+      { label: '服装', text: '歩きやすい靴、軽い上着（夕方は肌寒い場合あり）' },
+      { label: '撮影', text: 'ほとんどのエリアで可能だがフラッシュ・三脚禁止' },
+      { label: '飲食', text: '宮殿内での飲食不可 — くる前の食事を推奨' },
+      { label: 'アクセス', text: '公共交通機関利用 — 駐車スペースは極めて限定的' },
+      { label: 'アクセシビリティ', text: '一部区画は床が不均一；車椅子対応は宮殿によって異なる' },
+    ],
     cta: '宮殿の詳細を見る →',
   },
   zh: {
     h1: '首尔宫殿夜间开放指南 2026',
-    intro: '宫殿夜间开放（야간개장）提供在星空下漫步灯火辉煌宫殿的奇妙体验。这些春秋季节限时举办的活动，展现了宫殿与白天完全不同的面貌。',
+    intro: '宫殿夜间开放（야간개장）提供在星空下漫步灯火辉煌宫殿的奇妙体验。这些春秋季节限时举办的活动，将熟悉的宫殿展现出与白天完全不同的面貌。',
     h2_1: '夜间开放概况',
     h2_2: '景福宫夜间开放',
     h2_3: '昌德宫夜间开放',
@@ -73,66 +167,78 @@ const h: Record<string, any> = {
     h2_5: '德寿宫 — 开放至晚上9点',
     h2_6: '预约技巧',
     h2_7: '现场指南',
+    overview: '<strong>季节:</strong> 春季（4-5月）和秋季（9-11月）<br><strong>门票:</strong> 成人₩3,000 / 青少年₩1,500<br><strong>预约:</strong> heritage.go.kr，活动前2-3周开售<br><strong>竞争:</strong> 极其有限 — 几小时内售罄',
+    gyeongbokgung_desc: '景福宫夜间开放是首尔最受欢迎的文化活动之一。导览沿主要宫殿建筑的特别路线行进，勤政殿和庆会楼在夜空背景下璀璨生辉。庆会楼有时还会举行传统音乐表演。',
+    gyeongbokgung_info: '<strong>时长:</strong> 约70分钟・<strong>容量:</strong> 每场约3,000人・<strong>场次:</strong> 通常活动当日2场（19:00、20:30）',
+    changdeokgung_desc: '昌德宫夜间开放侧重于建筑与自然的和谐融合。灯光照亮的宫殿建筑在池塘和溪流中倒映得美丽非凡。秘苑可能包含在某些特别夜间活动中——这是夜间参观这一联合国教科文组织遗产的难得机会。',
+    changgyeonggung_desc: '昌庆宫月光之旅（달빛기행）可能是所有夜间开放中最具氛围的体验。游客手持灯笼光线漫步宫殿庭院，穿过昌庆苑花园，池塘中倒映着月光照耀的亭台，构成难忘的画面。',
+    changgyeonggung_info: '<strong>时长:</strong> 约90分钟・<strong>容量:</strong> 每场限500人左右——所有夜间开放中最具 exclusivity 的体验。',
+    deoksugung_desc: '德寿宫不需要特别夜间开放——夏季（3-10月）每天晚上9点前都会开放。黄昏时分灯光照明的宫殿配合著名的石墙路，营造出魔幻般的夜间体验。夏季任何一个傍晚都可以来感受夜间宫殿的魅力。',
+    tips: [
+      { label: '售出即预约', text: '为heritage.go.kr门票开售时间设置手机闹钟' },
+      { label: '工作日更从容', text: '周末夜间开放售罄速度比工作日快' },
+      { label: '当日票可能性', text: '在线预约失败时，可在宫殿入口查看当日余票（数量有限）' },
+      { label: '综合票搭配', text: '白天参观使用综合票（₩10,000），夜间开放另行预约' },
+      { label: '月光之旅最难预约', text: '昌庆宫月光之旅最难预约——尝试多个日期' },
+    ],
+    on_site: [
+      { label: '穿着', text: '舒适的步行鞋，轻薄外套（傍晚可能转凉）' },
+      { label: '摄影', text: '大部分区域允许拍照，但禁止闪光灯和三脚架' },
+      { label: '饮食', text: '宫殿内不提供食物——来之前先吃饭' },
+      { label: '交通', text: '使用公共交通——停车位极其有限' },
+      { label: '无障碍', text: '部分路段地面不平；轮椅通道因宫殿而异' },
+    ],
     cta: '查看宫殿详情 →',
   },
-};
-
-const t = h[lang] || h.en;
+}[lang] ?? content.en;
 ---
-<GuideLayout title={title} description={description} lang={htmlLang}>
+<GuideLayout title={titles[lang] || titles.en} description={descriptions[lang] || descriptions.en} lang={htmlLang}>
   <style>@import '../../styles/global.css';</style>
   <div class="container">
     <BreadcrumbNav items={[{ name: 'Home', url: '/' }, { name: 'Guide', url: '/guide' }, { name: 'Night Tour' }]} lang={lang} />
     <article class="guide-content">
-      <h1>{t.h1}</h1>
+      <h1>{content.h1}</h1>
       <p class="guide-meta">Updated: June 2026 &middot; Korea Heritage Service official data</p>
-      <p class="guide-intro">{t.intro}</p>
+      <p class="guide-intro">{content.intro}</p>
 
-      <h2>{t.h2_1}</h2>
+      <h2>{content.h2_1}</h2>
       <div class="info-box">
-        <p><strong>Season:</strong> Spring (April–May) and Autumn (September–November)<br/>
-        <strong>Tickets:</strong> ₩3,000 adults / ₩1,500 youth<br/>
-        <strong>Booking:</strong> heritage.go.kr, 2-3 weeks before each event<br/>
-        <strong>Availability:</strong> Extremely limited — sells out in hours</p>
+        <p>{content.overview}</p>
       </div>
 
-      <h2>{t.h2_2}</h2>
-      <p>Gyeongbokgung's night tour is one of the most popular cultural events in Seoul. The tour follows a special route through the main palace buildings, with Geunjeongjeon and Gyeonghoeru Pavilion illuminated against the night sky. Special traditional music performances are often held at Gyeonghoeru.</p>
-      <p><strong>Duration:</strong> Approximately 70 minutes. <strong>Capacity:</strong> ~3,000 per event. <strong>Sessions:</strong> Usually 2 time slots per event night (7:00 PM and 8:30 PM).</p>
+      <h2>{content.h2_2}</h2>
+      <p>{content.gyeongbokgung_desc}</p>
+      <p>{content.gyeongbokgung_info}</p>
 
-      <h2>{t.h2_3}</h2>
-      <p>Changdeokgung's night tour focuses on the harmonious integration of architecture and nature. The illuminated palace buildings reflect beautifully in the ponds and streams. The Secret Garden may be included in some special night events — a rare opportunity to see this UNESCO site after dark.</p>
+      <h2>{content.h2_3}</h2>
+      <p>{content.changdeokgung_desc}</p>
 
-      <h2>{t.h2_4}</h2>
-      <p>The Changgyeonggung Moonlight Tour (달빛기행) is perhaps the most atmospheric of all night tours. Visitors walk through the palace grounds by lantern light, passing through Changgyeongwon Garden where the reflections of moonlit pavilions on the pond create an unforgettable scene.</p>
-      <p><strong>Duration:</strong> Approximately 90 minutes. <strong>Capacity:</strong> Limited to ~500 per session — the most exclusive of all night tours.</p>
+      <h2>{content.h2_4}</h2>
+      <p>{content.changgyeonggung_desc}</p>
+      <p>{content.changgyeonggung_info}</p>
 
-      <h2>{t.h2_5}</h2>
-      <p>Deoksugung doesn't need a special night tour — it's <strong>open until 9 PM every day</strong> during summer (March–October). The palace illuminated at dusk, combined with the famous Stone Wall Road at sunset, creates a magical evening experience. Visit on any summer evening for a taste of nighttime palace magic.</p>
+      <h2>{content.h2_5}</h2>
+      <p>{content.deoksugung_desc}</p>
 
-      <h2>{t.h2_6}</h2>
+      <h2>{content.h2_6}</h2>
       <div class="info-box tip-box">
         <ul>
-          <li><strong>Book immediately</strong> when tickets are released — set a phone alarm for heritage.go.kr</li>
-          <li>Weekday night tours sell out slower than weekends</li>
-          <li>If you miss online booking, check for same-day availability at the palace entrance (limited)</li>
-          <li>Buy the integrated ticket (₩10,000) for regular daytime visits, then book night tours separately</li>
-          <li>Changgyeonggung's Moonlight Tour is the hardest to get — try multiple dates</li>
+          {content.tips.map(tip => (
+            <li><strong>{tip.label}:</strong> {tip.text}</li>
+          ))}
         </ul>
       </div>
 
-      <h2>{t.h2_7}</h2>
+      <h2>{content.h2_7}</h2>
       <div class="info-box">
         <ul>
-          <li><strong>What to wear:</strong> Comfortable walking shoes, light layers (evenings can be cool)</li>
-          <li><strong>Photography:</strong> Allowed in most areas, but no flash or tripods</li>
-          <li><strong>Food:</strong> Not available inside — eat before arriving</li>
-          <li><strong>Getting there:</strong> Use public transport — parking is extremely limited</li>
-          <li><strong>Accessibility:</strong> Some paths may be uneven; wheelchair accessibility varies by palace</li>
+          {content.on_site.map(item => (
+            <li><strong>{item.label}:</strong> {item.text}</li>
+          ))}
         </ul>
       </div>
 
-      <div class="cta-box"><a href={`/?lang=${lang}`}>{t.cta}</a></div>
+      <div class="cta-box"><a href={`/?lang=${lang}`}>{content.cta}</a></div>
 
       <FAQSection items={faqByLang} lang={lang} />
     </article>

@@ -9,35 +9,48 @@ const lang = getLang(Astro.url);
 const htmlLang = lang === 'kr' ? 'ko' : lang;
 const buildings = await fetchPalaceList(4);
 
-const title = 'Deoksugung Palace Complete Guide 2026 | K-Heritage';
-const description = 'Complete guide to Deoksugung Palace: ticket prices, opening hours, Seokjojeon Hall, stone wall road, Emperor Gojong history, and visitor tips for 2026.';
+const titles: Record<string, string> = {
+  kr: '덕수궁 완전 가이드 2026 — K-Heritage',
+  en: 'Deoksugung Palace Complete Guide 2026 | K-Heritage',
+  ja: '徳寿宮 完全ガイド 2026 — K-Heritage',
+  zh: '德寿宫完全指南 2026 — K-Heritage',
+};
+const descriptions: Record<string, string> = {
+  kr: '덕수궁 관람 안내: 입장료, 개방시간, 석조전, 돌담길, 고종 황제 역사, 2026년 방문 팁',
+  en: 'Complete guide to Deoksugung Palace: ticket prices, opening hours, Seokjojeon Hall, stone wall road, Emperor Gojong history, and visitor tips for 2026.',
+  ja: '徳寿宮の完全ガイド：チケット料金、営業時間、石造殿、石垣道、高宗皇帝の歴史、2026年訪問のコツ',
+  zh: '德寿宫完全指南：门票价格、开放时间、石造殿、石墙路、高宗皇帝历史、2026年参观贴士',
+};
 
 const faqByLang: Record<string, { question: string; answer: string }[]> = {
   kr: [
-    { question: "이 내용은 아직 준비 중입니다", answer: "영어 버전을 참조해주세요." },
+    { question: '덕수궁 개방시간은?', answer: '3~10월: 09:00~21:00(마지막 입장 20:00). 11~2월: 09:00~20:00(마지막 입장 19:00). 월요일 휴관. 서울에서 밤 9시까지 개방하는 유일한 궁궐입니다.' },
+    { question: '덕수궁 입장료는?', answer: '성인 ₩1,000, 청소년(7~18세) ₩500. 7세 이하·65세 이상 무료. 서울에서 가장 저렴한 궁궐 입장료 중 하나입니다.' },
+    { question: '덕수궁 돌담길은?', answer: '덕수궁 돌담길은 궁궐 서쪽 벽을 따라 이어지는 약 900m 산책로로, 서울에서 가장 운치 있는 산책 코스 중 하나입니다. 특히 일몰 시간에 아름답습니다.' },
+    { question: '덕수궁 야간에 방문할 수 있나요?', answer: '네, 덕수궁은 밤 9시까지 개방하는 유일한 궁궐입니다. 해질녘 조명이 켜진 궁궐과 돌담길은 특별한 분위기를 자아냅니다. 목요일은 무료 가이드 투어가 열리기도 합니다.' },
   ],
   en: [
-  { question: 'What are Deoksugung Palace opening hours?', answer: '09:00–21:00 (summer, Mar–Oct). 09:00–20:00 (winter, Nov–Feb). Closed Mondays. The palace is uniquely open until 9 PM, making it ideal for evening visits.' },
-  { question: 'How much is the Deoksugung ticket?', answer: 'Adults: ₩1,000. Youth (7–18): ₩500. Free for children under 7 and seniors 65+. One of the cheapest palace admissions in Seoul.' },
-  { question: 'What is the Deoksugung Stone Wall Road?', answer: 'The Deoksugung Stone Wall Road (덕수궁 돌담길) is a picturesque 900-meter path along the palace\'s western wall, one of the most romantic walking routes in Seoul, especially beautiful at sunset.' },
-  { question: 'Can I visit Deoksugung at night?', answer: 'Yes, Deoksugung is the only palace open until 9 PM. The illuminated palace and stone wall road at dusk create a magical atmosphere. Thursday evenings sometimes feature free guided tours.' },
-],
+    { question: 'What are Deoksugung Palace opening hours?', answer: '09:00–21:00 (summer, Mar–Oct). 09:00–20:00 (winter, Nov–Feb). Closed Mondays. The palace is uniquely open until 9 PM, making it ideal for evening visits.' },
+    { question: 'How much is the Deoksugung ticket?', answer: 'Adults: ₩1,000. Youth (7–18): ₩500. Free for children under 7 and seniors 65+. One of the cheapest palace admissions in Seoul.' },
+    { question: 'What is the Deoksugung Stone Wall Road?', answer: 'The Deoksugung Stone Wall Road (덕수궁 돌담길) is a picturesque 900-meter path along the palace\'s western wall, one of the most romantic walking routes in Seoul, especially beautiful at sunset.' },
+    { question: 'Can I visit Deoksugung at night?', answer: 'Yes, Deoksugung is the only palace open until 9 PM. The illuminated palace and stone wall road at dusk create a magical atmosphere. Thursday evenings sometimes feature free guided tours.' },
+  ],
+  ja: [
+    { question: '徳寿宮の営業時間は？', answer: '3〜10月: 09:00〜21:00（最終入場20:00）。11〜2月: 09:00〜20:00（最終入場19:00）。月曜休館。ソウルで夜9時まで開いている唯一の宮殿です。' },
+    { question: '入場料は？', answer: '大人₩1,000、青少年(7〜18歳)₩500。7歳以下・65歳以上無料。ソウルで最も安い宮殿入場料の一つ。' },
+    { question: '徳寿宮の石垣道は？', answer: '徳寿宮石垣道は宮殿の西壁に沿って続く約900mの散策路で、ソウルで最も風情ある散歩コースの一つ。特に日暮れ時に美しい。' },
+    { question: '夜間に徳寿宮を訪ねられますか？', answer: 'はい、徳寿宮は夜9時まで開いている唯一の宮殿。夕暮れに illuminated な宮殿と石垣道は魔法のような雰囲気。木曜日の夜は無料ガイドツアーがある場合も。' },
+  ],
+  zh: [
+    { question: '德寿宫开放时间？', answer: '3-10月: 09:00-21:00（最后入场20:00）。11-2月: 09:00-20:00（最后入场19:00）。周一闭馆。首尔唯一开放至晚上9点的宫殿。' },
+    { question: '门票价格？', answer: '成人₩1,000，青少年(7-18岁)₩500。7岁以下·65岁以上免费。首尔最便宜的宫殿门票之一。' },
+    { question: '德寿宫石墙路是什么？', answer: '德寿宫石墙路是沿宫殿西墙延伸约900米的步行道，是首尔最有情调的散步路线之一。日落时分尤其美丽。' },
+    { question: '可以夜间参观德寿宫吗？', answer: '可以，德寿宫是唯一开放至晚上9点的宫殿。黄昏时分灯光照明的宫殿和石墙路营造出魔法般的氛围。周四晚上有时还有免费导览。' },
+  ],
 };
 const faqItems = faqByLang[lang] || faqByLang.en;
 
-const h: Record<string, any> = {
-  en: {
-    h1: 'Deoksugung Palace Complete Guide 2026',
-    intro: 'Deoksugung Palace (덕수궁) is unique among Seoul\'s palaces — it\'s the only one where traditional Korean architecture coexists with Western-style buildings. Originally a royal residence during the Joseon dynasty, it became the imperial palace of Emperor Gojong in 1897. The palace is famous for its 900-meter stone wall road, the neoclassical Seokjojeon Hall, and extended evening hours until 9 PM.',
-    h2_1: 'Ticket Prices & Admission',
-    h2_2: 'Opening Hours — Open Until 9 PM',
-    h2_3: 'How to Get There',
-    h2_4: 'Must-See Buildings & Highlights',
-    h2_5: 'The Stone Wall Road (돌담길)',
-    h2_6: 'Visitor Tips',
-    buildings_text: 'Deoksugung uniquely blends East and West. Seokjojeon (석조전), a Western-style granite building, served as the state council hall. Junghwajeon (중화전) is the traditional throne hall. Jeukjodang (즉조당) is where Emperor Gojong proclaimed the Korean Empire. The modern National Museum of Modern and Contemporary Art (MMCA) branch is also within the palace grounds.',
-    cta: 'Explore all buildings at Deoksugung →',
-  },
+const content = {
   kr: {
     h1: '덕수궁 완전 가이드 2026',
     intro: '덕수궁(德壽宮)은 서울 궁궐 중 유일하게 전통 건축과 근대 서양 건축이 공존하는 궁궐입니다. 1897년 고종황제의 황제궁이 되었으며, 900m 돌담길과 석조전으로 유명합니다. 밤 9시까지 개방하는 서울 유일의 야간 관람 궁궐입니다.',
@@ -47,8 +60,50 @@ const h: Record<string, any> = {
     h2_4: '주요 건축물 및 하이라이트',
     h2_5: '돌담길',
     h2_6: '관람 팁',
+    info_1: '성인 ₩1,000 · 청소년(7~18세) ₩500 · 7세 이하 및 65세 이상 무료. 서울에서 가장 저렴한 궁궐 입장료.',
+    info_2: '3~10월: 09:00~21:00(마지막 입장 20:00) · 11~2월: 09:00~20:00(마지막 입장 19:00) · 휴관: 매주 월요일(화요일이 아닌 유일한 궁궐!)',
+    open_until_9pm_desc: '덕수궁은 밤 9시까지 개방하는 서울 유일의 궁궐로, 저녁 방문에 완벽합니다. 밤에는 조명이 켜진 궁궐과 일몰 시간의 돌담길이 잊을 수 없는 분위기를 만들어냅니다.',
+    transport_subway: '지하철 1·2호선 시청역(12번 출구) — 도보 2분. 지하철 3호선 광화문역(7번 출구) — 도보 5분.',
+    transport_bus: '버스 100, 401, 402, 600번이 시청에 정차합니다.',
     buildings_text: '덕수궁은 동서양 건축의 조화가 특징입니다. 석조전(石造殿)은 서양식 화강암 건물로 대한제국 시대 국정 회의장이었으며, 중화전(中和殿)은 전통 정전, 즉조당(卽祚堂)은 고종황제가 대한제국을 선포한 곳입니다.',
+    stone_wall_desc: '덕수궁 돌담길(덕수궁 돌담길)은 궁궐 서쪽 둘레를 따라 900미터 이어지는 길입니다. 나무와 시대별 가로등이 늘어선 이 길은 서울에서 가장 사랑받는 산책로 중 하나입니다. 일몰 시간에는 나무 사이로 스며드는 따뜻한 빛이 로맨틱한 분위기를 만들어 연인과 사진작가들에게 특히 사랑받는 길입니다.',
+    stone_wall_connects: '이 길은 시청역에서 광화문 방향으로 이어지며, 중간에 국립현대미술관 덕수궁관(MMCA)을 지납니다.',
+    tips_title: '관람 팁',
+    tips: [
+      { label: '일몰 시간 방문', text: '낮과 밤의 풍경을 모두 경험할 수 있는 황금 시간대' },
+      { label: '목요일 무료 가이드', text: '목요일 저녁에는 무료 가이드 투어가 자주 열림 — 공식 웹사이트 확인' },
+      { label: 'MMCA 포함', text: '궁궐 내 국립현대미술관 덕수궁관도 입장료에 포함' },
+      { label: '가을 단풍', text: '돌담길은 가을에 단풍이 물들 때 특히 사진 찍기 좋음' },
+      { label: '한복 무료 입장', text: '한복 착용 시 무료 입장 — 시청역 주변에 대여점 있음' },
+    ],
     cta: '덕수궁 건물 전체 보기 →',
+  },
+  en: {
+    h1: 'Deoksugung Palace Complete Guide 2026',
+    intro: 'Deoksugung Palace (덕수궁) is unique among Seoul\'s palaces — it\'s the only one where traditional Korean architecture coexists with Western-style buildings. Originally a royal residence during the Joseon dynasty, it became the imperial palace of Emperor Gojong in 1897. The palace is famous for its 900-meter stone wall road, the neoclassical Seokjojeon Hall, and extended evening hours until 9 PM.',
+    h2_1: 'Ticket Prices & Admission',
+    h2_2: 'Opening Hours — Open Until 9 PM',
+    h2_3: 'How to Get There',
+    h2_4: 'Must-See Buildings & Highlights',
+    h2_5: 'The Stone Wall Road (돌담길)',
+    h2_6: 'Visitor Tips',
+    info_1: 'Adults: ₩1,000 · Youth (7–18): ₩500 · Children under 7 & seniors 65+: Free. The cheapest palace admission in Seoul.',
+    info_2: 'Mar–Oct: 09:00–21:00 (last entry 20:00) · Nov–Feb: 09:00–20:00 (last entry 19:00) · Closed: Every Monday (not Tuesday like other palaces!)',
+    open_until_9pm_desc: 'Deoksugung is the only Seoul palace open until 9 PM, making it perfect for evening visits. The palace illuminated at night, combined with the stone wall road at sunset, creates an unforgettable atmosphere.',
+    transport_subway: 'Line 1/2 City Hall Station (Exit 12) — 2 min walk. Line 3 Gwanghwamun Station (Exit 7) — 5 min walk.',
+    transport_bus: 'Bus routes 100, 401, 402, 600 stop at City Hall.',
+    buildings_text: 'Deoksugung uniquely blends East and West. Seokjojeon (석조전), a Western-style granite building, served as the state council hall. Junghwajeon (중화전) is the traditional throne hall. Jeukjodang (즉조당) is where Emperor Gojong proclaimed the Korean Empire. The modern National Museum of Modern and Contemporary Art (MMCA) branch is also within the palace grounds.',
+    stone_wall_desc: 'The Deoksugung Stone Wall Road (덕수궁 돌담길) stretches 900 meters along the palace\'s western perimeter. Lined with trees and period street lamps, it\'s one of Seoul\'s most beloved walking routes. At sunset, the warm light filtering through the trees creates a romantic atmosphere that has made this path a favorite for couples and photographers alike.',
+    stone_wall_connects: 'The path connects from City Hall Station toward Gwanghwamun, passing the National Museum of Modern and Contemporary Art (MMCA Deoksugung) along the way.',
+    tips_title: 'Visitor Tips',
+    tips: [
+      { label: 'Visit at sunset', text: 'Experience both daytime and illuminated evening views in one visit' },
+      { label: 'Thursday free tours', text: 'Thursday evenings often feature free guided tours — check the official website' },
+      { label: 'MMCA included', text: 'The MMCA branch inside the palace grounds is included with palace admission' },
+      { label: 'Autumn foliage', text: 'The stone wall road is especially photogenic in autumn when leaves change color' },
+      { label: 'Hanbok free entry', text: 'Free admission with hanbok — rental shops are available near City Hall Station' },
+    ],
+    cta: 'Explore all buildings at Deoksugung →',
   },
   ja: {
     h1: '徳寿宮 完全ガイド 2026',
@@ -59,7 +114,22 @@ const h: Record<string, any> = {
     h2_4: '見どころ建築物',
     h2_5: '石垣道',
     h2_6: '観光ヒント',
+    info_1: '大人₩1,000・青少年(7〜18歳)₩500・7歳以下及び65歳以上無料。ソウルで最も安い宮殿入場料。',
+    info_2: '3〜10月: 09:00〜21:00（最終入場20:00）・11〜2月: 09:00〜20:00（最終入場19:00）・休館: 毎週月曜日（火曜日ではない唯一の宮殿！）',
+    open_until_9pm_desc: '徳寿宮は夜9時まで開いているソウル唯一の宮殿で、夕方の訪問に最適。夜間照明された宮殿と日暮れの石垣道が忘れられない雰囲気を作り出します。',
+    transport_subway: '地下鉄1・2号線 市役所駅（12番出口）— 徒歩2分。地下鉄3号線 光化門駅（7番出口）— 徒歩5分。',
+    transport_bus: 'バス100、401、402、600番が市役所に停車。',
     buildings_text: '徳寿宮は東西建築の調和が特徴。石造殿は西洋式花崗岩建築で大韓帝国時代の会議場、中和殿は伝統的な正殿、即祚堂は高宗皇帝が大韓帝国を宣言した場所です。',
+    stone_wall_desc: '徳寿宮石垣道（덕수궁 돌담길）は宮殿の西側の周囲に沿って900メートル続く道です。木々と時代を感じさせる街灯が並ぶこの道は、ソウルで最も愛される散歩コースの一つ。日没時、木々の間から差し込む暖かな光がロマンチックな雰囲気を醸し出し、恋人や写真家たちに特に愛されています。',
+    stone_wall_connects: 'この道は市役所駅から光化門方面へと続き、途中で国立現代美術館徳寿宮館（MMCA）を通ります。',
+    tips_title: '観光ヒント',
+    tips: [
+      { label: '日没時に visit', text: '一度で昼と夜の両方の景色を体験できるゴールデンタイム' },
+      { label: '木曜日無料ガイド', text: '木曜日の夜は無料ガイドツアーが頻繁に開催 — 公式サイトを確認' },
+      { label: 'MMCA込み', text: '宮殿内国立現代美術館徳寿宮館も入場料に含まれる' },
+      { label: '秋の紅葉', text: '石垣道は秋に紅葉すると特に写真映えする' },
+      { label: '韓服で無料入場', text: '韓服着用で入場無料 — 市役所駅周辺にレンタル店あり' },
+    ],
     cta: '徳寿宮の全建築物を見る →',
   },
   zh: {
@@ -71,41 +141,54 @@ const h: Record<string, any> = {
     h2_4: '必看建筑与亮点',
     h2_5: '石墙路',
     h2_6: '游客贴士',
+    info_1: '成人₩1,000・青少年(7-18岁)₩500・7岁以下及65岁以上免费。首尔最便宜的宫殿门票。',
+    info_2: '3-10月: 09:00-21:00（最后入场20:00）・11-2月: 09:00-20:00（最后入场19:00）・闭馆: 每周一（不是像其他宫殿那样的周二！）',
+    open_until_9pm_desc: '德寿宫是首尔唯一开放至晚上9点的宫殿，非常适合傍晚参观。夜间灯光照明的宫殿配合日落时的石墙路，营造出难忘的氛围。',
+    transport_subway: '地铁1·2号线 市政厅站（12号出口）— 步行2分钟。地铁3号线 光化门站（7号出口）— 步行5分钟。',
+    transport_bus: '公交100、401、402、600路在市政厅站停靠。',
     buildings_text: '德寿宫融合东西方建筑特色。石造殿是西式花岗岩建筑，曾是大韩帝国时期的国务会议厅；中和殿是传统正殿；即조堂是高宗皇帝宣布大韩帝国成立的地方。',
+    stone_wall_desc: '德寿宫石墙路（덕수궁 돌담길）沿宫殿西侧周边延伸900米。道路两旁种满树木，配有复古风格的路灯，是首尔最受欢迎的步行路线之一。日落时分，树木间透出的暖色灯光营造出浪漫氛围，使这条路成为情侣和摄影师的最爱。',
+    stone_wall_connects: '这条路从市政厅站向光化门方向延伸，沿途经过国立现代美术馆德寿宫馆（MMCA）。',
+    tips_title: '游客贴士',
+    tips: [
+      { label: '日落时参观', text: '一次性体验白天和夜间景色的黄金时间' },
+      { label: '周四免费导览', text: '周四晚上经常有免费导览 — 查看官方网站' },
+      { label: 'MMCA included', text: '宫殿内的国立现代美术馆德寿宫馆也包含在门票中' },
+      { label: '秋季红叶', text: '石墙路秋天落叶时特别适合拍照' },
+      { label: '穿韩服免票', text: '穿韩服免费入场 — 市政厅站附近有租赁店' },
+    ],
     cta: '查看德寿宫全部建筑 →',
   },
-};
-
-const t = h[lang] || h.en;
+}[lang] ?? content.en;
 
 function getBldName(b: typeof buildings[0]) {
   const map: Record<string, string> = { kr: b.nameKr, en: b.nameEn, ja: b.nameJa, zh: b.nameZh };
   return map[lang] || b.nameEn;
 }
 ---
-<GuideLayout title={title} description={description} lang={htmlLang}>
+<GuideLayout title={titles[lang] || titles.en} description={descriptions[lang] || descriptions.en} lang={htmlLang}>
   <style>@import '../../styles/global.css';</style>
   <div class="container">
     <BreadcrumbNav items={[{ name: 'Home', url: '/' }, { name: 'Guide', url: '/guide' }, { name: 'Deoksugung' }]} lang={lang} />
     <article class="guide-content">
-      <h1>{t.h1}</h1>
+      <h1>{content.h1}</h1>
       <p class="guide-meta">Updated: June 2026 &middot; Korea Heritage Service official data</p>
       <img class="guide-hero-img" src="https://www.heritage.go.kr/gung/gogung4/images/mode_general_00_01.jpg" alt="Deoksugung Palace Seokjojeon" width="960" height="400" />
-      <p class="guide-intro">{t.intro}</p>
+      <p class="guide-intro">{content.intro}</p>
 
-      <h2>{t.h2_1}</h2>
-      <div class="info-box"><p>Adults: ₩1,000 &middot; Youth (7–18): ₩500 &middot; Children under 7 & Seniors 65+: Free<br/>The cheapest palace admission in Seoul — exceptional value for the experience.</p></div>
+      <h2>{content.h2_1}</h2>
+      <div class="info-box"><p>{content.info_1}</p></div>
 
-      <h2>{t.h2_2}</h2>
-      <div class="info-box"><p><strong>Mar–Oct:</strong> 09:00–21:00 (last entry 20:00)<br/><strong>Nov–Feb:</strong> 09:00–20:00 (last entry 19:00)<br/><strong>Closed:</strong> Every Monday (not Tuesday like other palaces!)</p></div>
-      <p>Deoksugung is the only Seoul palace open until 9 PM, making it perfect for evening visits. The palace illuminated at night, combined with the stone wall road at sunset, creates an unforgettable atmosphere.</p>
+      <h2>{content.h2_2}</h2>
+      <div class="info-box"><p>{content.info_2}</p></div>
+      <p>{content.open_until_9pm_desc}</p>
 
-      <h2>{t.h2_3}</h2>
-      <p><strong>Subway:</strong> Line 1/2 City Hall Station (Exit 12) — 2 min walk. Line 3 Gwanghwamun Station (Exit 7) — 5 min walk.</p>
-      <p><strong>Bus:</strong> Routes 100, 401, 402, 600 stop at City Hall.</p>
+      <h2>{content.h2_3}</h2>
+      <p><strong>{lang === 'kr' ? '지하철' : lang === 'ja' ? '地下鉄' : lang === 'zh' ? '地铁' : 'Subway'}:</strong> {content.transport_subway}</p>
+      <p><strong>{lang === 'kr' ? '버스' : lang === 'ja' ? 'バス' : lang === 'zh' ? '公交' : 'Bus'}:</strong> {content.transport_bus}</p>
 
-      <h2>{t.h2_4}</h2>
-      <p>{t.buildings_text}</p>
+      <h2>{content.h2_4}</h2>
+      <p>{content.buildings_text}</p>
       <div class="building-highlights">
         {buildings.slice(0, 6).map(b => (
           <a href={`/palace/4/${b.detailCode}?sn=${b.serialNumber}&lang=${lang}`} class="building-highlight-card">
@@ -114,20 +197,18 @@ function getBldName(b: typeof buildings[0]) {
           </a>
         ))}
       </div>
-      <div class="cta-box"><a href={`/palace/4?lang=${lang}`}>{t.cta}</a></div>
+      <div class="cta-box"><a href={`/palace/4?lang=${lang}`}>{content.cta}</a></div>
 
-      <h2>{t.h2_5}</h2>
-      <p>The Deoksugung Stone Wall Road (덕수궁 돌담길) stretches 900 meters along the palace's western perimeter. Lined with trees and period street lamps, it's one of Seoul's most beloved walking routes. At sunset, the warm light filtering through the trees creates a romantic atmosphere that has made this path a favorite for couples and photographers alike.</p>
-      <p>The path connects from City Hall Station toward Gwanghwamun, passing the National Museum of Modern and Contemporary Art (MMCA Deoksugung) along the way.</p>
+      <h2>{content.h2_5}</h2>
+      <p>{content.stone_wall_desc}</p>
+      <p>{content.stone_wall_connects}</p>
 
-      <h2>{t.h2_6}</h2>
+      <h2>{content.h2_6}</h2>
       <div class="info-box tip-box">
         <ul>
-          <li>Visit at sunset to experience both daytime and illuminated evening views</li>
-          <li>Thursday evenings often feature free guided tours — check the official website</li>
-          <li>The MMCA branch inside the palace grounds is included with palace admission</li>
-          <li>The stone wall road is especially photogenic in autumn when leaves change color</li>
-          <li>Free admission with hanbok — rental shops are available near City Hall Station</li>
+          {content.tips.map(tip => (
+            <li><strong>{tip.label}:</strong> {tip.text}</li>
+          ))}
         </ul>
       </div>
 

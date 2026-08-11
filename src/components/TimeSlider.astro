@@ -128,8 +128,8 @@ const L = labels[lang] || labels.kr;
     font-weight: 600;
     color: var(--color-text-light);
   }
-  .ts-label-left { color: var(--neon-gold); }
-  .ts-label-right { color: var(--neon-blue); }
+  .ts-label-left { color: var(--color-primary); }
+  .ts-label-right { color: var(--color-accent); }
 
   .ts-viewport {
     position: relative;
@@ -182,19 +182,19 @@ const L = labels[lang] || labels.kr;
     top: 0;
     bottom: 0;
     width: 3px;
-    background: var(--dancheong-white);
-    box-shadow: 0 0 8px rgba(255,255,255,0.5);
+    background: var(--color-bg);
+    box-shadow: var(--shadow-sm);
   }
   .ts-handle-circle {
     width: 44px;
     height: 44px;
     border-radius: 50%;
-    background: var(--dancheong-yellow);
-    color: var(--dancheong-black);
+    background: var(--color-primary);
+    color: var(--color-text);
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 0 20px rgba(255,215,0,0.5), 0 2px 8px rgba(0,0,0,0.3);
+    box-shadow: var(--shadow-md);
     transition: transform 0.2s;
     position: relative;
     z-index: 11;

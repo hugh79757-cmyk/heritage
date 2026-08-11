@@ -1,0 +1,43 @@
+{
+  "5": [
+    {
+      "serialNumber": "501",
+      "detailCode": "1",
+      "gungNumber": "5",
+      "nameKr": "종묘 정문",
+      "nameEn": "Jongmyo Main Gate",
+      "nameJa": "宗廟正門",
+      "nameZh": "宗庙正门",
+      "explanationKr": "종묘의 정문은 길고 낮은 돌계단을 올라야 만날 수 있습니다. 이 낮은 계단과 낮은 지붕은, 종묘가 권위를 드러내기보다 경건함을 우선하는 공간임을 보여줍니다. 정문을 지나 안으로 들어서면, 좌우로 길게 늘어선 정전의 지붕선이 한 폭의 긴 두루마리 그림처럼 펼쳐집니다. 이곳은 살아 있는 권력을 모시는 곳이 아니라, 죽은 왕과 왕비의 영혼을 모시는 사당입니다. 그래서 종묘의 첫인상은 '장엄함'보다 '엄숙함'에 가깝습니다.",
+      "explanationEn": "The main gate of Jongmyo can be reached by climbing a long, low stone staircase. This low staircase and low roof show that Jongmyo is a space that prioritizes reverence over displaying authority. After passing the main gate and entering, the roof lines of Jeongjeon stretching long to left and right unfold like a long scroll painting. This place is not a place where living power is enshrined, but a shrine where the souls of dead kings and queens are enshrined. So the first impression of Jongmyo is closer to 'solemnity' than 'majesty.'",
+      "explanationJa": "宗廟の正門は長く低い石段を上ってようやくたどり着けます。この低い階段と低い屋根は、宗廟が権威を誇示す空間ではなく、敬虔さを優先する空間であることを示しています。正門を過ぎ中に入ると、左右に長く並ぶ正殿の屋根線がまるで一幅の長い巻物絵のよう 펼쳐집니다。ここは生きている権力を祀る場所ではなく、死んだ王や王妃の魂を祀る祠堂です。だから宗廟の第一印象は「荘厳さ」より「厳かさ」に近い。",
+      "explanationZh": "宗庙的正门必须爬过又长又低的石阶才能到达。这低矮的台阶和低矮的屋顶表明，宗庙是优先考虑敬虔而非展示权威的空间。穿过正门走进去，正殿的屋顶线左右长长地排列着，像一幅长长的卷轴画。这里不是供奉活着的权势，而是供奉死去的王和王后灵魂的祠堂。所以宗庙的第一印象更接近庄严而非严肃。"
+    },
+    {
+      "serialNumber": "502",
+      "detailCode": "2",
+      "gungNumber": "5",
+      "nameKr": "망묘루",
+      "nameEn": "Mangmyoru Pavilion",
+      "nameJa": "望廟樓",
+      "nameZh": "望庙楼",
+      "explanationKr": "망묘루는 종묘의 정전을 바라보며 제사를 준비하던 건물입니다. '망묘(望廟)'는 '사당을 바라본다'는 뜻. 제관들은 이곳에서 정전과 영녕전에 모신 왕과 왕비의 신위를 향해 마지막 점검을 하고, 마음을 가다듬었습니다. 망묘루는 종묘의 엄숙한 공간 중에서도, 제사의 준비 과정이 이루어지는 비교적 인간적인 공간입니다. 이곳에서 제관들은 제사 절차를 익히고, 제수를 확인하며, 정전에 들어갈 준비를 했지요.",
+      "explanationEn": "Mangmyoru is the building where preparations for rituals were made while looking toward the Jeongjeon of Jongmyo. 'Mangmyo (望廟)' means 'to gaze at the shrine.' At this place, the ritual officials made final checks toward the spirit tablets of kings and queens enshrined in Jeongjeon and Yeongnyeongjeon, and settled their minds. Mangmyoru is a relatively human space where the preparation process of rituals takes place among the solemn spaces of Jongmyo. Here, ritual officials learned ritual procedures, confirmed ritual foods, and prepared to enter Jeongjeon.",
+      "explanationJa": "望廟樓は宗廟の正殿を眺めながら祭祀の準備をした建物です。「望廟」は「祠堂を望む」という意味。祭官はここで正殿と永寧殿に祀られた王や王妃の神位に向かって最後の点検を行い、心を落ち着けました。望廟樓は宗廟の厳かな空間の中でも、祭祀の準備過程が行われる比較的人間的な空間です。ここで祭官は祭祀の手順を習い、祭需を確認し、正殿に入る準備をしました。",
+      "explanationZh": "望庙楼是望着宗庙正殿准备祭祀的建筑。“望庙”意为“眺望祠堂”。祭官们在这里朝着供奉在正殿和永宁殿里的王和王后的神位做最后的检查，安定心神。望庙楼是在宗庙庄严的空间中，进行祭祀准备过程的相对人性化的空间。在这里，祭官们学习祭祀程序，确认祭品，为进入正殿做准备。"
+    },
+    {
+      "serialNumber": "503",
+      "detailCode": "3",
+      "gungNumber": "5",
+      "nameKr": "정전",
+      "nameEn": "Jeongjeon Shrine",
+      "nameJa": "正殿",
+      "nameZh": "正殿",
+      "explanationKr": "종묘의 정전은 조선 왕조의 왕과 왕비, 그리고 추존된 왕과 왕비의 신위를 모신 곳입니다. 총 19칸의 긴 건물로, 세계에서 가장 긴 목조 건축물 중 하나로 꼽힙니다. 정전의 지붕은 낮고 길게 이어져, 마치 경건한 행렬처럼 보입니다. 각 칸마다 신위가 모셔져 있으며, 매년 5월 첫째 일요일에 열리는 종묘대제 때 이곳에서 제사가 거행됩니다. 정전의 앞마당에서는 종묘제례악이 연주되며, 조선 왕조의 마지막 순간까지 이어진 유교적 제사 의식이 엄숙하게 재현됩니다.",
+      "explanationEn": "The Jeongjeon of Jongmyo is the place where the spirit tablets of the kings and queens of the Joseon dynasty, as well as the honored kings and queens, are enshrined. As a long building with a total of 19 kan (bays), it is counted as one of the longest wooden buildings in the world. The low and long roof of Jeongjeon looks like a reverent procession. In each kan, spirit tablets are enshrined, and during the Jongmyo Daeje (Royal Cult of Jongmyo) held on the first Sunday of May every year, rituals are performed here. In the courtyard of Jeongjeon, Jongmyo Jeryeak (Royal Ancestral Ritual Music of Jongmyo) is performed, and the Confucian ritual that continued until the last moment of the Joseon dynasty is solemnly reproduced.",
+      "explanationJa": "宗廟の正殿は朝鮮王朝の王と王妃、そして追尊された王と王妃の神位を祀った場所です。全19間の長い建物で、世界で最も長い木造建築物の一つに挙げられます。正殿の屋根は低く長く続いて、まるで敬虔な行列のように見えます。各間ごとに神位が祀られており、毎年5月の第一个日曜日に行われる宗廟大祭の時ここで祭祀が行われます。正殿の前庭では宗廟祭礼楽が演奏され、朝鮮王朝の最後まで続いた儒教的な祭祀儀式が厳かに再現されます。",
+      "explanationZh": "宗庙的正殿是供奉朝鲜王朝的王和王妃，以及被追尊的王和王妃的神位的地方。作为总共有19间的长长建筑，被誉为世界上最长的木结构建筑之一。正殿低矮而长长的屋顶看起来像是一列虔诚的行列。每间都供奉着神位，每年5月第一个星期日举行的宗庙大祭时，在这里举行祭祀。在正殿的前院，演奏着宗庙祭礼乐，朝鲜王朝最后时刻为止延续的儒教祭祀仪式被庄严地重现。"
+    }
+  ]
+}

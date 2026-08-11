@@ -482,7 +482,8 @@ const landmarkData = JSON.stringify(mapLandmarks);
       center: [SEOUL.lng, SEOUL.lat],
       zoom: 12.5,
       pitch: 40,
-      attributionControl: false
+      attributionControl: false,
+      scrollZoom: false
     });
     map.addControl(new maplibregl.AttributionControl({ compact: true }), 'bottom-right');
     map.on('load', () => {

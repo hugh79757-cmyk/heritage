@@ -39,6 +39,7 @@ export const GET: APIRoute = async ({ url }) => {
 
       const text = await res.text();
 
+      // Primary: parse <item> blocks
       const blocks = text.match(/<item>[\s\S]*?<\/item>/g) || [];
       for (const block of blocks) {
         const title = block.match(/<narration_title>([\s\S]*?)<\/narration_title>/)?.[1]?.trim() || '';
@@ -46,6 +47,12 @@ export const GET: APIRoute = async ({ url }) => {
         if (urlMatch) {
           items.push({ title, url: urlMatch.startsWith('http') ? urlMatch : `https:${urlMatch}` });
         }
+      }
+
+      // Fallback: if no <item> blocks, try extracting any mp3/audio URL directly
+      if (items.length === 0) {
+        const audioUrl = text.match(/https?:\/\/[^\s"'<>]+\.(mp3|wav|m4a|ogg|aac)(\?[^\s"'<>]*)?/i)?.[0];
+        if (audioUrl) items.push({ title: '', url: audioUrl });
       }
       if (items.length > 0) break;
     } catch {

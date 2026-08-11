@@ -5,7 +5,7 @@ interface Props {
   desc: string;
   image: string;
   href: string;
-  color?: string;
+  color?: string; // accent color var (e.g., var(--dancheong-red-pastel))
   lang?: string;
   size?: 'default' | 'large';
 }
@@ -16,217 +16,64 @@ const {
   desc,
   image,
   href,
-  color = 'var(--dancheong-yellow)',
+  color = 'var(--dancheong-red-pastel)',
   lang = 'kr',
   size = 'default',
 } = Astro.props;
 ---
-
-<a href={href} class="dancheong-card dc-size-{size}" style={`--card-accent: ${color}`}>
-  <div class="glass-shine"></div>
-  <div class="dc-img">
+<a href={href} class="card-base card-block" style={{ '--accent': color }}>
+  <div class="card-image">
     <img src={image} alt={name} loading="lazy" width="400" height="260" />
-    <div class="dc-img-overlay"></div>
-    <div class="dc-glow"></div>
   </div>
-  <div class="dc-body">
-    {nameH && <span class="dc-hanja">{nameH}</span>}
-    <h3 class="dc-name">{name}</h3>
-    <p class="dc-desc">{desc}</p>
+  <div class="card-content">
+    {nameH && <span class="dancheong-hanja">{nameH}</span>}
+    <h3 class="dancheong-name">{name}</h3>
+    <p class="dancheong-desc">{desc}</p>
   </div>
-  <div class="dc-arrow">&rarr;</div>
 </a>
 
-<script>
-  document.querySelectorAll('.dancheong-card').forEach(card => {
-    // Mouse tracking for radial gradient
-    card.addEventListener('mousemove', (e) => {
-      const rect = card.getBoundingClientRect();
-      const x = ((e.clientX - rect.left) / rect.width) * 100;
-      const y = ((e.clientY - rect.top) / rect.height) * 100;
-      card.style.setProperty('--mouse-x', x + '%');
-      card.style.setProperty('--mouse-y', y + '%');
-    });
-
-    // 3D tilt effect (desktop only)
-    const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-    if (!isTouch) {
-      card.addEventListener('mousemove', (e) => {
-        const rect = card.getBoundingClientRect();
-        const x = (e.clientX - rect.left) / rect.width;
-        const y = (e.clientY - rect.top) / rect.height;
-        const tiltX = (y - 0.5) * -12;
-        const tiltY = (x - 0.5) * 12;
-        card.style.setProperty('--tilt-x', tiltX + 'deg');
-        card.style.setProperty('--tilt-y', tiltY + 'deg');
-      });
-
-      card.addEventListener('mouseleave', () => {
-        card.style.setProperty('--tilt-x', '0deg');
-        card.style.setProperty('--tilt-y', '0deg');
-      });
-    }
-  });
-</script>
-
 <style>
-  .dancheong-card {
-    display: block;
-    background: var(--bg-glass);
-    backdrop-filter: blur(12px) saturate(1.2);
-    -webkit-backdrop-filter: blur(12px) saturate(1.2);
-    border-radius: 16px;
-    overflow: hidden;
-    border: 1px solid var(--color-border-light);
-    text-decoration: none;
-    color: inherit;
-    position: relative;
-    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
-                box-shadow 0.4s ease,
-                border-color 0.4s ease;
-    -webkit-tap-highlight-color: transparent;
-    transform: perspective(800px)
-               rotateX(var(--tilt-x, 0deg))
-               rotateY(var(--tilt-y, 0deg));
-    will-change: transform;
+  /* Reuse variables for consistency */
+  :root {
+    --dancheong-hanja-color: var(--dancheong-red-pastel);
+    --dancheong-name-color: var(--color-text);
+    --dancheong-desc-color: var(--color-text-light);
   }
 
-  .dc-size-large .dc-img {
-    height: 340px;
-  }
-  .dc-size-large .dc-name {
-    font-size: 1.4rem;
-  }
-
-  .dancheong-card::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(
-      circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
-      rgba(255, 215, 0, 0.12) 0%,
-      transparent 60%
-    );
-    border-radius: inherit;
-    opacity: 0;
-    transition: opacity 0.3s;
-    pointer-events: none;
-    z-index: 1;
-  }
-  .dancheong-card:hover::before {
-    opacity: 1;
-  }
-  @media (pointer: coarse) {
-    .dancheong-card::before { display: none; }
-  }
-
-  .dancheong-card:hover {
-    transform: perspective(800px)
-               rotateX(var(--tilt-x, 0deg))
-               rotateY(var(--tilt-y, 0deg))
-               translateY(-8px);
-    box-shadow: 0 20px 60px rgba(0,0,0,0.5),
-                0 0 40px color-mix(in srgb, var(--card-accent) 30%, transparent);
-    border-color: color-mix(in srgb, var(--card-accent) 35%, transparent);
-  }
-  .dancheong-card:active {
-    transform: scale(0.98);
-  }
-
-  .dc-img {
-    position: relative;
-    height: 220px;
-    overflow: hidden;
-  }
-  .dc-img img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.6s ease, filter 0.6s;
-    filter: brightness(0.75) saturate(1.15) contrast(1.05);
-  }
-  .dancheong-card:hover .dc-img img {
-    transform: scale(1.06);
-    filter: brightness(0.9) saturate(1.3) contrast(1.1);
-  }
-  .dc-img-overlay {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 100px;
-    background: linear-gradient(to top, var(--bg-card), transparent);
-  }
-  .dc-glow {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 3px;
-    background: var(--card-accent);
-    opacity: 0.6;
-    transition: opacity 0.3s, height 0.3s, box-shadow 0.3s;
-    box-shadow: 0 0 12px var(--card-accent);
-  }
-  .dancheong-card:hover .dc-glow {
-    opacity: 1;
-    height: 4px;
-    box-shadow: 0 0 24px var(--card-accent);
-  }
-
-  .dc-body { padding: 20px; }
-  .dc-size-large .dc-body { padding: 28px; }
-  .dc-hanja {
+  .dancheong-hanja {
     display: inline-block;
     font-family: 'Noto Serif KR', serif;
-    font-size: 0.8rem;
-    color: var(--card-accent);
-    opacity: 0.7;
-    margin-bottom: 4px;
-    letter-spacing: 0.05em;
-  }
-  .dc-name {
-    font-family: 'Noto Serif KR', serif;
-    font-size: 1.2rem;
-    font-weight: 700;
-    margin-bottom: 6px;
-    color: var(--color-text);
-  }
-  .dc-desc {
-    font-size: 0.9rem;
-    color: var(--color-text-light);
-    line-height: 1.6;
-  }
-  .dc-arrow {
-    position: absolute;
-    bottom: 20px;
-    right: 20px;
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    background: var(--card-accent);
-    color: var(--dancheong-black);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.1rem;
-    opacity: 0;
-    transform: translateX(-8px);
-    transition: opacity 0.3s, transform 0.3s, box-shadow 0.3s;
-  }
-  .dancheong-card:hover .dc-arrow {
-    opacity: 1;
-    transform: translateX(0);
-    box-shadow: 0 0 20px var(--card-accent);
+    font-size: 0.75rem;
+    color: var(--dancheong-hanja-color);
+    margin-bottom: var(--space-1);
+    letter-spacing: 0.04em;
   }
 
-  @media (max-width: 640px) {
-    .dc-img { height: 200px; }
-    .dc-size-large .dc-img { height: 260px; }
-    .dc-body { padding: 16px; }
-    .dc-size-large .dc-body { padding: 20px; }
-    .dancheong-card {
-      transform: none !important;
-    }
+  .dancheong-name {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 1.125rem;
+    font-weight: 700;
+    margin-bottom: var(--space-2);
+    color: var(--dancheong-name-color);
+  }
+
+  .dancheong-desc {
+    font-size: 0.9rem;
+    color: var(--dancheong-desc-color);
+    line-height: 1.6;
+  }
+
+  /* Optional hover lift effect using custom property */
+  a:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--accent, var(--color-primary));
+  }
+
+  /* Ensure the link fills its container */
+  .card-block {
+    display: block;
+    width: 100%;
+    height: 100%;
   }
 </style>

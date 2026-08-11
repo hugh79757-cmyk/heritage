@@ -1,0 +1,121 @@
+{
+  "2": [
+    {
+      "serialNumber": "201",
+      "detailCode": "1",
+      "gungNumber": "2",
+      "nameKr": "돈화문",
+      "nameEn": "Donhwamun Gate",
+      "nameJa": "敦化門",
+      "nameZh": "敦化门",
+      "explanationKr": "돈화문은 창덕궁의 정문입니다. '돈화(敦化)'는 '교화를 돈독히 한다'는 뜻으로, 유교적 교화가 백성에게 두루 미치기를 바라는 마음을 담았습니다. 1412년(태종 12년)에 처음 세워졌으며, 임진왜란 때 불탄 것을 1608년(광해군 즉위년)에 다시 지었습니다. 지금 남아 있는 건물은 그때의 모습을 간직하고 있습니다. 돈화문은 창덕궁의 다른 문들보다 낮고 소박한 모습으로, 주변 지형에 순응하며 자연스럽게 앉은 창덕궁의 성격을 잘 보여줍니다.",
+      "explanationEn": "Donhwamun is the main gate of Changdeokgung Palace. 'Donhwa (敦化)' means 'to deepen edification,' expressing the hope that Confucian edification would reach all the people. First built in 1412 (the 12th year of King Taejong), it was burned during the Imjin War and rebuilt in 1608 (the enthronement year of King Gwanghaegun). The current building retains the appearance of that time. Donhwamun is lower and more modest than the gates of other palaces, showing well the character of Changdeokgung, which sits naturally in harmony with the surrounding topography.",
+      "explanationJa": "敦化門は昌徳宮の正門です。「敦化」は「教化を篤くする」という意味で、儒教的な教化が民衆に広く及ぶことを願う心が込められています。1412年(太宗12年)に最初に建てられ、壬辰倭乱で焼失した後、1608年(光海君即位年)に再建されました。現在の建物はその時の姿を保っています。敦化門は昌徳宮の他の門よりも低くて素朴な姿で、周囲の地形に応じて自然に座した昌徳宮の性格をよく示しています。",
+      "explanationZh": "敦化门是昌德宫的正门。“敦化”意为“篤厚教化”，蕴含着儒教教化能够广泛普及到百姓之中的愿望。最初建于1412年(太宗12年)，壬辰倭乱时被烧毁，于1608年(光海君即位年)重建。现存建筑保留了当时的面貌。敦化门比其他宫殿的门低矮而朴素，很好地体现了昌德宫顺应周围地形、自然而坐的特色。"
+    },
+    {
+      "serialNumber": "202",
+      "detailCode": "2",
+      "gungNumber": "2",
+      "nameKr": "금천교",
+      "nameEn": "Geumcheongyo Bridge",
+      "nameJa": "錦川橋",
+      "nameZh": "锦川桥",
+      "explanationKr": "금천교는 창덕궁의 정문 돈화문을 들어서면 처음 마주하는 돌다리입니다. 다리 아래로 금천(禁川)이라는 물이 흘렀고, 이 물을 건너면 임금의 구역이라는 뜻을 담았습니다. '금천'의 '금(禁)'은 '금지한다', '삼간다'는 뜻입니다. 사자상과 해태상이 다리 양옆에 서서 사악한 기운을 막아주지요. 창덕궁의 금천교는 조선 궁궐 금천교 중에서도 가장 아름다운 것으로 꼽힙니다.",
+      "explanationEn": "Geumcheongyo Bridge is the first stone bridge you encounter after entering Donhwamun, the main gate of Changdeokgung. The water called Geumcheon (禁川) once flowed under the bridge, and crossing it meant entering the king's area. 'Geum (禁)' in Geumcheon means 'to prohibit' or 'to be cautious.' Lion statues and haechi statues stand on both sides of the bridge to ward off evil energy. The Geumcheongyo of Changdeokgung is counted among the most beautiful Geumcheongyo bridges in Joseon palaces.",
+      "explanationJa": "錦川橋は昌徳宮の正門敦化門を入ると最初に目にする石橋です。橋の下を錦川(禁川)という水が流れ、この水を渡ると王の領域に入るという意味を込めました。「禁川」の「禁」は「禁止する」「つつしむ」という意味です。獅子像とヘチ像が橋の両側に立って邪気を防いでいます。昌徳宮の錦川橋は朝鮮の宮殿の金川橋の中でも最も美しいものと挙げられます。",
+      "explanationZh": "锦川桥是走进昌德宫正门敦化门后首先遇到的石桥。桥下曾流淌着名为锦川(禁川)的水流，跨过这水流意味着进入王的领域。“禁川”中的“禁”意为“禁止”“谨慎”。狮子像和獬豸像分别矗立在桥的两侧，防范邪气。昌德宫的锦川桥被誉为朝鲜宫殿金川桥中最美丽的一座。"
+    },
+    {
+      "serialNumber": "203",
+      "detailCode": "3",
+      "gungNumber": "2",
+      "nameKr": "인정전",
+      "nameEn": "Injeongjeon Hall",
+      "nameJa": "仁政殿",
+      "nameZh": "仁政殿",
+      "explanationKr": "인정전은 창덕궁의 정전(正殿)입니다. '인정(仁政)'은 '어진 정치'라는 뜻. 왕은 이곳에서 신하들의 조회를 받고, 외국 사신을 맞이하며, 나라의 중요한 의식을 치렀습니다. 1405년 창덕궁 창건 당시 처음 세웠고, 임진왜란 때 불탄 것을 1609년에 재건했습니다. 현재의 건물은 1804년(순조 4년)에 다시 지은 것입니다. 인정전 앞 월대 위에는 품계석이 늘어서 있어, 조정의 질서를 보여주지요. 내부에는 어좌와 일월오봉도 병풍이 마련되어 있습니다.",
+      "explanationEn": "Injeongjeon is the main hall (jeongjeon) of Changdeokgung. 'Injeong (仁政)' means 'benevolent governance.' The king received the court assemblies of his subjects here, welcomed foreign envoys, and held important state ceremonies. First built in 1405 when Changdeokgung was founded, it was burned during the Imjin War and reconstructed in 1609. The current building was rebuilt in 1804 (the 4th year of King Sunjo). Rank stones line the woldae (platform) in front of Injeongjeon, showing the order of the court. Inside, the throne and the Ilwol-Obongdo (Sun, Moon, and Five Peaks) screen are prepared.",
+      "explanationJa": "仁政殿は昌徳宮の正殿(政殿)です。「仁政」は「仁しい政治」という意味。王はここで臣下の朝会を受け、外国使節を迎え、国の重要な儀式を行いました。1405年昌徳宮創建時に初めて建てられ、壬辰倭乱で焼失した後1609年に再建。現在の建物は1804年(純祖4年)に再建されたものです。仁政殿前の月臺の上には品階石が並び、朝廷の秩序を示しています。内部には御座と日月五峯図の屛風が設けられています。",
+      "explanationZh": "仁政殿是昌德宫的正殿(政治殿)。“仁政”意为“仁慈的政治”。王在这里召开臣子的朝会，迎接外国使节，举行国家重要仪式。1405年昌德宫创建时初次建成，壬辰倭乱时被烧毁，于1609年重建。现存建筑是1804年(纯祖4年)重建的。仁政殿前月台上排列着品阶石，显示着朝廷的秩序。内部设有御座和日月五峰图屏风。"
+    },
+    {
+      "serialNumber": "204",
+      "detailCode": "4",
+      "gungNumber": "2",
+      "nameKr": "희정당",
+      "nameEn": "Huijeongdang Hall",
+      "nameJa": "熙政堂",
+      "nameZh": "熙政堂",
+      "explanationKr": "희정당은 왕의 편전(便殿)으로, 일상적인 정무를 보던 곳입니다. '희정(熙政)'은 '밝게 정사를 펼친다'는 뜻. 인정전이 공식 의식을 위한 공간이라면, 희정당은 왕이 신하들과 국정을 논의하고 결재하던 실무 공간이었습니다. 지금의 희정당은 고종 때 중건된 것으로, 서양식 창호지가 도입되어 전통과 근대가 공존하는 독특한 모습을 보여줍니다. 내부에는 카본산가스 난로와 유리창, 의자 등 서양식 생활도구도 남아 있습니다.",
+      "explanationEn": "Huijeongdang is the king's pyeonjeon (auxiliary hall), where daily political affairs were handled. 'Huijeong (熙政)' means 'to shine and carry out governance.' If Injeongjeon was a space for official ceremonies, Huijeongdang was the working space where the king discussed state affairs with his subjects and approved documents. The current Huijeongdang was rebuilt during King Gojong's time, with Western-style windows introduced, showing a unique appearance where tradition and modernity coexist. Inside, Western-style living tools such as a carbon dioxide heater, glass windows, and chairs remain.",
+      "explanationJa": "熙政堂は王の便殿(便所の「便」ではなく「便殿」)で、日常的な政務を行っていた場所です。「熙政」は「明るく政事をはこぶ」という意味。仁政殿が公式儀式のための空間なら、熙政堂は王が臣下たちと国政を議論し、決裁していた実務空間でした。当時の熙政堂は高宗の時に再建されたもので、西様式窓が導入され tradition と近代が共存するユニークな姿を見せています。内部にはカーボンガスストーブや硝子窓、椅子など西洋式生活道具も残っています。",
+      "explanationZh": "熙政堂是王的便殿(偏殿)，处理日常政务的地方。“熙政”意为“明亮地展开政事”。如果说仁政殿是用于正式仪式的空间，那么熙政堂就是王与臣下讨论国政、批阅公务的实务空间。现存的熙政堂是高宗时期重建的，引入了西式窗户，展现出传统与近代共存的独特面貌。内部还留有碳酸气体暖气、玻璃窗、椅子等西式生活用具。"
+    },
+    {
+      "serialNumber": "205",
+      "detailCode": "5",
+      "gungNumber": "2",
+      "nameKr": "대조전",
+      "nameEn": "Daejojeon Hall",
+      "nameJa": "大造殿",
+      "nameZh": "大造殿",
+      "explanationKr": "대조전은 왕비의 침전입니다. '대조(大造)'는 '크게 만든다'는 뜻으로, 경사스러운 일 — 특히 왕실의 후사가 번창하기를 바라는 마음을 담았습니다. 창덕궁의 왕비는 이곳에서 생활하며 내명부를 통솔했습니다. 현재의 대조전은 고종 때 중건된 것으로, 내부에는 교태전과 마찬가지로 온돌과 마루, 부엌 등이 마련되어 있어 왕실의 생활공간을 엿볼 수 있습니다. 대조전 뒤뜰에는 왕비의 수행을 돕던 상궁들의 공간도 있었습니다.",
+      "explanationEn": "Daejojeon is the queen's bedchamber. 'Daejo (大造)' means 'to create greatly,' containing the wish for a joyous event — especially the flourishing of the royal lineage. The queen of Changdeokgung lived here and supervised the naemyeongbu (inner court). The current Daejojeon was rebuilt during King Gojong's time, and inside, like Gyotaejeon, there are ondol, wooden floors, kitchens, and so on, allowing a glimpse into the royal living space. In the backyard of Daejojeon, there was also space for the sanggung (court ladies) who assisted the queen.",
+      "explanationJa": "大造殿は王妃の寝殿です。「大造」は「大きく造る」という意味で、慶事——特に王室の後嗣が栄えることを願う心を込めました。昌徳宮の王妃はここで生活し、内命婦を統率しました。現在の大造殿は高宗の時に再建されたもので、内部には交泰殿と同様に溫突と床、台所などが設けられており、王室の生活空間を垣間見ることができます。大造殿の裏庭には王妃の世話をした尙宮たちの空間もありました。",
+      "explanationZh": "大造殿是王后的寝宫。“大造”意为“大事作成”，蕴含着对喜事——特别是王室后嗣繁昌的美好愿望。昌德宫的王后曾在此生活并统辖内命妇。现存的大造殿是高宗时期重建的，内部与交泰殿一样设有暖炕、地板、厨房等，可以一窥王室的生活空间。大造殿的后院还有协助王后工作的尚宫们的空间。"
+    },
+    {
+      "serialNumber": "206",
+      "detailCode": "6",
+      "gungNumber": "2",
+      "nameKr": "낙선재",
+      "nameEn": "Nakseonjae House",
+      "nameJa": "樂善齋",
+      "nameZh": "乐善斋",
+      "explanationKr": "낙선재는 창덕궁 동궁 지역에 있는 건물입니다. '낙선(樂善)'은 '선을 즐거워한다'는 뜻. 조선 후기, 왕실의 친족이나 나이 든 상궁들이 기거하던 곳으로, 검소하면서도 품격 있는 생활이 묻어나는 공간입니다. 낙선재에는 석복헌,수강재 등 여러 채의 건물이 모여 있으며, 각 건물마다 다양한 문양의 창살과 담장이 돋보입니다. 특히 낙선재의 창호지와 담장에는 조선 후기 건축의 소박한 아름다움이 잘 드러납니다. 헌종 때 지어졌으며, 헌종은 낙선재를 매우 사랑했다고 전해집니다.",
+      "explanationEn": "Nakseonjae is a building in the East Palace area of Changdeokgung. 'Nakseon (樂善)' means 'to delight in goodness.' In the late Joseon period, it was a place where royal relatives or aged court ladies lived, a space where simple yet dignified living is felt. Nakseonjae gathers several buildings such as Seokbokheon and Sujangjae, and each building stands out for its various pattern lattice windows and walls. Especially, the changhoji (Korean paper windows) and walls of Nakseonjae well reveal the simple beauty of late Joseon architecture. It was built during King Heonjong's time, and King Heonjong was said to have loved Nakseonjae very much.",
+      "explanationJa": "楽善斎は昌徳宮東宮領域にある建物です。「楽善」は「善を楽しむ」という意味。朝鮮後期、王室の親族や年老いた尙宮たちが住んでいた場所で、質素ながら品格のある生活が感じられる空間です。楽善斎には石福軒、修康斎などいくつかの建物が集まっており、各建物ごとにさまざまな文様の障子や壁が目立ちます。特に楽善斎の障子紙と壁には朝鮮後期の建築の素朴な美しさがよく現れています。憲宗の時に建てられ、憲宗は楽善斎をとても愛したと言われています。",
+      "explanationZh": "乐善斋是昌德宫东宫区域的一座建筑。“乐善”意为“以善为乐”。朝鲜后期，这里是王室亲属或年老尚宫居住的地方，是感受质朴而有档次的生活的空间。乐善斋汇集了石福轩、修康斋等多座建筑，每座建筑的各种纹样窗棂和墙壁都很引人注目。特别是乐善斋的窗纸和墙壁，很好地展现了朝鲜后期建筑的质朴之美。它建于宪宗时期，据说宪宗非常喜爱乐善斋。"
+    },
+    {
+      "serialNumber": "207",
+      "detailCode": "7",
+      "gungNumber": "2",
+      "nameKr": "부용지",
+      "nameEn": "Buyongji Pond",
+      "nameJa": "芙蓉池",
+      "nameZh": "芙蓉池",
+      "explanationKr": "부용지는 창덕궁 후원에 있는 네모난 연못입니다. '부용(芙蓉)'은 연꽃을 뜻하는 말로, 연못에 핀 연꽃처럼 깨끗하고 아름다운 정신을 담고자 한 이름입니다. 연못 한가운데에는 둥글게 섬을 만들고 그 위에 부용정을 세워, 네모난 연못과 둥근 섬이 어우러진 우주관을 표현했습니다. 주변에는 주합루라는 2층 누각이 있어, 아래에서 연못을 내려다보고 위에서 독서하며 경치를 즐길 수 있게 조성되었습니다. 부용지는 후원을 찾는 이들이 가장 먼저 만나는 아름다운 경관입니다.",
+      "explanationEn": "Buyongji is a square pond in the Secret Garden of Changdeokgung. 'Buyong (芙蓉)' means lotus, a name intending to contain a pure and beautiful spirit like the lotus blooming in the pond. In the center of the pond, an island was made round and Buyongjeong pavilion was erected on it, expressing a cosmic view where the square pond and round island harmonize. Around it stands the 2-story pavilion Juhamnu, so that one can look down at the pond from below and enjoy reading and scenery from above. Buyongji is the beautiful scenery that visitors to the Secret Garden first encounter.",
+      "explanationJa": "芙蓉池は昌徳宮 Secret Garden(後苑)にある四角い池です。「芙蓉」は蓮の花を意味する言葉で、池に咲く蓮の花のように清く美しい精神を込めようとした名前です。池の真ん中には丸く島を作りその上に芙蓉亭を立て、四角い池と丸い島が調和した宇宙観を表現しました。周囲には挙合楼という二階建て楼閣があり、下から池を見晴らし、上からは読書しながら景色を楽しめるように造成されました。芙蓉池は Secret Garden(後苑)を訪れた人々が最初に目にする美しい景観です。",
+      "explanationZh": "芙蓉池是昌德宫秘苑里的一方形池塘。“芙蓉”意为莲花，名字中蕴含着像池中盛开的莲花一样纯洁美好的精神。在池的正中央做成圆形小岛并在上面建造了芙蓉亭，用四方形的池塘和圆形的岛屿和谐地表达了宇宙观。周围有一座二层楼阁举合楼，从下面可以俯瞰池塘，从上面可以一边阅读一边欣赏景色。芙蓉池是参观秘苑的人们最先遇到的美丽景观。"
+    },
+    {
+      "serialNumber": "208",
+      "detailCode": "8",
+      "gungNumber": "2",
+      "nameKr": "연경당",
+      "nameEn": "Yeongyeongdang House",
+      "nameJa": "演慶堂",
+      "nameZh": "演庆堂",
+      "explanationKr": "연경당은 창덕궁 후원 깊숙한 곳에 있는 사대부 주택 양식의 건물입니다. '연경(演慶)'은 '경사스러운 일을 펼쳐 보인다'는 뜻. 왕실이 아닌 사대부의 생활을 엿볼 수 있는 드문 공간으로, 안채, 사랑채, 행랑채 등이 한옥의 전형적인 배치를 이루고 있습니다. 특히 연경당의 대청마루와 누마루, 사랑채의 누마루에서는 후원의 아름다운 경치를 한눈에 바라볼 수 있습니다. 이곳에서 왕실은 사대부의 삶을 체험하고, 검소한 생활의 미덕을 배우기도 했지요.",
+      "explanationEn": "Yeongyeongdang is a building in the deep part of the Secret Garden of Changdeokgung, in the style of a scholar-official's house. 'Yeongyeong (演慶)' means 'to unfold a joyous event.' It is a rare space where you can catch a glimpse of the life of a scholar-official rather than a royal family, with an anchae (inner quarters), sarangchae (men's quarters), haengnangchae (servants' quarters) arranged in a typical hanok layout. Especially, from the daecheongmaru and numaru of Yeongyeongdang, and the numaru of the sarangchae, you can view the beautiful scenery of the Secret Garden at a glance. Here the royal family experienced the life of scholar-officials and learned the virtue of simple living.",
+      "explanationJa": "演慶堂は昌徳宮 Secret Garden(後苑)の深いところにある士大夫住宅の様式をした建物です。「演慶」は「慶事を繰り広げる」という意味。王室ではない士大夫の生活を垣間見ることができる珍しい空間で、안채(内側建物)、사랑채(男子空間)、行廊房(下男房)などが韓屋の典型的な配置をなしています。特に演慶堂の大清間に設けられた床と樓床、 사랑채의樓床からは後苑の美しい景色を一望できます。ここで王室は士大夫の生活を体験し、質素な生活の美徳を学んだりもしました。",
+      "explanationZh": "演庆堂是昌德宫秘苑深处一座采用士大夫住宅样式建造的建筑。“演庆”意为“演绎欢庆之事”。这里是难得一见的、不像王室而像是士大夫生活的空间，内宅、爱楼厅(男子起居室)、行廊房等呈现出韩屋典型的布局。特别是演庆堂的大清间和露台，以及爱楼厅的露台，可以将秘苑优美的景色尽收眼底。在这里，王室体验士大夫的生活，也曾学习过简朴生活的美德。"
+    },
+    {
+      "serialNumber": "230",
+      "detailCode": "9",
+      "gungNumber": "2",
+      "nameKr": "후원 입구",
+      "nameEn": "Secret Garden Entrance",
+      "nameJa": "秘苑入口",
+      "nameZh": "秘苑入口",
+      "explanationKr": "창덕궁 후원은 조선시대 왕들의 휴식과 사색의 공간이었습니다. '후원(後苑)'이라는 이름은 궁궐 뒤쪽에 있는 동산이라는 뜻이지만, 단순한 정원이 아니라 왕들이 시를 짓고, 학문을 논하고, 자연을 벗 삼아 마음을 쉬던 별도의 세계였지요. 후원에는 부용지, 애련지, 관람지, 존덕지 등 네 개의 연못과, 주합루, 연경당, 옥류천 등 수많은 정자와 누각이 숨어 있습니다. 후원에 들어서면 궁궐의 엄숙함과는 전혀 다른, 평화롭고 그윽한 세계가 펼쳐집니다.",
+      "explanationEn": "The Secret Garden of Changdeokgung was a space for rest and contemplation for the kings of the Joseon dynasty. The name 'Huwon (後苑)' means 'garden behind the palace,' but it was not a simple garden — it was a separate world where kings composed poetry, discussed scholarship, and rested their hearts with nature as their companion. The Secret Garden contains four ponds — Buyongji, Aeryeonji, Gwanramji, and Jondeokji — and numerous pavilions and nu-gak such as Juhamnu, Yeongyeongdang, and Ongnyucheon. When you enter the Secret Garden, a completely different world unfolds, peaceful and profound, unlike the solemnity of the palace.",
+      "explanationJa": "昌徳宮 Secret Garden(後苑)は朝鮮時代の王たちの休息と瞑想の空間でした。「後苑」という名前は宮殿後ろ側の杜という意味ですが、単なる庭ではなく、王たちが詩を詠み、学問を論じ、自然を友として心を休めた別の世界でした。Secret Garden(後苑)には芙蓉池、愛蓮池、観覧池、尊德池など四つの池と、挙合楼、演慶堂、玉流川など数多くの楼閣と亭が隠れています。Secret Garden(後苑)に入ると、宮殿の厳かさとは全く異なる、平和で奥深い世界が繰り広げられます。",
+      "explanationZh": "昌德宫秘苑是朝鲜时代王们休息和沉思的空间。“秘苑”这个名字虽然是指宫殿后边的园子，但并非单纯的花园，而是王们吟诗作画、讨论学问、以自然为友、休养心神的另一个世界。秘苑里有芙蓉池、爱莲池、观览池、尊德池四个池塘，还有举合楼、演庆堂、玉流川等众多亭子和楼阁隐藏其中。走进秘苑，就会展开与宫殿的庄严截然不同的、平和而深远的世界。"
+    }
+  ]
+}

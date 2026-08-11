@@ -23,10 +23,20 @@ const {
 
 const langKeys = ['kr', 'en', 'ja', 'zh'] as const;
 const resolvedLang = langKeys.includes(lang as any) ? lang : 'kr';
+
+const badgeLabels: Record<string, string> = { kr: '즉답', en: 'Quick Answer', ja: 'クイック回答', zh: '快速回答' };
+const mapLabels: Record<string, Record<string, string>> = {
+  kr: { naver: '네이버지도', kakao: '카카오맵', google: '구글맵' },
+  en: { naver: 'Naver Map', kakao: 'Kakao Map', google: 'Google Map' },
+  ja: { naver: 'ネイバーマップ', kakao: 'カカオマップ', google: 'グーグルマップ' },
+  zh: { naver: 'Naver地图', kakao: 'Kakao地图', google: 'Google地图' },
+};
+const badge = badgeLabels[resolvedLang] || badgeLabels.en;
+const maps = mapLabels[resolvedLang] || mapLabels.en;
 ---
 
 <aside class="quick-answer-box" data-lang={resolvedLang}>
-  <div class="qab-badge">즉답</div>
+  <div class="qab-badge">{badge}</div>
 
   <div class="qab-row">
     <span class="qab-icon" aria-hidden="true">📍</span>
@@ -52,17 +62,17 @@ const resolvedLang = langKeys.includes(lang as any) ? lang : 'kr';
     <div class="qab-maps">
       {mapLinks.naver && (
         <a href={mapLinks.naver} class="qab-map-btn" target="_blank" rel="noopener">
-          네이버지도
+          {maps.naver}
         </a>
       )}
       {mapLinks.kakao && (
         <a href={mapLinks.kakao} class="qab-map-btn" target="_blank" rel="noopener">
-          카카오맵
+          {maps.kakao}
         </a>
       )}
       {mapLinks.google && (
         <a href={mapLinks.google} class="qab-map-btn" target="_blank" rel="noopener">
-          구글맵
+          {maps.google}
         </a>
       )}
     </div>
@@ -86,12 +96,12 @@ const resolvedLang = langKeys.includes(lang as any) ? lang : 'kr';
     top: -1px;
     left: var(--space-6);
     background: var(--color-card);
-    color: var(--neon-gold);
+    color: var(--color-primary);
     font-size: 0.75rem;
     font-weight: 700;
     letter-spacing: 0.08em;
     padding: 4px 10px;
-    border-left: 3px solid var(--neon-gold);
+    border-left: 3px solid var(--color-primary);
     border-top-left-radius: var(--radius-lg);
     border-top-right-radius: 4px;
     text-transform: uppercase;
@@ -191,21 +201,21 @@ const resolvedLang = langKeys.includes(lang as any) ? lang : 'kr';
   }
 
   .dark .quick-answer-box {
-    background: #1a1825;
-    border-color: rgba(255, 215, 0, 0.2);
+    background: var(--color-card);
+    border-color: var(--color-border);
   }
 
   .dark .qab-text {
-    color: #E8DFD0;
+    color: var(--color-text);
   }
 
   .dark .qab-map-btn {
-    border-color: rgba(255, 215, 0, 0.25);
-    color: #E8DFD0;
+    border-color: var(--color-border);
+    color: var(--color-text);
   }
 
   .dark .qab-map-btn:hover {
-    background: var(--neon-gold);
-    color: #1a1825;
+    background: var(--color-text);
+    color: var(--color-bg);
   }
 </style>

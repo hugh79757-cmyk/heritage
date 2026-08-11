@@ -1,4 +1,5 @@
 import palaceData from './palace_data.json';
+import palaceOther from './palace_other.json';
 
 /* ── Palace metadata ── */
 export interface Palace {
@@ -77,8 +78,8 @@ export const PALACES: Palace[] = [
     nameEn: 'Deoksugung Palace',
     nameJa: '徳寿宮',
     nameZh: '德寿宫',
-    image: 'https://www.heritage.go.kr/gung/gogung4/images/mode_general_00_01.jpg',
-    heroImage: 'https://www.heritage.go.kr/gung/gogung4/images/mode_general_00_01.jpg',
+    image: 'https://www.heritage.go.kr/gung/gung4/images/mode_general_00_01.jpg',
+    heroImage: 'https://www.heritage.go.kr/gung/gung4/images/mode_general_00_01.jpg',
     descKr: '근대와 전통이 공존하는 궁궐',
     descEn: 'A palace where modern and traditional architecture coexist',
     descJa: '近代と伝統が共存する宮殿',
@@ -130,6 +131,9 @@ export function getPalaceHook(p: Palace, lang: Lang): string {
   const map: Record<Lang, string> = { kr: p.hookKr, en: p.hookEn, ja: p.hookJa, zh: p.hookZh };
   return map[lang];
 }
+
+/* ── Palace other (other palaces building data) ── */
+export const PALACE_OTHER = palaceOther as Record<string, any[]>;
 
 /* ── XML helpers ── */
 function extractTag(xml: string, tag: string): string {
@@ -196,6 +200,53 @@ export async function fetchBuildingDetail(
   detailCode: number,
 ): Promise<BuildingDetail | null> {
   const buildings = (palaceData as Record<string, any[]>)[String(gungNumber)] || [];
+  const b = buildings.find((item: any) =>
+    String(item.serialNumber) === String(serialNumber) &&
+    String(item.detailCode) === String(detailCode)
+  );
+  if (!b) return null;
+
+  return {
+    serialNumber: b.serialNumber,
+    detailCode: b.detailCode,
+    gungNumber: b.gungNumber,
+    nameKr: b.nameKr,
+    nameEn: b.nameEn || b.nameKr,
+    nameJa: b.nameJa || b.nameKr,
+    nameZh: b.nameZh || b.nameKr,
+    explanationKr: b.explanationKr,
+    explanationEn: b.explanationEn || b.explanationKr,
+    explanationJa: b.explanationJa || b.explanationKr,
+    explanationZh: b.explanationZh || b.explanationKr,
+    mainImage: b.mainImage,
+    images: b.images || [],
+    videos: b.videos || [],
+  };
+}
+
+/* ── Fetch building list from palaceOther (for other palaces) ── */
+export async function fetchPalaceOtherList(gungNumber: number): Promise<BuildingItem[]> {
+  const buildings = PALACE_OTHER[String(gungNumber)] || [];
+  return buildings.map((b: any) => ({
+    serialNumber: b.serialNumber,
+    detailCode: b.detailCode,
+    nameKr: b.nameKr,
+    nameEn: b.nameEn || b.nameKr,
+    nameJa: b.nameJa || b.nameKr,
+    nameZh: b.nameZh || b.nameKr,
+    imageUrl: b.mainImage,
+    explanationKr: b.explanationKr,
+    explanationEn: b.explanationEn || b.explanationKr,
+  }));
+}
+
+/* ── Fetch building detail from palaceOther ── */
+export async function fetchPalaceOtherDetail(
+  gungNumber: number,
+  serialNumber: number,
+  detailCode: number,
+): Promise<BuildingDetail | null> {
+  const buildings = PALACE_OTHER[String(gungNumber)] || [];
   const b = buildings.find((item: any) =>
     String(item.serialNumber) === String(serialNumber) &&
     String(item.detailCode) === String(detailCode)

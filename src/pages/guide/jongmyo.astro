@@ -9,19 +9,45 @@ const lang = getLang(Astro.url);
 const htmlLang = lang === 'kr' ? 'ko' : lang;
 const buildings = await fetchPalaceList(5);
 
-const title = 'Jongmyo Shrine Complete Guide 2026 | K-Heritage';
-const description = 'Complete guide to Jongmyo Shrine: ticket prices, opening hours, UNESCO World Heritage significance, royal ancestral rites, and visitor tips for 2026.';
+const title = {
+  kr: '종묘 완전 가이드 2026 | K-Heritage',
+  en: 'Jongmyo Shrine Complete Guide 2026 | K-Heritage',
+  ja: '宗廟 完全ガイド 2026 | K-Heritage',
+  zh: '宗庙完全指南 2026 | K-Heritage',
+}[lang] ?? '';
+
+const description = {
+  kr: '종묘 입장료, 개방시간, UNESCO 세계유산 의의, 종묘제례, 관람 팁 완전 정리.',
+  en: 'Complete guide to Jongmyo Shrine: ticket prices, opening hours, UNESCO World Heritage significance, royal ancestral rites, and visitor tips for 2026.',
+  ja: '宗廟の完全ガイド：チケット料金、営業時間、UNESCO世界遺産の意義、宗廟祭礼、観光ヒント 2026年版。',
+  zh: '宗庙完全指南：门票价格、开放时间、UNESCO世界遗产意义、宗庙祭礼、游客贴士 2026版。',
+}[lang] ?? '';
 
 const faqByLang: Record<string, { question: string; answer: string }[]> = {
   kr: [
-    { question: "이 내용은 아직 준비 중입니다", answer: "영어 버전을 참조해주세요." },
+    { question: '종묘는 무엇인가요?', answer: '종묘(宗廟)는 조선 왕조의 왕실 사당으로, 왕과 왕비를 제사지낸 곳입니다. 1995년 UNESCO 세계유산으로 지정.' },
+    { question: '종묘 티켓 가격은?', answer: '성인 ₩1,000, 청소년(7~18세) ₩500. 7세 이하·65세 이상 무료. 서울 유산 중 최저가.' },
+    { question: '개방시간은?', answer: '3~10월 09:00~18:00 (마지막 입장 17:30), 11~2월 09:00~17:00 (마지막 입장 16:30). 화요일 휴관. 정전은 가이드 투어 필수.' },
+    { question: '종묘제례란?', answer: '종묘제례는 매년 5월 첫째 일요일에 거행되는 왕실 제례. 28명의 음악가와 64명의 무용수가 전통 의상을 입고 공연. 2001년 유네스코 무형문화유산 지정.' },
   ],
   en: [
-  { question: 'What is Jongmyo Shrine?', answer: 'Jongmyo (종묘) is the royal ancestral shrine of the Joseon dynasty, where ceremonies honoring deceased kings and queens were performed. It was designated a UNESCO World Heritage Site in 1995.' },
-  { question: 'How much is the Jongmyo ticket?', answer: 'Adults: ₩1,000. Youth (7–18): ₩500. Free for children under 7 and seniors 65+. The cheapest of all Seoul heritage sites.' },
-  { question: 'What are Jongmyo opening hours?', answer: '09:00–18:00 (Mar–Oct), 09:00–17:00 (Nov–Feb). Closed Tuesdays. The main hall (Jeongjeon) requires a guided tour to enter.' },
-  { question: 'What is Jongmyo Jerye?', answer: 'Jongmyo Jerye (종묘제례) is the Royal Ancestral Rite, performed annually on the first Sunday of May. It is an Intangible Cultural Heritage, featuring traditional music (Jeryeak) and dance (Jerye Mu).' },
-],
+    { question: 'What is Jongmyo Shrine?', answer: 'Jongmyo (종묘) is the royal ancestral shrine of the Joseon dynasty, where ceremonies honoring deceased kings and queens were performed. It was designated a UNESCO World Heritage Site in 1995.' },
+    { question: 'How much is the Jongmyo ticket?', answer: 'Adults: ₩1,000. Youth (7–18): ₩500. Free for children under 7 and seniors 65+. The cheapest of all Seoul heritage sites.' },
+    { question: 'What are Jongmyo opening hours?', answer: '09:00–18:00 (Mar–Oct), 09:00–17:00 (Nov–Feb). Closed Tuesdays. The main hall (Jeongjeon) requires a guided tour to enter.' },
+    { question: 'What is Jongmyo Jerye?', answer: 'Jongmyo Jerye (종묘제례) is the Royal Ancestral Rite, performed annually on the first Sunday of May. It is an Intangible Cultural Heritage, featuring traditional music (Jeryeak) and dance (Jerye Mu).' },
+  ],
+  ja: [
+    { question: '宗廟とは？', answer: '宗廟（종묘）は朝鮮王朝の王室祠堂で、王と王妃を祀りました。1995年にUNESCO世界遺産に指定。' },
+    { question: 'チケット料金は？', answer: '大人₩1,000、青少年（7〜18歳）₩500。7歳未満・65歳以上無料。ソウルの遺産施設で最も安い。' },
+    { question: '営業時間は？', answer: '3〜10月 09:00〜18:00（最終入場17:30）、11〜2月 09:00〜17:00（最終入場16:30）。火曜日休館。正殿はガイドツアー必須。' },
+    { question: '宗廟祭礼とは？', answer: '宗廟祭礼は毎年5月第1日曜日に行われる王室の祭礼。28名の音楽家と64名の舞踏家が伝統衣装で公演。2001年ユネスコ無形文化遺産に指定。' },
+  ],
+  zh: [
+    { question: '宗庙是什么？', answer: '宗庙（종묘）是朝鲜王朝的王室祠堂，祭祀国王和王后。1995年被列为UNESCO世界遗产。' },
+    { question: '门票价格？', answer: '成人₩1,000，青少年（7-18岁）₩500。7岁以下及65岁以上免费。首尔遗产设施中最便宜。' },
+    { question: '开放时间？', answer: '3-10月 09:00-18:00（最后入场17:30），11-2月 09:00-17:00（最后入场16:30）。周二闭馆。正殿需参加导览团。' },
+    { question: '宗庙祭礼是什么？', answer: '宗庙祭礼是每年5月第一个周日举行的王室祭祀仪式。28名乐师和64名舞者身着传统服饰表演。2001年被列为UNESCO非物质文化遗产。' },
+  ],
 };
 const faqItems = faqByLang[lang] || faqByLang.en;
 
@@ -78,6 +104,41 @@ const h: Record<string, any> = {
 
 const t = h[lang] || h.en;
 
+const body = {
+  kr: {
+    price: '성인: ₩1,000 · 청소년(7~18세): ₩500 · 7세 이하·65세 이상 무료',
+    hours: '<strong>3~10월:</strong> 09:00~18:00 (마지막 입장 17:30)<br/><strong>11~2월:</strong> 09:00~17:00 (마지막 입장 16:30)<br/><strong>휴관:</strong> 매주 화요일<br/><strong>참고:</strong> 정전(본전) 입장은 무료 가이드 투어 필수, 일정 시간 운행',
+    transport: '<strong>지하철:</strong> 1·3·5호선 종로3가역(11번 출구) — 도보 5분<br/><strong>버스:</strong> 101, 162, 171, 272, 606번 종로3가 하차',
+    unesco: '종묘는 유교 건축과 제례의 걸작으로 1995년 UNESCO 세계유산에 지정되었습니다. 500년 넘게 사용된 세계에서 가장 오래된 사당 중 하나입니다.\n\n건축은 엄격한 유교 원칙을 따르며 — 소박한 목조건물이 장엄함과 존경을 강조합니다. 101m 길이의 정전은 아시아에서 가장 긴 목조건물로, 전통 공학의 놀라운 업적입니다.',
+    jerye: '종묘제례(종묘제례)는 매년 5월 첫째 일요일에 거행됩니다. 이 정교한 의식에는 28명의 음악가와 64명의 무용수가 전통 의상을 입고 고궁 음악과 춤을 선보입니다. 2001년 종묘제례악(고궁 음악)은 유네스코 인류 무형문화유산으로 지정되었습니다.',
+    tips: ['정전 가이드 투어는 무료이며 20~30분 간격으로 운행', '내부 제례박물관 무료 관람', '창경궁(인접)과 연계하면 하루 코스 완성', '5월 제례 관람이 목적이라면 5월 방문 추천', '정전의 긴 복도형 내부는 독특한 촬영 포인트'],
+  },
+  en: {
+    price: 'Adults: ₩1,000 · Youth (7–18): ₩500 · Children under 7 & Seniors 65+: Free',
+    hours: '<strong>Mar–Oct:</strong> 09:00–18:00 (last entry 17:30)<br/><strong>Nov–Feb:</strong> 09:00–17:00 (last entry 16:30)<br/><strong>Closed:</strong> Every Tuesday<br/><strong>Note:</strong> Entry to Jeongjeon (main hall) requires a free guided tour, available at fixed intervals.',
+    transport: '<strong>Subway:</strong> Line 1/3/5 Jongno 3-ga Station (Exit 11) — 5 min walk.<br/><strong>Bus:</strong> Routes 101, 162, 171, 272, 606 stop near Jongno 3-ga.',
+    unesco: 'Jongmyo was designated a UNESCO World Heritage Site in 1995 for its outstanding universal value as a masterpiece of Confucian architecture and ritual practice. The shrine has been continuously used for over 500 years, making it one of the oldest and longest-operating shrines in East Asia.\n\nThe architectural design follows strict Confucian principles — the simple, unadorned wooden structures emphasize solemnity and respect. The 101-meter-long Jeongjeon is the longest wooden building in Asia, a remarkable feat of traditional engineering.',
+    jerye: 'The annual Royal Ancestral Rite (종묘제례, Jongmyo Jerye) is performed on the first Sunday of May. This elaborate ceremony features 28 musicians and 64 dancers in traditional costumes, performing ancient court music and dances to honor the spirits of deceased monarchs. In 2001, the Jongmyo Jeryeak (court music) was designated a UNESCO Intangible Cultural Heritage of Humanity.',
+    tips: ['The guided tour of Jeongjeon is free and runs every 20-30 minutes', 'The Ancestral Rite Museum inside the grounds is free to enter', 'Combine with Changgyeonggung (adjacent) for a full day', 'May is the best month to visit if you want to see the Jerye ceremony', 'The long, corridor-like interior of Jeongjeon is a unique photo opportunity'],
+  },
+  ja: {
+    price: '大人: ₩1,000 · 青少年(7~18歳): ₩500 · 7歳未満・65歳以上無料',
+    hours: '<strong>3~10月:</strong> 09:00~18:00（最終入場17:30）<br/><strong>11~2月:</strong> 09:00~17:00（最終入場16:30）<br/><strong>休館:</strong> 毎週火曜日<br/><strong>注意:</strong> 正殿入場は無料ガイドツアー必須、定時運行',
+    transport: '<strong>地下鉄:</strong> 1·3·5号線鐘路3街駅（11番出口）— 徒歩5分<br/><strong>バス:</strong> 101, 162, 171, 272, 606便 鐘路3街下車',
+    unesco: '宗廟は儒教建築と祭礼の傑作として1995年にUNESCO世界遺産に指定。500年以上使用され続けている東アジア最古の祠堂の一つ。\n\n建築は厳格な儒教原則に従い — 素朴な木造建築が厳粛さと敬意を強調。101mの正殿はアジア最長の木造建築で、伝統工学の偉業。',
+    jerye: '宗廟祭礼は毎年5月第1日曜日に行われる。28名の音楽家と64名の舞踏家が伝統衣装で古代の宮廷音楽と踊りを披露。2001年に宗廟祭礼楽はユネスコ無形文化遺産に指定。',
+    tips: ['正殿ガイドツアーは無料で20〜30分ごと運行', '境内の祭礼博物館は無料見学', '昌慶宮（隣接）と組み合わせて一日コース', '祭礼を見たいなら5月がベスト', '正殿の長い廊下のような内部は独特の撮影ポイント'],
+  },
+  zh: {
+    price: '成人: ₩1,000 · 青少年(7~18岁): ₩500 · 7岁以下·65岁以上免费',
+    hours: '<strong>3~10月:</strong> 09:00~18:00（最后入场17:30）<br/><strong>11~2月:</strong> 09:00~17:00（最后入场16:30）<br/><strong>闭馆:</strong> 每周二<br/><strong>注意:</strong> 正殿入场需免费导览团，定时运行',
+    transport: '<strong>地铁:</strong> 1·3·5号线钟路3街站（11号出口）— 步行5分钟<br/><strong>公交:</strong> 101, 162, 171, 272, 606路 钟路3街下车',
+    unesco: '宗庙作为儒学建筑和祭祀仪式的杰作，于1995年被列为UNESCO世界遗产。已使用超过500年，是东亚最古老的祠堂之一。\n\n建筑设计遵循严格的儒学原则——朴素的木结构强调庄严与敬意。101米长的正殿是亚洲最长的木结构建筑，是传统工程的杰出成就。',
+    jerye: '宗庙祭礼每年5月第一个周日举行。这一精心策划的仪式由28名乐师和64名舞者身着传统服饰，演奏古代宫廷音乐和舞蹈以祭祀已故君王的灵魂。2001年宗庙祭礼乐被列为UNESCO非物质文化遗产。',
+    tips: ['正殿导览免费，每20-30分钟一趟', '境内祭礼博物馆免费参观', '与昌庆宫（相邻）组合可构成一日游', '5月想看祭礼仪式最佳', '正殿长廊般的内部是独特的拍摄点'],
+  },
+}[lang] ?? { price: '', hours: '', transport: '', unesco: '', jerye: '', tips: [] };
+
 function getBldName(b: typeof buildings[0]) {
   const map: Record<string, string> = { kr: b.nameKr, en: b.nameEn, ja: b.nameJa, zh: b.nameZh };
   return map[lang] || b.nameEn;
@@ -94,30 +155,24 @@ function getBldName(b: typeof buildings[0]) {
       <p class="guide-intro">{t.intro}</p>
 
       <h2>{t.h2_1}</h2>
-      <div class="info-box"><p>Adults: ₩1,000 &middot; Youth (7–18): ₩500 &middot; Children under 7 & Seniors 65+: Free</p></div>
+      <div class="info-box"><p>{body.price}</p></div>
 
       <h2>{t.h2_2}</h2>
-      <div class="info-box"><p><strong>Mar–Oct:</strong> 09:00–18:00 (last entry 17:30)<br/><strong>Nov–Feb:</strong> 09:00–17:00 (last entry 16:30)<br/><strong>Closed:</strong> Every Tuesday<br/><strong>Note:</strong> Entry to Jeongjeon (main hall) requires a free guided tour, available at fixed intervals.</p></div>
+      <div class="info-box" set:html={body.hours} />
 
       <h2>{t.h2_3}</h2>
-      <p><strong>Subway:</strong> Line 1/3/5 Jongno 3-ga Station (Exit 11) — 5 min walk.</p>
-      <p><strong>Bus:</strong> Routes 101, 162, 171, 272, 606 stop near Jongno 3-ga.</p>
+      <p set:html={body.transport} />
 
       <h2>{t.h2_4}</h2>
-      <p>Jongmyo was designated a UNESCO World Heritage Site in 1995 for its outstanding universal value as a masterpiece of Confucian architecture and ritual practice. The shrine has been continuously used for over 500 years, making it one of the oldest and longest-operating shrines in East Asia.</p>
-      <p>The architectural design follows strict Confucian principles — the simple, unadorned wooden structures emphasize solemnity and respect. The 101-meter-long Jeongjeon is the longest wooden building in Asia, a remarkable feat of traditional engineering.</p>
+      {body.unesco.split('\n\n').map(p => <p>{p}</p>)}
 
       <h2>{t.h2_5}</h2>
-      <p>The annual Royal Ancestral Rite (종묘제례, Jongmyo Jerye) is performed on the first Sunday of May. This elaborate ceremony features 28 musicians and 64 dancers in traditional costumes, performing ancient court music and dances to honor the spirits of deceased monarchs. In 2001, the Jongmyo Jeryeak (court music) was designated a UNESCO Intangible Cultural Heritage of Humanity.</p>
+      <p>{body.jerye}</p>
 
       <h2>{t.h2_6}</h2>
       <div class="info-box tip-box">
         <ul>
-          <li>The guided tour of Jeongjeon is free and runs every 20-30 minutes</li>
-          <li>The Ancestral Rite Museum inside the grounds is free to enter</li>
-          <li>Combine with Changgyeonggung (adjacent) for a full day</li>
-          <li>May is the best month to visit if you want to see the Jerye ceremony</li>
-          <li>The long, corridor-like interior of Jeongjeon is a unique photo opportunity</li>
+          {body.tips.map(tip => <li>{tip}</li>)}
         </ul>
       </div>
 

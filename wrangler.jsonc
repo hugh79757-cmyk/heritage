@@ -19,5 +19,8 @@
 			"database_name": "heritage-db",
 			"database_id": "b4f2264e-d032-442b-a260-48b7ffd99414"
 		}
+	],
+	"routes": [
+		{ "pattern": "heritage.aikorea24.kr", "custom_domain": true }
 	]
 }

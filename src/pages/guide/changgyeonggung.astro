@@ -9,8 +9,18 @@ const lang = getLang(Astro.url);
 const htmlLang = lang === 'kr' ? 'ko' : lang;
 const buildings = await fetchPalaceList(3);
 
-const title = 'Changgyeonggung Palace Complete Guide 2026 | K-Heritage';
-const description = 'Complete guide to Changgyeonggung Palace: ticket prices, opening hours, night tours, must-see buildings including Daemyeongjeon and Changgyeongwon Garden.';
+const titles: Record<string, string> = {
+  kr: '창경궁 완전 가이드 2026 — K-Heritage',
+  en: 'Changgyeonggung Palace Complete Guide 2026 | K-Heritage',
+  ja: '昌慶宮 完全ガイド 2026 — K-Heritage',
+  zh: '昌庆宫完全指南 2026 — K-Heritage',
+};
+const descriptions: Record<string, string> = {
+  kr: '창경궁 관람 안내: 입장료, 개방시간, 야간개장, 대명전·창경원 포함 주요 건물 안내',
+  en: 'Complete guide to Changgyeonggung Palace: ticket prices, opening hours, night tours, must-see buildings including Daemyeongjeon and Changgyeongwon Garden.',
+  ja: '昌慶宮の完全ガイド：チケット料金、営業時間、夜間開場、大明殿・昌慶苑を含む見どころ',
+  zh: '昌庆宫完全指南：门票价格、开放时间、夜间开放、大明殿和昌庆苑等必看建筑',
+};
 
 const faqByLang: Record<string, { question: string; answer: string }[]> = {
   kr: [
@@ -86,7 +96,7 @@ function getBldName(b: typeof buildings[0]) {
   return map[lang] || b.nameEn;
 }
 ---
-<GuideLayout title={title} description={description} lang={htmlLang}>
+<GuideLayout title={titles[lang] || titles.en} description={descriptions[lang] || descriptions.en} lang={htmlLang}>
   <style>@import '../../styles/global.css';</style>
   <div class="container">
     <BreadcrumbNav items={[{ name: 'Home', url: '/' }, { name: 'Guide', url: '/guide' }, { name: 'Changgyeonggung' }]} lang={lang} />

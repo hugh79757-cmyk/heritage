@@ -1,0 +1,38 @@
+---
+interface Props {
+  /** Color variant: blue | red | yellow | green */
+  variant?: 'blue' | 'red' | 'yellow' | 'green';
+  /** Additional class names */
+  class?: string;
+}
+
+const { variant = 'blue', class: className = '' } = Astro.props;
+---
+
+<div class={`pastel-glow pastel-glow-${variant}`} class={className}>
+  <slot />
+</div>
+
+<style>
+  .pastel-glow {
+    border-radius: var(--radius-lg);
+    padding: var(--space-4);
+    background: var(--color-card);
+    border: 1px solid var(--color-border);
+    box-shadow: var(--shadow-sm);
+    transition: all var(--transition);
+  }
+  .pastel-glow:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--color-primary);
+  }
+  .pastel-glow-blue { border-color: var(--dancheong-blue-pastel); }
+  .pastel-glow-red { border-color: var(--dancheong-red-pastel); }
+  .pastel-glow-yellow { border-color: var(--dancheong-yellow-pastel); }
+  .pastel-glow-green { border-color: var(--dancheong-black-pastel); }
+  .pastel-glow-blue:hover { box-shadow: var(--shadow-md); }
+  .pastel-glow-red:hover { box-shadow: var(--shadow-md); }
+  .pastel-glow-yellow:hover { box-shadow: var(--shadow-md); }
+  .pastel-glow-green:hover { box-shadow: var(--shadow-md); }
+</style>

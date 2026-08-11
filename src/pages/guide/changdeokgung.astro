@@ -9,8 +9,18 @@ const lang = getLang(Astro.url);
 const htmlLang = lang === 'kr' ? 'ko' : lang;
 const buildings = await fetchPalaceList(2);
 
-const title = 'Changdeokgung Palace Complete Guide 2026 | K-Heritage';
-const description = 'Complete guide to Changdeokgung Palace: Secret Garden reservation, ticket prices, opening hours, must-see buildings, and visitor tips for 2026.';
+const titles: Record<string, string> = {
+  kr: '창덕궁 완전 가이드 2026 — K-Heritage',
+  en: 'Changdeokgung Palace Complete Guide 2026 | K-Heritage',
+  ja: '昌徳宮 完全ガイド 2026 — K-Heritage',
+  zh: '昌德宫完全指南 2026 — K-Heritage',
+};
+const descriptions: Record<string, string> = {
+  kr: '창덕궁 관람 안내: 비원 예약, 입장료, 개방시간, 주요 건물, 2026년 방문 팁',
+  en: 'Complete guide to Changdeokgung Palace: Secret Garden reservation, ticket prices, opening hours, must-see buildings, and visitor tips for 2026.',
+  ja: '昌徳宮の完全ガイド：秘苑予約、チケット料金、営業時間、見どころ、2026年訪問のコツ',
+  zh: '昌德宫完全指南：后苑预约、门票价格、开放时间、必看建筑、2026年参观贴士',
+};
 
 const faqByLang: Record<string, { question: string; answer: string }[]> = {
   kr: [
@@ -28,7 +38,7 @@ const faqByLang: Record<string, { question: string; answer: string }[]> = {
     { question: 'Best season to visit?', answer: 'Autumn (mid-Oct to Nov) for vibrant foliage. Spring cherry blossoms and summer lotus are also spectacular.' },
   ],
   ja: [
-    { question: '昌德宮秘苑はどうやって訪問しますか？', answer: '秘苑は別途ガイドツアーが必要です。heritage.go.krで事前予約。ツアーは10:00、11:00、14:00、15:30出発。すぐに完売します。' },
+    { question: '昌徳宮秘苑はどうやって訪問しますか？', answer: '秘苑は別途ガイドツアーが必要です。heritage.go.krで事前予約。ツアーは10:00、11:00、14:00、15:30出発。すぐに完売します。' },
     { question: '入場料は？', answer: '宮殿: 大人₩3,000、青少年₩1,500。秘苑: 大人₩5,000、青少年₩2,500。統合: ₩8,000。7歳以下・65歳以上無料。' },
     { question: 'UNESCO世界遺産ですか？', answer: 'はい、1997年に自然の地形と調和した建築で世界遺産に指定されました。' },
     { question: '訪問時間は？', answer: '宮殿のみ1〜1.5時間。秘苑ツアー込みで約3時間。' },
@@ -44,20 +54,7 @@ const faqByLang: Record<string, { question: string; answer: string }[]> = {
 };
 const faqItems = faqByLang[lang] || faqByLang.en;
 
-const headings: Record<string, { h1: string; intro: string; h2_1: string; h2_2: string; h2_3: string; h2_4: string; h2_5: string; info_1: string; info_2: string; buildings_text: string; cta: string }> = {
-  en: {
-    h1: 'Changdeokgung Palace Complete Guide 2026',
-    intro: 'Changdeokgung Palace (창덕궁) is a UNESCO World Heritage Site, renowned for its exceptional architecture that harmonizes with the natural topography. Built in 1405, it served as the secondary palace of the Joseon dynasty and was favored by many kings for its beautiful layout. The attached Secret Garden (비원/Huwon) is considered one of the finest examples of Korean garden design.',
-    h2_1: 'Ticket Prices & Secret Garden Reservation',
-    h2_2: 'Opening Hours & Tour Schedule',
-    h2_3: 'How to Get There',
-    h2_4: 'Must-See Buildings & Secret Garden Highlights',
-    h2_5: 'Visitor Tips',
-    info_1: 'Palace admission: ₩3,000 (adults), ₩1,500 (youth 7-18). Secret Garden: ₩5,000 (adults), ₩2,500 (youth). Combined: ₩8,000. Children under 7 and seniors 65+ are free.',
-    info_2: 'Palace: 09:00–18:00 (Feb–Oct), 09:00–17:00 (Nov–Jan). Closed Tuesdays. Secret Garden guided tours: 10:00, 11:00, 14:00, 15:30 daily. Each tour accommodates ~100 visitors and lasts approximately 90 minutes.',
-    buildings_text: 'Changdeokgung features buildings arranged along the natural terrain rather than a rigid grid. Notable structures include Donhwamun Gate (the main entrance with its unique arched design), Injeongjeon Hall (the throne hall), Seonjeongjeon (the king\'s office), and Buyongjeong Pavilion.',
-    cta: 'Explore all buildings at Changdeokgung →',
-  },
+const content = {
   kr: {
     h1: '창덕궁 완전 가이드 2026',
     intro: '창덕궁(昌德宮)은 UNESCO 세계유산으로, 자연 지형과 조화를 이룬 뛰어난 건축으로 유명합니다. 1405년 건립된 이 궁궐은 조선 왕조의 이궁으로 많은 왕들이 사랑했습니다. 부속된 후원(비원)은 한국 정원 디자인의 걸작으로 꼽힙니다.',
@@ -68,12 +65,53 @@ const headings: Record<string, { h1: string; intro: string; h2_1: string; h2_2: 
     h2_5: '관람 팁',
     info_1: '궁궐: 성인 ₩3,000, 청소년 ₩1,500. 비원: 성인 ₩5,000, 청소년 ₩2,500. 통합: ₩8,000. 7세 이하 및 65세 이상 무료.',
     info_2: '궁궐: 09:00~18:00(2~10월), 09:00~17:00(11~1월). 매주 화요일 휴관. 비원 가이드 투어: 매일 10:00, 11:00, 14:00, 15:30. 회당 약 100명, 약 90분 소요.',
+    secret_garden_desc: '비원 투어는 창덕궁 방문의 하이라이트입니다. 국가유산청 홈페이지(heritage.go.kr)에서 예약할 수 있으며, 예약이 열리면 매우 빠르게 매진됩니다. 매월 1일 다음 달 예약이 열리므로, 예약 오픈 시간에 맞춰 확인하는 것이 좋습니다.',
+    ticket_alone_desc: '궁궐 입장권만으로 가이드 없이 주요 전각을 둘러볼 수 있습니다. 다만 비원은 가이드 투어로만 관람 가능하며, 별도 예약 없이 입장할 수 없습니다.',
+    garden_route_desc: '비원 투어는 78에이커 규모의 정원을 정해진 경로로 둘러봅니다. 부용지, 주합루, 옥류천, 연경당 등을 지나며 계절마다 다른 매력을 느낄 수 있습니다 — 봄 벚꽃, 여름 푸른 녹음, 가을 단풍, 겨울 설경.',
+    transport_subway: '지하철 3호선 안국역(3번 출구) — 도보 5분, 또는 3호선 종로3가역(6번 출구) — 도보 8분.',
+    transport_bus: '버스 101, 162, 171, 272, 606번이 안국역 근처에 정차합니다. 안국역 3번 출구에서 궁궐 방향으로 걸어가면 됩니다.',
     buildings_text: '창덕궁은 격자형 배치 대신 자연 지형을 따라 건물을 배치한 것이 특징입니다. 돈화문(정문), 인정전(전정), 선정전(왕의 집무실), 부용정(연못 위 정자) 등이 대표적입니다.',
+    visitor_tips_title: '관람 팁',
+    tips: [
+      { label: '사전 예약', text: '비원 티켓은 최소 1~2주 전에 예약 — 몇 시간 만에 매진됨' },
+      { label: '편한 신발', text: '비원 투어는 2km 이상 보행 코스이므로 편안한 신발 필수' },
+      { label: '계절별 매력', text: '모든 계절이 아름답지만, 가을(10월 중순)이 가장 압도적인 풍경을 제공함' },
+      { label: '촬영 가능', text: '대부분 구역 사진 촬영 가능하나, 피크 시간대 삼각대 제한 가능' },
+      { label: '오디오 가이드', text: '입구에서 다국어 오디오 가이드 대여 가능' },
+      { label: '한복 무료 입장', text: '한복 착용 시 무료 입장 — 안국역 주변에 대여점 다수' },
+    ],
     cta: '창덕궁 건물 전체 보기 →',
+  },
+  en: {
+    h1: 'Changdeokgung Palace Complete Guide 2026',
+    intro: 'Changdeokgung Palace (창덕궁) is a UNESCO World Heritage Site, renowned for its exceptional architecture that harmonizes with the natural topography. Built in 1405, it served as the secondary palace of the Joseon dynasty and was favored by many kings for its beautiful layout. The attached Secret Garden (비원/Huwon) is considered one of the finest examples of Korean garden design.',
+    h2_1: 'Ticket Prices & Secret Garden Reservation',
+    h2_2: 'Opening Hours & Tour Schedule',
+    h2_3: 'How to Get There',
+    h2_4: 'Must-See Buildings & Secret Garden Highlights',
+    h2_5: 'Visitor Tips',
+    info_1: 'Palace admission: ₩3,000 (adults), ₩1,500 (youth 7-18). Secret Garden: ₩5,000 (adults), ₩2,500 (youth). Combined: ₩8,000. Children under 7 and seniors 65+ are free.',
+    info_2: 'Palace: 09:00–18:00 (Feb–Oct), 09:00–17:00 (Nov–Jan). Closed Tuesdays. Secret Garden guided tours: 10:00, 11:00, 14:00, 15:30 daily. Each tour accommodates ~100 visitors and lasts approximately 90 minutes.',
+    secret_garden_desc: 'The Secret Garden tour is the highlight of any Changdeokgung visit. Reservations open on the Korea Heritage Service website (heritage.go.kr) and sell out extremely fast. We recommend checking availability exactly when new dates are released — typically on the 1st of each month for the following month.',
+    ticket_alone_desc: 'The palace ticket alone allows you to explore the main palace buildings without a guide. However, the Secret Garden requires a guided tour and cannot be visited independently.',
+    garden_route_desc: 'The Secret Garden tour follows a set route through the 78-acre garden, passing by Buyongji Pond, Juhamnu Pavilion, Ongnyucheon Stream, and the Yeongyeongdang Residence. Each season reveals a different beauty — cherry blossoms in spring, lush greenery in summer, vibrant foliage in autumn, and serene snowscapes in winter.',
+    transport_subway: 'Seoul Metro Line 3 to Anguk Station (Exit 3) — 5 minute walk, or Line 3 Jongno 3-ga Station (Exit 6) — 8 minute walk.',
+    transport_bus: 'Bus routes 101, 162, 171, 272, 606 stop near Anguk. Walk from Anguk Station Exit 3 toward the palace.',
+    buildings_text: 'Changdeokgung features buildings arranged along the natural terrain rather than a rigid grid. Notable structures include Donhwamun Gate (the main entrance with its unique arched design), Injeongjeon Hall (the throne hall), Seonjeongjeon (the king\'s office), and Buyongjeong Pavilion.',
+    visitor_tips_title: 'Visitor Tips',
+    tips: [
+      { label: 'Book in advance', text: 'Secret Garden tickets at least 1-2 weeks ahead — they sell out within hours' },
+      { label: 'Wear comfortable shoes', text: 'The Secret Garden tour involves 2+ km of walking' },
+      { label: 'Seasonal beauty', text: 'The palace is beautiful in every season, but autumn (mid-October) offers the most stunning views' },
+      { label: 'Photography', text: 'Allowed in most areas, but tripods may be restricted during peak hours' },
+      { label: 'Audio guides', text: 'Available at the entrance in multiple languages' },
+      { label: 'Hanbok free entry', text: 'Free admission with hanbok — rental shops are plentiful around Anguk Station' },
+    ],
+    cta: 'Explore all buildings at Changdeokgung →',
   },
   ja: {
     h1: '昌德宮 完全ガイド 2026',
-    intro: '昌德宮（창덕궁）はUNESCO世界遺産で、自然の地形と調和した優れた建築で知られています。1405年に築かれたこの宮殿は朝鮮王朝の離宮で、多くの王に愛されました。付属の秘苑（后園）は韓国庭園デザインの傑作とされています。',
+    intro: '昌徳宮（창덕궁）はUNESCO世界遺産で、自然の地形と調和した優れた建築で知られています。1405年に築かれたこの宮殿は朝鮮王朝の離宮で、多くの王に愛されました。付属の秘苑（后園）は韓国庭園デザインの傑作とされています。',
     h2_1: 'チケット料金と秘苑予約',
     h2_2: '営業時間とツアー日程',
     h2_3: 'アクセス方法',
@@ -81,12 +119,26 @@ const headings: Record<string, { h1: string; intro: string; h2_1: string; h2_2: 
     h2_5: '観光ヒント',
     info_1: '宮殿：大人₩3,000、青少年₩1,500。秘苑：大人₩5,000、青少年₩2,500。統合：₩8,000。7歳以下及び65歳以上無料。',
     info_2: '宮殿：09:00〜18:00（2〜10月）、09:00〜17:00（11〜1月）。毎週火曜休館。秘苑ガイドツアー：毎日10:00、11:00、14:00、15:30。回あたり約100名、約90分。',
-    buildings_text: '昌德宮は格子型配置ではなく自然の地形に沿って建物を配置するのが特徴です。敦化門（正門）、仁政殿（正殿）、宣政殿（執務室）、芙蓉亭（蓮池上の亭）などが代表的です。',
-    cta: '昌德宮の全建築物を見る →',
+    secret_garden_desc: '秘苑ツアーは昌徳宮訪問のハイライトです。heritage.go.krで予約でき、予約開始後すぐに完売します。毎月1日に翌月分の予約が始まるので、公開時間に合わせて確認するのがおすすめです。',
+    ticket_alone_desc: '宮殿入場券だけでガイドなしで主要な建物を見られます。ただし秘苑はガイドツアーでのみ見学可能で、個別予約なしでは入れません。',
+    garden_route_desc: '秘苑ツアーは78エーカーの庭園を決められたコースで巡ります。夫容池、宙合楼、玉流川、演慶堂などを経て、季節ごとに異なる魅力があります — 春の桜、夏の緑、秋の紅葉、冬の雪景色。',
+    transport_subway: '地下鉄3号線 安国駅（3番出口）— 徒歩5分、または3号線 鍾路3街駅（6番出口）— 徒歩8分。',
+    transport_bus: 'バス101、162、171、272、606番が安国駅付近に停車します。安国駅3番出口から宮殿方面に歩いてください。',
+    buildings_text: '昌徳宮は格子型配置ではなく自然の地形に沿って建物を配置するのが特徴です。敦化門（正門）、仁政殿（正殿）、宣政殿（執務室）、芙蓉亭（蓮池上の亭）などが代表的です。',
+    visitor_tips_title: '観光ヒント',
+    tips: [
+      { label: '事前予約', text: '秘苑チケットは最低1〜2週間前に予約 — 数時間で完売' },
+      { label: '歩きやすい靴', text: '秘苑ツアーは2km以上のウォーキングコースなので快適な靴が必須' },
+      { label: '季節の魅力', text: '全季節が美しいが、秋（10月中旬）が最も圧倒的な光景を提供' },
+      { label: '撮影', text: 'ほとんどのエリアで撮影可能だが、ピーク時間帯は三脚制限あり' },
+      { label: 'オーディオガイド', text: '入口で多言語オーディオガイドをレンタル可能' },
+      { label: '韓服で無料入場', text: '韓服着用で入場無料 — 安国駅周辺にレンタル店が多数' },
+    ],
+    cta: '昌徳宮の全建築物を見る →',
   },
   zh: {
     h1: '昌德宫完全指南 2026',
-    intro: '昌德宫（창덕궁）是UNESCO世界遗产，以与自然地形和谐融合的卓越建筑闻名。建于1405年，作为朝鲜王朝的离宫深受多位国王喜爱。附属的后苑（秘苑）被视为韩国园林设计的杰作。',
+    intro: '昌德宫（창덕궁）是UNESCO世界遗产，以与自然地形和谐融合的卓越建筑闻名。建于1405年，作为朝鲜王朝的离宫深受多位国王喜爱。附属的后苑（秘苑/后园）被视为韩国园林设计的杰作。',
     h2_1: '门票价格与秘苑预约',
     h2_2: '开放时间与导览日程',
     h2_3: '交通指南',
@@ -94,19 +146,31 @@ const headings: Record<string, { h1: string; intro: string; h2_1: string; h2_2: 
     h2_5: '游客贴士',
     info_1: '宫殿：成人₩3,000，青少年₩1,500。秘苑：成人₩5,000，青少年₩2,500。综合：₩8,000。7岁以下及65岁以上免费。',
     info_2: '宫殿：09:00-18:00（2-10月），09:00-17:00（11-1月）。每周二闭馆。秘苑导览：每天10:00、11:00、14:00、15:30。每场约100人，约90分钟。',
+    secret_garden_desc: '秘苑导览是参观昌德宫的亮点。在韩国遗产厅网站（heritage.go.kr）上可以预约，预约开放后会迅速售罄。建议在每月1日发布下月预约时及时查看。',
+    ticket_alone_desc: '仅凭宫殿门票就能在没有导游的情况下参观主要宫殿建筑。但是，秘苑需要导游陪同 tours，不能独立参观。',
+    garden_route_desc: '秘苑导览沿着78英亩花园的固定路线行进，经过孚容池、宙合楼、玉流川和演庆堂等地。每个季节都有不同的美景 — 春季樱花、夏季郁郁葱葱、秋季绚烂红叶、冬季宁静雪景。',
+    transport_subway: '首尔地铁3号线 安国站（3号出口）— 步行5分钟，或3号线 钟路3街站（6号出口）— 步行8分钟。',
+    transport_bus: '公交101、162、171、272、606路在安国站附近停靠。从安国站3号出口朝宫殿方向步行即可。',
     buildings_text: '昌德宫的特点是不采用格子型布局，而是沿自然地形布置建筑。敦化门（正门）、仁政殿（正殿）、宣政殿（办公室）、芙蓉亭（莲池上的亭子）等为代表性建筑。',
+    visitor_tips_title: '游客贴士',
+    tips: [
+      { label: '提前预约', text: '秘苑票至少提前1-2周预约 — 几小时内售罄' },
+      { label: '穿舒适的鞋', text: '秘苑导览涉及2公里以上步行，需穿舒适的鞋子' },
+      { label: '季节美景', text: '每个季节都很美，但秋季（10月中旬）景色最为壮观' },
+      { label: '摄影', text: '大部分区域允许拍照，但高峰时段可能限制三角架' },
+      { label: '语音导览', text: '入口处提供多语言语音导览租借' },
+      { label: '穿韩服免票', text: '穿韩服免费入场 — 安国站周边有很多租赁店' },
+    ],
     cta: '查看昌德宫全部建筑 →',
   },
-};
-
-const h = headings[lang] || headings.en;
+}[lang] ?? content.en;
 
 function getBldName(b: typeof buildings[0]) {
   const map: Record<string, string> = { kr: b.nameKr, en: b.nameEn, ja: b.nameJa, zh: b.nameZh };
   return map[lang] || b.nameEn;
 }
 ---
-<GuideLayout title={title} description={description} lang={htmlLang}>
+<GuideLayout title={titles[lang] || titles.en} description={descriptions[lang] || descriptions.en} lang={htmlLang}>
   <style>
     @import '../../styles/global.css';
   </style>
@@ -115,32 +179,32 @@ function getBldName(b: typeof buildings[0]) {
     <BreadcrumbNav items={[{ name: 'Home', url: '/' }, { name: 'Guide', url: '/guide' }, { name: 'Changdeokgung' }]} lang={lang} />
 
     <article class="guide-content">
-      <h1>{h.h1}</h1>
+      <h1>{content.h1}</h1>
       <p class="guide-meta">Updated: June 2026 &middot; Korea Heritage Service official data</p>
 
       <img class="guide-hero-img" src="https://www.heritage.go.kr/gung/gogung2/images/img_changdeok_story_bg_00_00.jpg" alt="Changdeokgung Palace" width="960" height="400" />
 
-      <p class="guide-intro">{h.intro}</p>
+      <p class="guide-intro">{content.intro}</p>
 
-      <h2>{h.h2_1}</h2>
+      <h2>{content.h2_1}</h2>
       <div class="info-box">
-        <p>{h.info_1}</p>
+        <p>{content.info_1}</p>
       </div>
-      <p>The Secret Garden tour is the highlight of any Changdeokgung visit. Reservations open on the Korea Heritage Service website (heritage.go.kr) and sell out extremely fast. We recommend checking availability exactly when new dates are released — typically on the 1st of each month for the following month.</p>
-      <p>The palace ticket alone allows you to explore the main palace buildings without a guide. However, the Secret Garden requires a guided tour and cannot be visited independently.</p>
+      <p>{content.secret_garden_desc}</p>
+      <p>{content.ticket_alone_desc}</p>
 
-      <h2>{h.h2_2}</h2>
+      <h2>{content.h2_2}</h2>
       <div class="info-box">
-        <p>{h.info_2}</p>
+        <p>{content.info_2}</p>
       </div>
-      <p>The Secret Garden tour follows a set route through the 78-acre garden, passing by Buyongji Pond, Juhamnu Pavilion, Ongnyucheon Stream, and the Yeongyeongdang Residence. Each season reveals a different beauty — cherry blossoms in spring, lush greenery in summer, vibrant foliage in autumn, and serene snowscapes in winter.</p>
+      <p>{content.garden_route_desc}</p>
 
-      <h2>{h.h2_3}</h2>
-      <p><strong>Subway:</strong> Seoul Metro Line 3 to Anguk Station (Exit 3) — 5 minute walk, or Line 3 Jongno 3-ga Station (Exit 6) — 8 minute walk.</p>
-      <p><strong>Bus:</strong> Routes 101, 162, 171, 272, 606 stop near Anguk. Walk from Anguk Station Exit 3 toward the palace.</p>
+      <h2>{content.h2_3}</h2>
+      <p><strong>{lang === 'kr' ? '지하철' : lang === 'ja' ? '地下鉄' : lang === 'zh' ? '地铁' : 'Subway'}:</strong> {content.transport_subway}</p>
+      <p><strong>{lang === 'kr' ? '버스' : lang === 'ja' ? 'バス' : lang === 'zh' ? '公交' : 'Bus'}:</strong> {content.transport_bus}</p>
 
-      <h2>{h.h2_4}</h2>
-      <p>{h.buildings_text}</p>
+      <h2>{content.h2_4}</h2>
+      <p>{content.buildings_text}</p>
 
       <div class="building-highlights">
         {buildings.slice(0, 6).map(b => (
@@ -155,19 +219,16 @@ function getBldName(b: typeof buildings[0]) {
       </div>
 
       <div class="cta-box">
-        <a href={`/palace/2?lang=${lang}`}>{h.cta}</a>
+        <a href={`/palace/2?lang=${lang}`}>{content.cta}</a>
       </div>
 
-      <h2>{h.h2_5}</h2>
+      <h2>{content.h2_5}</h2>
       <div class="info-box tip-box">
-        <p><strong>Visitor Tips:</strong></p>
+        <p><strong>{content.visitor_tips_title}:</strong></p>
         <ul>
-          <li>Book Secret Garden tickets at least 1-2 weeks in advance — they sell out within hours</li>
-          <li>Wear comfortable walking shoes — the Secret Garden tour involves 2+ km of walking</li>
-          <li>The palace is beautiful in every season, but autumn (mid-October) offers the most stunning views</li>
-          <li>Photography is allowed in most areas, but tripods may be restricted during peak hours</li>
-          <li>Audio guides are available at the entrance in multiple languages</li>
-          <li>Free admission with hanbok — nearby rental shops are plentiful around Anguk Station</li>
+          {content.tips.map(tip => (
+            <li><strong>{tip.label}:</strong> {tip.text}</li>
+          ))}
         </ul>
       </div>
 
@@ -177,137 +238,27 @@ function getBldName(b: typeof buildings[0]) {
 </GuideLayout>
 
 <style>
-  .guide-content {
-    padding: 80px 0 60px;
-    max-width: 800px;
-    margin: 0 auto;
-  }
-  .guide-content h1 {
-    font-family: 'Noto Serif KR', serif;
-    font-size: clamp(1.8rem, 4vw, 2.6rem);
-    font-weight: 700;
-    margin-bottom: 12px;
-    line-height: 1.3;
-  }
-  .guide-meta {
-    font-size: 0.85rem;
-    color: var(--color-text-muted, #9A8B7F);
-    margin-bottom: 24px;
-  }
-  .guide-hero-img {
-    width: 100%;
-    max-height: 400px;
-    object-fit: cover;
-    border-radius: 16px;
-    margin-bottom: 32px;
-  }
-  .guide-intro {
-    font-size: 1.1rem;
-    line-height: 1.8;
-    margin-bottom: 32px;
-    color: var(--color-text-light, #6B5B4F);
-  }
-  .guide-content h2 {
-    font-family: 'Noto Serif KR', serif;
-    font-size: 1.4rem;
-    font-weight: 700;
-    margin-top: 48px;
-    margin-bottom: 16px;
-    padding-bottom: 10px;
-    border-bottom: 2px solid var(--color-accent, #D4A574);
-  }
-  .guide-content p {
-    font-size: 1rem;
-    line-height: 1.9;
-    margin-bottom: 16px;
-  }
-  .info-box {
-    background: var(--color-card, #fff);
-    border: 1px solid var(--color-border, #E8DDD4);
-    border-radius: 12px;
-    padding: 20px;
-    margin: 16px 0 24px;
-  }
-  html.dark .info-box {
-    background: var(--color-card, #1C1916);
-    border-color: var(--color-border, #2D2720);
-  }
-  .tip-box {
-    border-left: 4px solid var(--color-primary, #C8956C);
-  }
-  .info-box ul {
-    margin-top: 8px;
-    padding-left: 20px;
-  }
-  .info-box li {
-    margin-bottom: 6px;
-    line-height: 1.6;
-    font-size: 0.95rem;
-  }
-  .building-highlights {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 12px;
-    margin: 20px 0 24px;
-  }
-  .building-highlight-card {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 12px;
-    background: var(--color-card, #fff);
-    border: 1px solid var(--color-border, #E8DDD4);
-    border-radius: 10px;
-    text-decoration: none;
-    color: inherit;
-    transition: border-color 0.2s;
-  }
-  html.dark .building-highlight-card {
-    background: var(--color-card, #1C1916);
-    border-color: var(--color-border, #2D2720);
-  }
-  .building-highlight-card:hover {
-    border-color: var(--color-primary, #C8956C);
-  }
-  .building-highlight-card img {
-    width: 80px;
-    height: 56px;
-    object-fit: cover;
-    border-radius: 8px;
-    flex-shrink: 0;
-  }
-  .building-highlight-card h4 {
-    font-size: 0.9rem;
-    font-weight: 600;
-    margin-bottom: 4px;
-    color: var(--color-text, #1A1210);
-  }
-  .building-highlight-card p {
-    font-size: 0.78rem;
-    color: var(--color-text-muted, #9A8B7F);
-    margin: 0;
-    line-height: 1.4;
-  }
-  .cta-box {
-    text-align: center;
-    margin: 32px 0;
-  }
-  .cta-box a {
-    display: inline-block;
-    padding: 14px 32px;
-    background: var(--color-primary, #C8956C);
-    color: #fff;
-    border-radius: 12px;
-    font-weight: 600;
-    font-size: 1rem;
-    text-decoration: none;
-    transition: background 0.3s, transform 0.2s;
-  }
-  .cta-box a:hover {
-    background: var(--color-primary-dark, #8B5E3C);
-    transform: translateY(-2px);
-  }
-  @media (max-width: 640px) {
-    .building-highlights { grid-template-columns: 1fr; }
-  }
+  .guide-content { padding: 80px 0 60px; max-width: 800px; margin: 0 auto; }
+  .guide-content h1 { font-family: 'Noto Serif KR', serif; font-size: clamp(1.8rem, 4vw, 2.6rem); font-weight: 700; margin-bottom: 12px; line-height: 1.3; }
+  .guide-meta { font-size: 0.85rem; color: var(--color-text-muted, #9A8B7F); margin-bottom: 24px; }
+  .guide-hero-img { width: 100%; max-height: 400px; object-fit: cover; border-radius: 16px; margin-bottom: 32px; }
+  .guide-intro { font-size: 1.1rem; line-height: 1.8; margin-bottom: 32px; color: var(--color-text-light, #6B5B4F); }
+  .guide-content h2 { font-family: 'Noto Serif KR', serif; font-size: 1.4rem; font-weight: 700; margin-top: 48px; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 2px solid var(--color-accent, #D4A574); }
+  .guide-content p { font-size: 1rem; line-height: 1.9; margin-bottom: 16px; }
+  .info-box { background: var(--color-card, #fff); border: 1px solid var(--color-border, #E8DDD4); border-radius: 12px; padding: 20px; margin: 16px 0 24px; }
+  html.dark .info-box { background: var(--color-card, #1C1916); border-color: var(--color-border, #2D2720); }
+  .tip-box { border-left: 4px solid var(--color-primary, #C8956C); }
+  .info-box ul { margin-top: 8px; padding-left: 20px; }
+  .info-box li { margin-bottom: 6px; line-height: 1.6; font-size: 0.95rem; }
+  .building-highlights { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; margin: 20px 0 24px; }
+  .building-highlight-card { display: flex; align-items: center; gap: 12px; padding: 12px; background: var(--color-card, #fff); border: 1px solid var(--color-border, #E8DDD4); border-radius: 10px; text-decoration: none; color: inherit; transition: border-color 0.2s; }
+  html.dark .building-highlight-card { background: var(--color-card, #1C1916); border-color: var(--color-border, #2D2720); }
+  .building-highlight-card:hover { border-color: var(--color-primary, #C8956C); }
+  .building-highlight-card img { width: 80px; height: 56px; object-fit: cover; border-radius: 8px; flex-shrink: 0; }
+  .building-highlight-card h4 { font-size: 0.9rem; font-weight: 600; margin-bottom: 4px; color: var(--color-text, #1A1210); }
+  .building-highlight-card p { font-size: 0.78rem; color: var(--color-text-muted, #9A8B7F); margin: 0; line-height: 1.4; }
+  .cta-box { text-align: center; margin: 32px 0; }
+  .cta-box a { display: inline-block; padding: 14px 32px; background: var(--color-primary, #C8956C); color: #fff; border-radius: 12px; font-weight: 600; font-size: 1rem; text-decoration: none; transition: background 0.3s, transform 0.2s; }
+  .cta-box a:hover { background: var(--color-primary-dark, #8B5E3C); transform: translateY(-2px); }
+  @media (max-width: 640px) { .building-highlights { grid-template-columns: 1fr; } }
 </style>

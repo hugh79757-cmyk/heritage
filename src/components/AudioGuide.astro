@@ -56,7 +56,6 @@ const loadingMsg = loadingMsgs[lang] || loadingMsgs.kr;
   data-loading-msg={loadingMsg}
   data-explanation={explanation}
 >
-  <div class="glass-shine"></div>
   <div class="ag-glow"></div>
 
   <div class="ag-header">
@@ -272,14 +271,20 @@ const loadingMsg = loadingMsgs[lang] || loadingMsgs.kr;
       var langMap = { kr: 'ko-KR', en: 'en-US', ja: 'ja-JP', zh: 'zh-CN' };
       var target = langMap[lang] || 'ko-KR';
       for (var i = 0; i < voices.length; i++) {
-        if (voices[i].lang.startsWith(target)) return voices[i];
+        if (voices[i].lang && voices[i].lang.startsWith(target)) return voices[i];
       }
-      return null;
+      // Fallback: any Korean voice, then any voice at all
+      for (var j = 0; j < voices.length; j++) {
+        if (voices[j].lang && voices[j].lang.startsWith('ko')) return voices[j];
+      }
+      return voices[0] || null;
     }
 
     function getLangText(lang) {
-      var map = { kr: 'explanationKr', en: 'explanationEn', ja: 'explanationJa', zh: 'explanationZh' };
-      return rawExplanation[map[lang]] || '';
+      // Support both { kr, en, ja, zh } and { explanationKr, ... } shapes
+      var text = rawExplanation[lang] || rawExplanation['explanation' + lang.charAt(0).toUpperCase() + lang.slice(1)] || '';
+      // Remove \r\n line breaks that hurt TTS flow
+      return text.replace(/[\r\n]+/g, ' ').trim();
     }
 
     function startTTS(lang) {
@@ -373,6 +378,7 @@ const loadingMsg = loadingMsgs[lang] || loadingMsgs.kr;
       // Fallback to TTS if explanation text exists
       var text = getLangText(lang);
       if (text) {
+        console.warn('[AudioGuide] No narration audio for asno=' + asno + ' lang=' + lang + ' — falling back to TTS');
         ttsBtn.hidden = false;
         showState('empty');
       } else {
@@ -521,19 +527,17 @@ const loadingMsg = loadingMsgs[lang] || loadingMsgs.kr;
   .audio-guide {
     position: relative;
     overflow: hidden;
-    background: var(--bg-glass);
-    backdrop-filter: blur(20px) saturate(1.4);
-    -webkit-backdrop-filter: blur(20px) saturate(1.4);
-    border: 1px solid var(--bg-glass-border);
+    background: var(--color-card);
+    border: 1px solid var(--color-border);
     border-radius: var(--radius);
-    box-shadow: var(--shadow-glass);
+    box-shadow: var(--shadow-sm);
     padding: 24px;
     transition: border-color var(--transition), box-shadow var(--transition);
   }
 
   .audio-guide:hover {
-    border-color: rgba(255, 215, 0, 0.2);
-    box-shadow: var(--shadow-lg), var(--glow-gold);
+    border-color: var(--color-primary);
+    box-shadow: var(--shadow-md);
   }
 
   .ag-glow {
@@ -543,7 +547,7 @@ const loadingMsg = loadingMsgs[lang] || loadingMsgs.kr;
     width: 200px;
     height: 200px;
     border-radius: 50%;
-    background: radial-gradient(circle, rgba(255, 215, 0, 0.06) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(168, 208, 230, 0.12) 0%, transparent 70%);
     pointer-events: none;
     z-index: 0;
   }
@@ -618,21 +622,21 @@ const loadingMsg = loadingMsgs[lang] || loadingMsgs.kr;
     height: 56px;
     border-radius: 50%;
     border: none;
-    background: linear-gradient(135deg, var(--dancheong-yellow), var(--neon-gold));
-    color: var(--dancheong-black);
+    background: var(--color-primary);
+    color: var(--color-text);
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: transform var(--transition-bounce), box-shadow var(--transition);
-    box-shadow: 0 0 20px rgba(255, 215, 0, 0.25);
+    transition: transform var(--transition), box-shadow var(--transition);
+    box-shadow: var(--shadow-sm);
     -webkit-tap-highlight-color: transparent;
     position: relative;
   }
 
   .ag-play-btn:hover {
     transform: scale(1.08);
-    box-shadow: 0 0 30px rgba(255, 215, 0, 0.4);
+    box-shadow: var(--shadow-md);
   }
 
   .ag-play-btn:active {
@@ -640,7 +644,7 @@ const loadingMsg = loadingMsgs[lang] || loadingMsgs.kr;
   }
 
   .ag-play-btn:focus-visible {
-    outline: 2px solid var(--neon-gold);
+    outline: 2px solid var(--color-primary);
     outline-offset: 3px;
   }
 
@@ -660,7 +664,7 @@ const loadingMsg = loadingMsgs[lang] || loadingMsgs.kr;
     position: relative;
     width: 100%;
     height: 6px;
-    background: rgba(255, 215, 0, 0.1);
+    background: var(--color-border-light);
     border-radius: 3px;
     cursor: pointer;
     touch-action: none;
@@ -675,7 +679,7 @@ const loadingMsg = loadingMsgs[lang] || loadingMsgs.kr;
     top: 0;
     left: 0;
     height: 100%;
-    background: linear-gradient(90deg, var(--dancheong-yellow), var(--neon-gold));
+    background: var(--color-primary);
     border-radius: 3px;
     width: 0%;
     transition: width 0.1s linear;
@@ -688,8 +692,8 @@ const loadingMsg = loadingMsgs[lang] || loadingMsgs.kr;
     width: 14px;
     height: 14px;
     border-radius: 50%;
-    background: var(--neon-gold);
-    box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+    background: var(--color-primary);
+    box-shadow: var(--shadow-sm);
     transform: translate(-50%, -50%);
     left: 0%;
     pointer-events: none;
@@ -743,9 +747,9 @@ const loadingMsg = loadingMsgs[lang] || loadingMsgs.kr;
     margin-top: 12px;
     padding: 8px 20px;
     border-radius: 24px;
-    border: 1px solid var(--neon-blue);
-    background: rgba(0, 200, 255, 0.08);
-    color: var(--neon-blue);
+    border: 1px solid var(--color-primary);
+    background: transparent;
+    color: var(--color-primary);
     font-family: 'Pretendard', sans-serif;
     font-size: 0.85rem;
     font-weight: 600;
@@ -755,8 +759,9 @@ const loadingMsg = loadingMsgs[lang] || loadingMsgs.kr;
   }
 
   .ag-tts-btn:hover {
-    background: rgba(0, 200, 255, 0.15);
-    box-shadow: 0 0 16px rgba(0, 200, 255, 0.2);
+    background: var(--color-primary);
+    color: var(--color-text);
+    box-shadow: var(--shadow-sm);
   }
 
   .ag-tts-btn:active {
@@ -790,19 +795,19 @@ const loadingMsg = loadingMsgs[lang] || loadingMsgs.kr;
   }
 
   .ag-lang-btn:hover {
-    border-color: rgba(255, 215, 0, 0.3);
-    color: var(--color-text-light);
+    border-color: var(--color-primary);
+    color: var(--color-text);
   }
 
   .ag-lang-btn.active {
-    border-color: var(--neon-gold);
-    color: var(--neon-gold);
-    background: rgba(255, 215, 0, 0.08);
-    box-shadow: 0 0 12px rgba(255, 215, 0, 0.15);
+    border-color: var(--color-primary);
+    color: var(--color-text);
+    background: var(--color-primary);
+    box-shadow: var(--shadow-sm);
   }
 
   .ag-lang-btn:focus-visible {
-    outline: 2px solid var(--neon-gold);
+    outline: 2px solid var(--color-primary);
     outline-offset: 2px;
   }
 

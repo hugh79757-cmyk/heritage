@@ -1,0 +1,354 @@
+---
+import GuideLayout from '../../components/GuideLayout.astro';
+import BreadcrumbNav from '../../components/BreadcrumbNav.astro';
+import FAQSection from '../../components/FAQSection.astro';
+import '../../styles/global.css';
+import { getLang } from '../../lib/api';
+
+const lang = getLang(Astro.url);
+const htmlLang = lang === 'kr' ? 'ko' : lang;
+
+const titles: Record<string, string> = {
+  kr: '단청 완전 가이드 2026 — K-Heritage',
+  en: 'Dancheong Traditional Painting Complete Guide 2026 | K-Heritage',
+  ja: '丹青 完全ガイド 2026 — K-Heritage',
+  zh: '丹青完全指南 2026 — K-Heritage',
+};
+const descriptions: Record<string, string> = {
+  kr: '단청의 의미, 오방색, 문양 종류, 궁궐별 특징, 복원 기법까지 — 한국 전통 건축 색채의 모든 것',
+  en: 'Complete guide to dancheong: five traditional colors, patterns, palace-specific styles, and modern restoration techniques.',
+  ja: '丹青の意味、五方色、文様の種類、宮殿ごとの特徴、修復技法 — 韓国伝統建築色彩のすべて',
+  zh: '丹青完全指南：五色、纹样、各宫殿特色及修复技法——韩国传统建筑色彩的一切',
+};
+
+const content = {
+  kr: {
+    h1: '단청 완전 가이드 2026',
+    intro: '단청(丹靑)은 한국 전통 건축물의 목재에 색칠하여 보호하고 장식하는 기법이다. 철거된 건물의 목재를 수백 년간 보존할 뿐만 아니라, 조선 왕실 건축의 아름다움을 상징하는 핵심 요소로 자리한다.',
+    h2_1: '단청이란?',
+    h2_2: '오방색 (五方色)',
+    h2_3: '단청 문양',
+    h2_4: '궁궐별 단청',
+    h2_5: '단청 복원',
+    definition: '단청은 "붉은(丹)"과 "푸른(靑)"이란 글자에서 유래했으며, 한자 그대로 붉은색과 청색을 중심으로 한 전통 건축 색채 체계를 말한다. 주로 사찰, 궁궐, 능침, 무덤 등의 건축물에 적용된다.',
+    purpose: '단청의 첫 번째 목적은 목재 보호이다. 천연 안료와 아교(풀)를 혼합하여 도포하면 목재의 습기와 곰팡이를 차단하고, 해충의 침입을 예방한다. 두 번째 목적은 장식과 상징이다. 건물의 등급과 용도에 따라 색상과 문양이 달라지며, 주택·관아·궁궐·사찰로 갈수록 화려해진다.',
+    apply_steps: '단청 도포는 크게 세 단계로 진행된다. ① 바탕칠(基底) — 목재 표면에 백색 안료를 바르고, ② 밑그림(下地) — 기본 문양을 그린 뒤, ③ 본채색(本彩) — 오방색으로 본격적으로 색을 입힌다. 최종적으로 아교 처리를 하여 색채를 보호한다.',
+    colors_title: '오방색은 동양 사상에서 유래한 다섯 가지 기본 색상으로, 각각의 방위·원소·상징을 가진다.',
+    blue: '청색(靑色) — 동쪽, 봄, 나무(木).生命的 탄생과 성장을 상징한다.',
+    red: '적색(赤色) — 남쪽, 여름, 불(火). 열정과 보호를 상징한다.',
+    yellow: '황색(黃色) — 중앙, 땅, 토(土). 중심과 안정을 상징한다.',
+    white: '백색(白色) — 서쪽, 가을, 쇠(金). 순수와 결실을 상징한다.',
+    black: '흑색(黑色) — 북쪽, 겨울, 물(水). 깊이와 겸손을 상징한다.',
+    colors_note: '궁궐 단청에서는 적색과 청색이 가장 넓게 사용되며, 황색은 중앙과 골격에, 백색은 배경과 테두리에, 흑색은 윤곽과 음영에 쓰인다.',
+    patterns_intro: '단청 문양은 자연에서 모티브를 따와 기하학적으로 변환한 것이다. 건물의 크기와 용도에 따라 단순한 것부터 매우 화려한 것까지 다양하다.',
+    pattern_lotus: '연문(蓮文) — 연꽃을 본뜬 문양으로, 가장 흔히 사용된다. 부처의 깨달음과 순수함을 상징하며, 사찰 기둥과 처마에 자주 등장한다.',
+    pattern_cloud: '운문(雲文) — 구름을 본뜬 문양으로, 신령스러움과 영원함을 상징한다. 사찰 천장과 벽면에 널리 쓰인다.',
+    pattern_flower: '꽃문(花文) — 국화, 모란, 벚꽃 등의 꽃을 본뜬 문양으로, 풍요와 아름다움을 상징한다. 궁궐 건물의 처마와 문짝에 주로 사용된다.',
+    pattern_geometric: '기하학 문양 — 당초문(唐草文), 뇌문(雷文), 이수문(螭首文) 등 기하학적으로 반복되는 패턴으로, 건물의 등급과 위계를 나타내는 데 사용된다.',
+    palace_intro: '궁궐마다 주요 색상의 비율과 문양 스타일이 다르다. 이는 건물의 용도와 왕실의 위계를 반영한다.',
+    gyeongbok: '경복궁(景福宮) — 청색과 적색의 균형이 가장 조화롭다. 건물마다 채도가 다르게 적용되어 웅장하면서도 세련된 느낌을 준다.',
+    changdeok: '창덕궁(昌德宮) — 적색 비중이 높아 따뜻하고 화려한 인상. 후원(後苑) 건물들은 자연과 어우러지는 연한 색조가 특징이다.',
+    gyeonghui: '경희궁(慶熙宮) — 청백색 계열이 강세. 소박하고 차분한 분위기로, 학문과 예절을 중시하던 궁궐의 성격을 보여준다.',
+    changgyeong: '창경궁(昌慶宮) — 황색과 적색이 조화를 이룸. 왕실 생활 공간답게 따뜻하고 부드러운 색감이 특징이다.',
+    deoksugung: '덕수궁(德壽宮) — 서양식 건축과 혼합되어 단청의 비율이 상대적으로 적다. 석조전(石造殿)은 단청 없이 서양식 석재 외관을 유지한다.',
+    restoration_intro: '현대의 단청 복원은 전통 기법을 존중하면서 과학적 분석을 병행한다.',
+    restoration_analysis: '과학적 분석 — 복원 전 건물의 기존 안료를 채취하여 X선 형광분석(XRF) 등으로 성분을 분석한다. 이를 통해 원래 사용된 천연 안료의 조합을 재현한다.',
+    restoration_materials: '천연 안료 사용 — 전통 단청은 진사(진주빛 적색), 군자청(남색), 연청(연한 청색), 황토(황색), 백토(백색) 등의 광물성 안료를 사용한다. 합성 안료는 수명이 짧아 복원 시 피한다.',
+    restoration_process: '복원 절차 — ① 세척(기존 도색 제거) → ② 목재 수리(부패 부분 교체) → ③ 바탕칠 → ④ 밑그림 → ⑤ 본채색 → ⑥ 아교 마감. 전체 과정은 건물 규모에 따라 수개월에서 수년이 소요된다.',
+    restoration_challenge: '최근 도전 — 기후 변화로 인해 안료의 열화 속도가 빨라지고 있으며, 도시 공해로 인한 오염도 문제이다. 국립문화재연구소에서는 내구성이 강화된 전통 안료 개발을 진행 중이다.',
+    tip: '궁궐 방문 시 처마와 기둥 위의 단청 문양을 가까이에서 관찰해보세요. 같은 문양이라도 건물의 등급에 따라 크기와 색상이 달라지는 것을 확인할 수 있습니다.',
+    additional_tips: [
+      '단청의 색상은 보는 각도와 빛에 따라 다르게 보인다',
+      '사찰 단청은 궁궐보다 문양이 더 화려한 경우가 많다',
+      '한복 대여점에서 단청 색상의 한복도 대여 가능',
+      '국립문화재연구소에서 단청 체험 프로그램 운영',
+      '단청은 건물의 등급에 따라 문양 복잡도가 달라진다',
+    ],
+  },
+  en: {
+    h1: 'Dancheong Traditional Painting Complete Guide 2026',
+    intro: 'Dancheong (丹靑) is the traditional Korean technique of painting wooden structures to protect and decorate them. It preserves timber for centuries and symbolizes the beauty of Joseon royal architecture.',
+    h2_1: 'What is Dancheong?',
+    h2_2: 'Five Colors (五方色)',
+    h2_3: 'Dancheong Patterns',
+    h2_4: 'Palace-Specific Dancheong',
+    h2_5: 'Restoration Techniques',
+    definition: 'Dancheong derives from the characters "red" (丹) and "blue/green" (靑). It refers to the traditional architectural color system centered on red and blue hues, applied to temples, palaces, royal tombs, and other structures.',
+    purpose: 'The primary purpose is wood protection. A mixture of natural pigments and animal glue seals timber against moisture, mold, and insects. The secondary purpose is decoration and symbolism. Colors and patterns vary by building grade, becoming increasingly elaborate from houses to palaces and temples.',
+    apply_steps: 'Dancheong application involves three stages: ① Base coat — white pigment applied to the wood surface, ② Underdrawing — basic patterns sketched, ③ Main coloring — five colors applied in full. A final animal-glue treatment protects the pigments.',
+    colors_title: 'The five traditional colors (obangsaek) originate from Eastern philosophy, each associated with a cardinal direction, element, and symbolism.',
+    blue: 'Blue (靑) — East, Spring, Wood. Symbolizes birth and growth.',
+    red: 'Red (赤) — South, Summer, Fire. Symbolizes passion and protection.',
+    yellow: 'Yellow (黃) — Center, Earth, Soil. Symbolizes centrality and stability.',
+    white: 'White (白) — West, Autumn, Metal. Symbolizes purity and harvest.',
+    black: 'Black (黑) — North, Winter, Water. Symbolizes depth and humility.',
+    colors_note: 'In palace dancheong, red and blue dominate. Yellow accents the center and structural elements, white serves as background and borders, and black defines outlines and shadows.',
+    patterns_intro: 'Dancheong patterns are derived from nature and transformed into geometric designs. They range from simple to highly elaborate depending on the building\'s size and function.',
+    pattern_lotus: 'Lotus pattern (蓮文) — The most commonly used motif, symbolizing the Buddha\'s enlightenment and purity. Frequently seen on temple pillars and eaves.',
+    pattern_cloud: 'Cloud pattern (雲文) — Symbolizing divinity and eternity. Widely used on temple ceilings and walls.',
+    pattern_flower: 'Flower pattern (花文) — Chrysanthemum, peony, and cherry blossom motifs symbolizing abundance and beauty. Primarily found on palace eaves and doors.',
+    pattern_geometric: 'Geometric patterns — Tangchao (唐草), thunder (雷), and dragon-head (螭首) patterns that indicate the building\'s grade and hierarchy.',
+    palace_intro: 'Each palace has distinct proportions of primary colors and pattern styles, reflecting the building\'s function and royal hierarchy.',
+    gyeongbok: 'Gyeongbokgung — The most balanced use of blue and red. Different saturation levels create a grand yet refined impression.',
+    changdeok: 'Changdeokgung — Higher proportion of red, giving a warm and vibrant appearance. Rear garden buildings feature softer tones that blend with nature.',
+    gyeonghui: 'Gyeonghuigung — Dominated by blue-white tones. A sober and calm atmosphere reflecting the palace\'s emphasis on scholarship and etiquette.',
+    changgyeong: 'Changgyeonggung — Harmonious blend of yellow and red. Warm, soft coloring befitting a royal living space.',
+    deoksugung: 'Deoksugung — Mixed with Western architecture, dancheong is proportionally less prominent. Seokjojeon maintains a stone exterior without dancheong.',
+    restoration_intro: 'Modern dancheong restoration respects traditional techniques while incorporating scientific analysis.',
+    restoration_analysis: 'Scientific analysis — Pigments from existing layers are sampled and analyzed via X-ray fluorescence (XRF) to reconstruct original natural pigment compositions.',
+    restoration_materials: 'Natural pigments — Traditional dancheong uses mineral pigments such as jinssa (pearl red), gunjacheong (indigo), yeoncheong (light blue), hwangto (yellow earth), and baekto (white earth). Synthetic pigments are avoided due to shorter lifespan.',
+    restoration_process: 'Restoration steps — ① Cleaning (removing old paint) → ② Timber repair (replacing rotted sections) → ③ Base coat → ④ Underdrawing → ⑤ Main coloring → ⑥ Animal-glue finish. The full process takes months to years depending on building size.',
+    restoration_challenge: 'Recent challenges — Climate change accelerates pigment degradation, and urban pollution poses additional problems. The National Research Institute of Cultural Heritage is developing more durable traditional pigments.',
+    tip: 'When visiting palaces, observe the dancheong patterns on eaves and pillars up close. You\'ll notice that the same patterns vary in size and color intensity depending on the building\'s grade.',
+    additional_tips: [
+      'Dancheong colors appear different depending on viewing angle and lighting',
+      'Temple dancheong is often more elaborate than palace dancheong',
+      'Hanbok rental shops offer dancheong-colored hanbok',
+      'National Research Institute of Cultural Heritage offers dancheong experience programs',
+      'Pattern complexity varies with the building\'s official grade',
+    ],
+  },
+  ja: {
+    h1: '丹青 完全ガイド 2026',
+    intro: '丹青（たんせい）は韓国伝統建築の木部に彩色して保護・装飾する技法である。木材を数百年保存するとともに、朝鮮王室建築の美を象徴する要素である。',
+    h2_1: '丹青とは？',
+    h2_2: '五方色',
+    h2_3: '丹青文様',
+    h2_4: '宮殿ごとの丹青',
+    h2_5: '修復技法',
+    definition: '丹青は「赤い（丹）」と「青い（靑）」の文字に由来し、赤色と青色を中心にした伝統建築色彩体系を指す。主に寺院、宮殿、陵墓などの建築物に適用される。',
+    purpose: '第一の目的は木材保護である。天然顔料と動物膠（にかわ）を混合して塗布すると、木材の湿気やカビを防ぎ、害虫の侵入を予防する。第二の目的は装飾と象徴である。建物の格や用途によって色や文様が変わり、民家から官衙・宮殿・寺院へ進むほど華やかになる。',
+    apply_steps: '丹青の塗布は大きく三段階で行われる。① 下地塗り（白色顔料を塗布）、② 下絵（基本文様を描く）、③ 本彩色（五方色で本格的に色を乗せる）。最終的に動物膠処理で色彩を保護する。',
+    colors_title: '五方色は東洋思想から派生した五つの基本色で、それぞれの方角・元素・象徴を持つ。',
+    blue: '青色 — 東、春、木。生命の誕生と成長を象徴。',
+    red: '赤色 — 南、夏、火。情熱と保護を象徴。',
+    yellow: '黄色 — 中央、土、土。中心と安定を象徴。',
+    white: '白色 — 西、秋、金。純粋と実りを象徴。',
+    black: '黒色 — 北、冬、水。深さと謙遜を象徴。',
+    colors_note: '宮殿丹青では赤色と青色が最も広く使用され、黄色は中央と骨格に、白色は背景と枠に、黒色は輪郭と陰影に使われる。',
+    patterns_intro: '丹青文様は自然からモチーフをとって幾何学的に変換したものである。建物の大きさと用途によってシンプルなものから非常に華やかなものまで多様である。',
+    pattern_lotus: '蓮文 — 蓮の花を模した文様で、最もよく使われる。仏陀の悟りと純粋を象徴し、寺院の柱や軒先に頻繁に登場する。',
+    pattern_cloud: '雲文 — 雲を模した文様で、神秘性と永遠を象徴する。寺院の天井や壁面に広く使われる。',
+    pattern_flower: '花文 — 菊、牡丹、桜などの花を模した文様で、豊かさと美しさを象徴する。宮殿の軒先や扉に主に使用される。',
+    pattern_geometric: '幾何学文様 — 唐草文、雷文、螭首文など幾何学的に繰り返されるパターンで、建物の格と位階を示すために使用される。',
+    palace_intro: '宮殿ごとに主色の比率と文様スタイルが異なる。これは建物の用途と王室の位階を反映している。',
+    gyeongbok: '景福宮 — 青色と赤色の均衡が最も調和している。建物ごとに彩度が異なり、堂々としつつも洗練された印象を与える。',
+    changdeok: '昌徳宮 — 赤色の比率が高く、温かく華やかな印象。後苑の建物は自然と調和する淡い色調が特徴である。',
+    gyeonghui: '慶熙宮 — 青白色系が優勢。素朴で落ち着いた雰囲気で、学問と礼節を重んじた宮殿の性格を示す。',
+    changgyeong: '昌慶宮 — 黄色と赤色が調和。王室生活の場らしく温かく柔らかい色合いが特徴である。',
+    deoksugung: '徳寿宮 — 洋式建築と混合され、丹青の比率が相対的に少ない。石造殿は丹青なしで洋式石材の外観を保っている。',
+    restoration_intro: '現代の丹青修復は伝統技法を尊重しながら科学的分析を並行する。',
+    restoration_analysis: '科学的分析 — 修復前に既存の顔料をサンプリングし、X線蛍光分析（XRF）等で成分を分析する。これにより元の天然顔料の配合を再現する。',
+    restoration_materials: '天然顔料の使用 — 伝統丹青は辰砂（真珠光赤色）、群青青（藍色）、煙青（淡青色）、黄土（黄色）、白土（白色）などの鉱物性顔料を使用する。合成顔料は寿命が短く、修復では避ける。',
+    restoration_process: '修復手順 — ① 洗浄（既存塗装除去）→ ② 木材修繕（腐敗部分の交換）→ ③ 下地塗り → ④ 下絵 → ⑤ 本彩色 → ⑥ 動物膠仕上げ。全体の工程は建物の規模により数ヶ月から数年かかる。',
+    restoration_challenge: '最近の課題 — 気候変動により顔料の劣化速度が速まり、都市汚染も問題となっている。国立文化財研究所では耐久性を強化した伝統顔料の開発を進める。',
+    tip: '宮殿訪問時は軒先と柱の上の丹青文様を近くで観察してみよう。同じ文様でも建物の格によって大きさと色の濃さが異なることが確認できる。',
+    additional_tips: [
+      '丹青の色は見る角度と光によって違って見える',
+      '寺院の丹青は宮殿よりも文様が華やかなことが多い',
+      '韓服レンタル店で丹青色の韓服もレンタル可能',
+      '国立文化財研究所で丹青体験プログラムを実施',
+      '建物の格によって文様の複雑さが異なる',
+    ],
+  },
+  zh: {
+    h1: '丹青完全指南 2026',
+    intro: '丹青是韩国传统建筑木材上涂色以保护和装饰的技法。它可保护木材数百年，并象征朝鲜王室建筑之美。',
+    h2_1: '什么是丹青？',
+    h2_2: '五方色',
+    h2_3: '丹青纹样',
+    h2_4: '各宫殿丹青',
+    h2_5: '修复技法',
+    definition: '丹青源自"丹(红)"和"青(蓝)"二字，指以红色和青色为中心的传统建筑色彩体系。主要应用于寺庙、宫殿、陵墓等建筑。',
+    purpose: '首要目的是木材保护。天然颜料与动物胶混合涂布后，可阻隔木材湿气和霉菌，预防害虫侵入。第二目的是装饰和象征。颜色和纹样随建筑等级变化，从民居到宫殿和寺庙越来越华丽。',
+    apply_steps: '丹青涂布大致分三个阶段：① 底漆（在木材表面涂白色颜料），② 底稿（绘制基本纹样），③ 本彩（用五方色正式上色）。最后进行动物胶处理以保护色彩。',
+    colors_title: '五方色源自东方思想，五种基本颜色各有方位、元素和象征。',
+    blue: '青色——东方，春天，木。象征生命的诞生和成长。',
+    red: '赤色——南方，夏天，火。象征热情和保护。',
+    yellow: '黄色——中央，土。象征中心和稳定。',
+    white: '白色——西方，秋天，金。象征纯净和收获。',
+    black: '黑色——北方，冬天，水。象征深度和谦逊。',
+    colors_note: '宫殿丹青中赤色和青色使用最广，黄色用于中央和骨架，白色用于背景和边框，黑色用于轮廓和阴影。',
+    patterns_intro: '丹青纹样取自自然并转化为几何图案。根据建筑大小和功能，从简朴到华丽各不相同。',
+    pattern_lotus: '莲纹——最常用的图案，象征佛陀的觉悟和纯洁。常见于寺庙柱子和屋檐。',
+    pattern_cloud: '云纹——象征神秘和永恒。广泛用于寺庙天花板和墙壁。',
+    pattern_flower: '花纹——菊花、牡丹、樱花等花卉图案，象征丰饶和美丽。主要用于宫殿屋檐和门扇。',
+    pattern_geometric: '几何纹样——唐草纹、雷纹、螭首纹等几何重复图案，用于表示建筑的等级和位阶。',
+    palace_intro: '各宫殿的主要颜色比例和纹样风格不同，反映建筑用途和王室位阶。',
+    gyeongbok: '景福宫——青色和赤色最为均衡。各建筑饱和度不同，既庄严又精致。',
+    changdeok: '昌德宫——赤色比例较高，给人温暖华丽的印象。后苑建筑以淡雅色调与自然融合。',
+    gyeonghui: '庆熙宫——青白色系为主。朴素沉静的氛围体现重视学问和礼节的宫殿性格。',
+    changgyeong: '昌庆宫——黄色和赤色和谐搭配。作为王室生活空间，色彩温暖柔和。',
+    deoksugung: '德寿宫——与西洋建筑混合，丹青比例相对较少。石造殿保持石材外观无丹青。',
+    restoration_intro: '现代丹青修复在尊重传统技法的同时结合科学分析。',
+    restoration_analysis: '科学分析——修复前取样现有颜料，通过X射线荧光光谱（XRF）等分析成分，据此再现原始天然颜料配方。',
+    restoration_materials: '天然颜料使用——传统丹青使用辰砂（珍珠光红色）、群青青（蓝色）、烟青（淡蓝色）、黄土（黄色）、白土（白色）等矿物颜料。合成颜料寿命短，修复时避免使用。',
+    restoration_process: '修复步骤——① 清洗（去除旧涂装）→ ② 木材修缮（更换腐朽部分）→ ③ 底漆 → ④ 底稿 → ⑤ 本彩 → ⑥ 动物胶收尾。全过程根据建筑规模需数月至数年。',
+    restoration_challenge: '近期挑战——气候变化加速颜料劣化，城市污染也构成问题。国立文化财研究所正在开发更具耐久性的传统颜料。',
+    tip: '参观宫殿时，近距离观察屋檐和柱子上的丹青纹样。即使同一纹样，根据建筑等级大小和颜色深浅也不同。',
+    additional_tips: [
+      '丹青颜色因观看角度和光线不同而有差异',
+      '寺庙丹青往往比宫殿更为华丽',
+      '韩服租赁店提供丹青色韩服',
+      '国立文化财研究所提供丹青体验项目',
+      '建筑等级不同纹样复杂度也不同',
+    ],
+  },
+} as const;
+
+const faqByLang: Record<string, { question: string; answer: string }[]> = {
+  kr: [
+    { question: '단청의 주된 목적은?', answer: '목재 보호와 장식 두 가지이다. 천연 안료와 아교를 섞어 도포하면 습기·곰팡이·해충으로부터 목재를 보호하고, 건물의 등급과 용도에 따라 화려한 색채를 입혀 장식한다.' },
+    { question: '오방색이란?', answer: '청(동쪽·봄·목), 적(남쪽·여름·화), 황(중앙·땅·토), 백(서쪽·가을·금), 흑(북쪽·겨울·수)의 다섯 가지 기본 색상으로, 각각 방위·원소·상징을 가진다.' },
+    { question: '궁궐마다 단청이 다른 이유는?', answer: '건물의 용도와 왕실의 위계를 반영한다. 경복궁은 청·적 균형, 창덕궁은 적색 강세, 경희궁은 청백색 계열 등 궁궐마다 색상 비율과 문양 스타일이 다르다.' },
+    { question: '단청은 얼마나 오래 지속되는가?', answer: '제대로 시공된 단청은 20~30년 정도 지속되며, 이후 재도색이 필요하다. 기후 변화와 도시 공해로 인해 열화 속도가 빨라지고 있어 정기적인 관리가 중요하다.' },
+    { question: '단청 복원에 사용되는 안료는?', answer: '진사(진주빛 적색), 군자청(남색), 연청(연한 청색), 황토(황색), 백토(백색) 등의 광물성 천연 안료를 사용한다. 합성 안료는 수명이 짧아 복원에서는 피한다.' },
+  ],
+  en: [
+    { question: 'What is the main purpose of dancheong?', answer: 'Wood protection and decoration. A mixture of natural pigments and animal glue protects timber from moisture, mold, and insects, while elaborate colors and patterns decorate buildings according to their grade.' },
+    { question: 'What are the five traditional colors?', answer: 'Blue (East, Spring, Wood), Red (South, Summer, Fire), Yellow (Center, Earth), White (West, Autumn, Metal), and Black (North, Winter, Water) — each with directional, elemental, and symbolic meaning.' },
+    { question: 'Why does each palace have different dancheong?', answer: 'Colors reflect the building\'s function and royal hierarchy. Gyeongbokgung balances blue and red, Changdeokgung emphasizes red, and Gyeonghuigung favors blue-white tones.' },
+    { question: 'How long does dancheong last?', answer: 'Properly applied dancheong lasts 20–30 years before repainting is needed. Climate change and urban pollution accelerate degradation, making regular maintenance important.' },
+    { question: 'What pigments are used in restoration?', answer: 'Mineral natural pigments: jinssa (pearl red), gunjacheong (indigo), yeoncheong (light blue), hwangto (yellow earth), and baekto (white earth). Synthetic pigments are avoided due to shorter lifespan.' },
+  ],
+  ja: [
+    { question: '丹青の主な目的は？', answer: '木材保護と装飾の二つである。天然顔料と動物膠を混合して塗布すると湿気・カビ・害虫から木材を保護し、建物の格に応じて華やかな色彩を施す。' },
+    { question: '五方色とは？', answer: '青（東・春・木）、赤（南・夏・火）、黄（中央・土）、白（西・秋・金）、黒（北・冬・水）の五つの基本色で、それぞれ方角・元素・象徴を持つ。' },
+    { question: '宮殿ごとに丹青が異なる理由は？', answer: '建物の用途と王室の位階を反映する。景福宮は青・赤の均衡、昌徳宮は赤色優勢、慶熙宮は青白色系など、宮殿ごとに色の比率と文様スタイルが異なる。' },
+    { question: '丹青はどれくらい持つのか？', answer: '適切に施工された丹青は20〜30年程度持つ。その後、再塗装が必要である。気候変動と都市汚染で劣化が早まり、定期的な管理が重要である。' },
+    { question: '修復に使われる顔料は？', answer: '辰砂（真珠光赤色）、群青青（藍色）、煙青（淡青色）、黄土（黄色）、白土（白色）などの鉱物性天然顔料を使用する。合成顔料は寿命が短く修復では避ける。' },
+  ],
+  zh: [
+    { question: '丹青的主要目的是什么？', answer: '木材保护和装饰。天然颜料与动物胶混合涂布后，保护木材免受湿气、霉菌和害虫侵害，并根据建筑等级施以华丽色彩装饰。' },
+    { question: '五方色是什么？', answer: '青（东·春·木）、赤（南·夏·火）、黄（中央·土）、白（西·秋·金）、黑（北·冬·水）五种基本颜色，各有方位、元素和象征意义。' },
+    { question: '各宫殿丹青不同的原因？', answer: '反映建筑用途和王室位阶。景福宫青赤均衡，昌德宫赤色居多，庆熙宫以青白色为主。' },
+    { question: '丹青能持续多久？', answer: '正确施工的丹青可维持20-30年，之后需要重新涂装。气候变化和城市污染加速劣化，定期维护很重要。' },
+    { question: '修复使用什么颜料？', answer: '辰砂（珍珠光红色）、群青青（蓝色）、烟青（淡蓝色）、黄土（黄色）、白土（白色）等矿物天然颜料。合成颜料寿命短，修复时避免使用。' },
+  ],
+};
+
+const faqItems = faqByLang[lang] || faqByLang.en;
+---
+<GuideLayout title={titles[lang]} description={descriptions[lang]} lang={htmlLang}>
+  <style>@import '../../styles/global.css';</style>
+
+  <div class="container">
+    <BreadcrumbNav items={[{ name: 'Home', url: '/' }, { name: 'Guide', url: '/guide' }, { name: 'Dancheong' }]} lang={lang} />
+
+    <article class="guide-content">
+      <h1>{content[lang].h1}</h1>
+      <p class="guide-meta">Updated: June 2026 &middot; Korea Heritage Service official data</p>
+
+      <img class="guide-hero-img" src="https://www.heritage.go.kr/gung/gogung1/images/ic-e21.jpg" alt="Dancheong traditional Korean painting on palace architecture" width="960" height="400" />
+
+      <p class="guide-intro">{content[lang].intro}</p>
+
+      <h2>{content[lang].h2_1}</h2>
+      <p>{content[lang].definition}</p>
+      <p>{content[lang].purpose}</p>
+      <div class="info-box tip-box">
+        <p><strong>{lang === 'kr' ? '도포 과정' : lang === 'ja' ? '塗布過程' : lang === 'zh' ? '涂布过程' : 'Application Process'}:</strong></p>
+        <p>{content[lang].apply_steps}</p>
+      </div>
+
+      <h2>{content[lang].h2_2}</h2>
+      <p>{content[lang].colors_title}</p>
+
+      <div class="info-box">
+        <p><strong>{lang === 'kr' ? '청색(靑)' : lang === 'ja' ? '青色' : lang === 'zh' ? '青色' : 'Blue (靑)'}:</strong> {content[lang].blue}</p>
+        <p><strong>{lang === 'kr' ? '적색(赤)' : lang === 'ja' ? '赤色' : lang === 'zh' ? '赤色' : 'Red (赤)'}:</strong> {content[lang].red}</p>
+        <p><strong>{lang === 'kr' ? '황색(黃)' : lang === 'ja' ? '黄色' : lang === 'zh' ? '黄色' : 'Yellow (黃)'}:</strong> {content[lang].yellow}</p>
+        <p><strong>{lang === 'kr' ? '백색(白)' : lang === 'ja' ? '白色' : lang === 'zh' ? '白色' : 'White (白)'}:</strong> {content[lang].white}</p>
+        <p><strong>{lang === 'kr' ? '흑색(黑)' : lang === 'ja' ? '黒色' : lang === 'zh' ? '黑色' : 'Black (黑)'}:</strong> {content[lang].black}</p>
+      </div>
+      <p>{content[lang].colors_note}</p>
+
+      <div style="margin:2rem 0;text-align:center;">
+        <ins class="adsbygoogle" style="display:block;text-align:center" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5938862195544185" data-ad-slot="4797390169"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+      </div>
+
+      <h2>{content[lang].h2_3}</h2>
+      <p>{content[lang].patterns_intro}</p>
+
+      <div class="info-box">
+        <p><strong>{lang === 'kr' ? '연문(蓮文)' : lang === 'ja' ? '蓮文' : lang === 'zh' ? '莲纹' : 'Lotus Pattern (蓮文)'}:</strong> {content[lang].pattern_lotus}</p>
+        <p><strong>{lang === 'kr' ? '운문(雲文)' : lang === 'ja' ? '雲文' : lang === 'zh' ? '云纹' : 'Cloud Pattern (雲文)'}:</strong> {content[lang].pattern_cloud}</p>
+        <p><strong>{lang === 'kr' ? '꽃문(花文)' : lang === 'ja' ? '花文' : lang === 'zh' ? '花纹' : 'Flower Pattern (花文)'}:</strong> {content[lang].pattern_flower}</p>
+        <p><strong>{lang === 'kr' ? '기하학 문양' : lang === 'ja' ? '幾何学文様' : lang === 'zh' ? '几何纹样' : 'Geometric Patterns'}:</strong> {content[lang].pattern_geometric}</p>
+      </div>
+
+      <h2>{content[lang].h2_4}</h2>
+      <p>{content[lang].palace_intro}</p>
+
+      <div class="palace-dancheong-grid">
+        <div class="palace-dancheong-card">
+          <h4>{lang === 'kr' ? '경복궁' : lang === 'ja' ? '景福宮' : lang === 'zh' ? '景福宫' : 'Gyeongbokgung'}</h4>
+          <p>{content[lang].gyeongbok}</p>
+        </div>
+        <div class="palace-dancheong-card">
+          <h4>{lang === 'kr' ? '창덕궁' : lang === 'ja' ? '昌徳宮' : lang === 'zh' ? '昌德宫' : 'Changdeokgung'}</h4>
+          <p>{content[lang].changdeok}</p>
+        </div>
+        <div class="palace-dancheong-card">
+          <h4>{lang === 'kr' ? '경희궁' : lang === 'ja' ? '慶熙宮' : lang === 'zh' ? '庆熙宫' : 'Gyeonghuigung'}</h4>
+          <p>{content[lang].gyeonghui}</p>
+        </div>
+        <div class="palace-dancheong-card">
+          <h4>{lang === 'kr' ? '창경궁' : lang === 'ja' ? '昌慶宮' : lang === 'zh' ? '昌庆宫' : 'Changgyeonggung'}</h4>
+          <p>{content[lang].changgyeong}</p>
+        </div>
+        <div class="palace-dancheong-card">
+          <h4>{lang === 'kr' ? '덕수궁' : lang === 'ja' ? '徳寿宮' : lang === 'zh' ? '德寿宫' : 'Deoksugung'}</h4>
+          <p>{content[lang].deoksugung}</p>
+        </div>
+      </div>
+
+      <h2>{content[lang].h2_5}</h2>
+      <p>{content[lang].restoration_intro}</p>
+
+      <div class="info-box">
+        <p><strong>{lang === 'kr' ? '과학적 분석' : lang === 'ja' ? '科学的分析' : lang === 'zh' ? '科学分析' : 'Scientific Analysis'}:</strong> {content[lang].restoration_analysis}</p>
+        <p><strong>{lang === 'kr' ? '천연 안료 사용' : lang === 'ja' ? '天然顔料使用' : lang === 'zh' ? '天然颜料使用' : 'Natural Pigments'}:</strong> {content[lang].restoration_materials}</p>
+        <p><strong>{lang === 'kr' ? '복원 절차' : lang === 'ja' ? '修復手順' : lang === 'zh' ? '修复步骤' : 'Restoration Steps'}:</strong> {content[lang].restoration_process}</p>
+        <p><strong>{lang === 'kr' ? '최근 도전' : lang === 'ja' ? '最近の課題' : lang === 'zh' ? '近期挑战' : 'Recent Challenges'}:</strong> {content[lang].restoration_challenge}</p>
+      </div>
+
+      <div class="info-box tip-box">
+        <p><strong>{content[lang].tip}</strong></p>
+      </div>
+
+      <div class="info-box tip-box">
+        <p><strong>{lang === 'kr' ? '추가 팁' : lang === 'ja' ? '追加ヒント' : lang === 'zh' ? '更多贴士' : 'Additional Tips'}:</strong></p>
+        <ul>
+          {content[lang].additional_tips.map(tip => <li>{tip}</li>)}
+        </ul>
+      </div>
+
+      <FAQSection items={faqByLang} lang={lang} />
+    </article>
+  </div>
+</GuideLayout>
+
+<style>
+  .guide-content { padding: 80px 0 60px; max-width: 800px; margin: 0 auto; }
+  .guide-content h1 { font-family: 'Noto Serif KR', serif; font-size: clamp(1.8rem, 4vw, 2.6rem); font-weight: 700; margin-bottom: 12px; line-height: 1.3; }
+  .guide-meta { font-size: 0.85rem; color: var(--color-text-muted, #9A8B7F); margin-bottom: 24px; }
+  .guide-hero-img { width: 100%; max-height: 400px; object-fit: cover; border-radius: 16px; margin-bottom: 32px; }
+  .guide-intro { font-size: 1.1rem; line-height: 1.8; margin-bottom: 32px; color: var(--color-text-light, #6B5B4F); }
+  .guide-content h2 { font-family: 'Noto Serif KR', serif; font-size: 1.4rem; font-weight: 700; margin-top: 48px; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 2px solid var(--color-accent, #D4A574); }
+  .guide-content p { font-size: 1rem; line-height: 1.9; margin-bottom: 16px; }
+  .info-box { background: var(--color-card, #fff); border: 1px solid var(--color-border, #E8DDD4); border-radius: 12px; padding: 20px; margin: 16px 0 24px; }
+  html.dark .info-box { background: var(--color-card, #1C1916); border-color: var(--color-border, #2D2720); }
+  .tip-box { border-left: 4px solid var(--color-primary, #C8956C); }
+  .info-box p { margin-bottom: 10px; }
+  .info-box p:last-child { margin-bottom: 0; }
+  .info-box ul { margin-top: 8px; padding-left: 20px; }
+  .info-box li { margin-bottom: 6px; line-height: 1.6; font-size: 0.95rem; }
+  .palace-dancheong-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; margin: 20px 0 24px; }
+  .palace-dancheong-card { padding: 16px; background: var(--color-card, #fff); border: 1px solid var(--color-border, #E8DDD4); border-radius: 10px; }
+  html.dark .palace-dancheong-card { background: var(--color-card, #1C1916); border-color: var(--color-border, #2D2720); }
+  .palace-dancheong-card h4 { font-size: 0.95rem; font-weight: 600; margin-bottom: 8px; color: var(--color-text, #1A1210); }
+  .palace-dancheong-card p { font-size: 0.85rem; color: var(--color-text-muted, #9A8B7F); margin: 0; line-height: 1.5; }
+  @media (max-width: 640px) { .palace-dancheong-grid { grid-template-columns: 1fr; } }
+</style>

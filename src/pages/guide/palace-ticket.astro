@@ -8,8 +8,19 @@ import { getLang } from '../../lib/api';
 const lang = getLang(Astro.url);
 const htmlLang = lang === 'kr' ? 'ko' : lang;
 
-const title = 'Seoul Palace Integrated Ticket Guide 2026 | K-Heritage';
-const description = 'Complete guide to Seoul palace integrated ticket (궁궐 통합관람권): price, where to buy, which palaces are included, validity period, and money-saving tips for 2026.';
+const title = {
+  kr: '궁궐 통합관람권 완전 가이드 2026 | K-Heritage',
+  en: 'Seoul Palace Integrated Ticket Guide 2026 | K-Heritage',
+  ja: 'ソウル宮殿統合観覧券ガイド 2026 | K-Heritage',
+  zh: '首尔宫殿综合门票指南 2026 | K-Heritage',
+}[lang] ?? 'Seoul Palace Integrated Ticket Guide 2026 | K-Heritage';
+
+const description = {
+  kr: '궁궐 통합관람권 가격, 구매 방법, 포함 궁궐, 유효기간, 가성비 분석까지 2026년 완전 가이드.',
+  en: 'Complete guide to Seoul palace integrated ticket (궁궐 통합관람권): price, where to buy, which palaces are included, validity period, and money-saving tips for 2026.',
+  ja: 'ソウル宮殿統合観覧券の完全ガイド：料金、購入場所、含まれる宮殿、有効期間、節約ヒント 2026年版。',
+  zh: '首尔宫殿综合门票完全指南：价格、购买地点、包含宫殿、有效期及省钱攻略 2026版。',
+}[lang] ?? '';
 
 const faqByLang: Record<string, { question: string; answer: string }[]> = {
   kr: [
@@ -20,26 +31,29 @@ const faqByLang: Record<string, { question: string; answer: string }[]> = {
     { question: '비원도 포함되나요?', answer: '아니요, 창덕궁 비원은 별도 추가 요금(₩5,000)이 있습니다.' },
   ],
   en: [
-  { question: 'How much is the palace integrated ticket?', answer: 'Adults: ₩10,000. Youth (7–18): ₩5,000. Valid for one full year from the date of purchase. Children under 7 and seniors 65+ are free at all palaces regardless of ticket type.' },
-  { question: 'Which palaces does the integrated ticket cover?', answer: 'The integrated ticket covers all five major palaces (Gyeongbokgung, Changdeokgung, Changgyeonggung, Deoksugung, Gyeonghuigung) and Jongmyo Shrine — 6 sites in total. Gyeonghuigung is a smaller palace often missed by tourists.' },
-  { question: 'Where can I buy the integrated ticket?', answer: 'Available at the entrance of any of the covered palaces. You can also purchase individual tickets at each palace. The integrated ticket is not sold online — you must buy it in person.' },
-  { question: 'Is the integrated ticket worth it?', answer: 'If you plan to visit 4 or more palaces, the integrated ticket saves money. Individual tickets total ₩13,000+ for all palaces. The integrated ticket at ₩10,000 covers everything plus one year of re-entry.' },
-  { question: 'Does the integrated ticket include the Secret Garden?', answer: 'No, the Secret Garden at Changdeokgung requires a separate additional fee (₩5,000 adults). The integrated ticket only covers the main palace areas.' },
+    { question: 'How much is the palace integrated ticket?', answer: 'Adults: ₩10,000. Youth (7–18): ₩5,000. Valid for one full year from the date of purchase. Children under 7 and seniors 65+ are free at all palaces regardless of ticket type.' },
+    { question: 'Which palaces does the integrated ticket cover?', answer: 'The integrated ticket covers all five major palaces (Gyeongbokgung, Changdeokgung, Changgyeonggung, Deoksugung, Gyeonghuigung) and Jongmyo Shrine — 6 sites in total. Gyeonghuigung is a smaller palace often missed by tourists.' },
+    { question: 'Where can I buy the integrated ticket?', answer: 'Available at the entrance of any of the covered palaces. You can also purchase individual tickets at each palace. The integrated ticket is not sold online — you must buy it in person.' },
+    { question: 'Is the integrated ticket worth it?', answer: 'If you plan to visit 4 or more palaces, the integrated ticket saves money. Individual tickets total ₩13,000+ for all palaces. The integrated ticket at ₩10,000 covers everything plus one year of re-entry.' },
+    { question: 'Does the integrated ticket include the Secret Garden?', answer: 'No, the Secret Garden at Changdeokgung requires a separate additional fee (₩5,000 adults). The integrated ticket only covers the main palace areas.' },
+  ],
+  ja: [
+    { question: '宮殿統合観覧券の料金は？', answer: '大人₩10,000、青少年（7〜18歳）₩5,000。購入日から1年間有効。7歳未満・65歳以上は無料。' },
+    { question: 'どの宮殿が含まれていますか？', answer: '5大宮殿（景福宮、昌徳宮、昌慶宮、徳寿宮、慶熙宮）+ 宗廟 — 合計6箇所。' },
+    { question: 'どこで購入できますか？', answer: '各宮殿の入口にある窓口で購入。オンライン販売はなし。現地での購入必須。' },
+    { question: 'コストパフォーマンスは？', answer: '4箇所以上 visiting ならお得。個別購入では₩13,000以上。統合観覧券は₩10,000で1年間の再入場も可能。' },
+    { question: '秘苑も含まれますか？', answer: 'いいえ、昌徳宮の秘苑は別途追加料金（大人₩5,000）が必要です。統合観覧券は宮殿の主要エリアのみ対象。' },
+  ],
+  zh: [
+    { question: '宫殿综合门票价格？', answer: '成人₩10,000，青少年（7-18岁）₩5,000。自购买之日起一年内有效。7岁以下及65岁以上免费。' },
+    { question: '包含哪些宫殿？', answer: '五大宫殿（景福宫、昌德宫、昌庆宫、德寿宫、庆熙宫）+ 宗庙 — 共6处。' },
+    { question: '在哪里购买？', answer: '在任意宫殿入口处购买。不提供在线销售，必须现场购买。' },
+    { question: '性价比如何？', answer: '如果计划参观4处以上，综合门票更划算。单独购买全部宫殿门票需₩13,000以上。综合门票₩10,000覆盖全部且一年内可重复入场。' },
+    { question: '包含秘苑吗？', answer: '不包含。昌德宫秘苑需额外付费（成人₩5,000）。综合门票仅覆盖宫殿主要区域。' },
   ],
 };
-const faqItems = faqByLang[lang] || faqByLang.en;
 
-const h: Record<string, any> = {
-  en: {
-    h1: 'Seoul Palace Integrated Ticket Guide 2026',
-    intro: 'The Seoul Palace Integrated Ticket (궁궐 통합관람권) is a money-saving pass that grants access to all five major Joseon dynasty palaces and Jongmyo Shrine for one full year. If you\'re planning to explore Seoul\'s royal heritage beyond a single palace, this ticket offers exceptional value.',
-    h2_1: 'Price & Validity',
-    h2_2: 'What\'s Included',
-    h2_3: 'Where to Buy',
-    h2_4: 'Is It Worth It? — Cost Comparison',
-    h2_5: 'Tips for Using the Integrated Ticket',
-    cta: 'Start exploring palaces →',
-  },
+const content = {
   kr: {
     h1: '궁궐 통합관람권 완전 가이드 2026',
     intro: '궁궐 통합관람권은 조선왕조 5대 궁궐과 종묘를 1년간 무제한 관람할 수 있는 할인 입장권입니다. 여러 궁궐을 방문할 계획이라면 탁월한 가성비를 제공합니다.',
@@ -48,7 +62,41 @@ const h: Record<string, any> = {
     h2_3: '구매 장소',
     h2_4: '가성비 분석 — 개별 구매 대비',
     h2_5: '활용 팁',
+    price: '<strong>성인:</strong> ₩10,000 (~$7.50)<br/><strong>청소년(7~18세):</strong> ₩5,000 (~$3.75)<br/><strong>7세 이하:</strong> 무료 (별도 티켓 불필요)<br/><strong>65세 이상:</strong> 무료<br/><strong>유효기간:</strong> 구매일로부터 1년<br/><strong>재입장:</strong> 유효기간 내 무제한',
+    included: '<strong>경복궁</strong> — 조선 왕조의 법궁<br/><strong>창덕궁</strong> — UNESCO 세계유산<br/><strong>창경궁</strong> — 왕비의 거처<br/><strong>덕수궁</strong> — 근대와 전통의 조화<br/><strong>경희궁</strong> — 서쪽 궁궐<br/><strong>종묘</strong> — 왕실 사당',
+    not_included: '<strong>미포함:</strong> 창덕궁 비원(₩5,000 추가), 국립궁중박물관(무료), 국립민속박물관(무료).',
+    buy: '각 궁궐 입구 매표소에서 <strong>"통합관람권"</strong>을 요청하세요. 실물 카드형 티켓으로, 1년간 재입장 시 지참해야 합니다.',
+    cost: '<strong>개별 구매 (6개소):</strong><br/>경복궁 ₩3,000 + 창덕궁 ₩3,000 + 창경궁 ₩3,000 + 덕수궁 ₩1,000 + 경희궁 ₩1,000 + 종묘 ₩1,000 = <strong>₩12,000</strong><br/><br/><strong>통합관람권:</strong> <strong>₩10,000</strong> — ₩2,000 절약 + 1년 무제한 재입장<br/><br/><strong>결론:</strong> 3곳 이상 방문 시 이득. 계절별 재방문이나 사진 촬영을 위한 다수 관람에 탁월한 가성비.',
+    tips: [
+      '경복궁(가장 인기)부터 시작해 오후 혼잡을 다른 궁궐로 분산',
+      '재입장 가능 — 같은 궁궐을 시간대별로 방문',
+      '지리적으로 묶기: 경복궁 → 창덕궁 → 창경궁 (도보 이동 가능)',
+      '덕수궁 야간 개방(밤 9시) 포함 — 주간·야간 2회 방문 가능',
+      '실물 카드 보관 — 1년간 패스로 활용',
+    ],
     cta: '궁궐 둘러보기 →',
+  },
+  en: {
+    h1: 'Seoul Palace Integrated Ticket Guide 2026',
+    intro: 'The Seoul Palace Integrated Ticket (궁럴 통합관람권) is a money-saving pass that grants access to all five major Joseon dynasty palaces and Jongmyo Shrine for one full year. If you\'re planning to explore Seoul\'s royal heritage beyond a single palace, this ticket offers exceptional value.',
+    h2_1: 'Price & Validity',
+    h2_2: "What's Included",
+    h2_3: 'Where to Buy',
+    h2_4: 'Is It Worth It? — Cost Comparison',
+    h2_5: 'Tips for Using the Integrated Ticket',
+    price: '<strong>Adults:</strong> ₩10,000 (~$7.50 USD)<br/><strong>Youth (7–18):</strong> ₩5,000 (~$3.75 USD)<br/><strong>Children under 7:</strong> Free (no ticket needed)<br/><strong>Seniors 65+:</strong> Free<br/><strong>Validity:</strong> One full year from date of purchase<br/><strong>Re-entry:</strong> Unlimited during validity period',
+    included: '<strong>Gyeongbokgung</strong> — Primary royal palace<br/><strong>Changdeokgung</strong> — UNESCO World Heritage<br/><strong>Changgyeonggung</strong> — Residential palace<br/><strong>Deoksugung</strong> — Modern + traditional<br/><strong>Gyeonghuigung</strong> — Western palace<br/><strong>Jongmyo Shrine</strong> — Royal ancestral shrine',
+    not_included: '<strong>Not included:</strong> Changdeokgung Secret Garden (additional ₩5,000), National Palace Museum (free), National Folk Museum (free).',
+    buy: 'Purchase the integrated ticket at <strong>the entrance of any covered palace</strong>. Simply ask for "통합관람권" (tonghap gwallam-gwon) at the ticket counter. The ticket is a physical card — keep it safe for re-entry throughout the year.',
+    cost: '<strong>Individual tickets (all 6 sites):</strong><br/>Gyeongbokgung ₩3,000 + Changdeokgung ₩3,000 + Changgyeonggung ₩3,000 + Deoksugung ₩1,000 + Gyeonghuigung ₩1,000 + Jongmyo ₩1,000 = <strong>₩12,000</strong><br/><br/><strong>Integrated ticket:</strong> <strong>₩10,000</strong> — save ₩2,000 + get unlimited re-entry for a year.<br/><br/><strong>Verdict:</strong> Worth it if visiting 3+ palaces. Excellent value for repeat visitors and photographers who want multiple visits across seasons.',
+    tips: [
+      'Start at Gyeongbokgung (most popular) to avoid afternoon crowds at other palaces',
+      'The ticket is valid for re-entry — visit the same palace at different times of day',
+      'Combine palaces by geography: Gyeongbokgung → Changdeokgung → Changgyeonggung (all within walking distance)',
+      "Deoksugung's evening hours (until 9 PM) are included — visit twice: day and night",
+      "Keep the ticket card — it's your pass for the entire year",
+    ],
+    cta: 'Start exploring palaces →',
   },
   ja: {
     h1: 'ソウル宮殿統合観覧券ガイド 2026',
@@ -58,6 +106,18 @@ const h: Record<string, any> = {
     h2_3: '購入場所',
     h2_4: 'コストパフォーマンス分析',
     h2_5: '活用ヒント',
+    price: '<strong>大人:</strong> ₩10,000 (~$7.50)<br/><strong>青少年(7〜18歳):</strong> ₩5,000 (~$3.75)<br/><strong>7歳未満:</strong> 無料（チケット不要）<br/><strong>65歳以上:</strong> 無料<br/><strong>有効期間:</strong> 購入日から1年間<br/><strong>再入場:</strong> 有効期間内無制限',
+    included: '<strong>景福宮</strong> — 朝鮮王朝の正宮<br/><strong>昌徳宮</strong> — UNESCO世界遺産<br/><strong>昌慶宮</strong> — 王妃の住居<br/><strong>徳寿宮</strong> — 近代と伝統の融合<br/><strong>慶熙宮</strong> — 西側の宮殿<br/><strong>宗廟</strong> — 王室の祠堂',
+    not_included: '<strong>未含:</strong> 昌徳宮秘苑（追加₩5,000）、国立宮中博物館（無料）、国立民俗博物館（無料）。',
+    buy: '各宮殿の入口にある窓口で<strong>「統合観覧券」</strong>を依頼してください。実物カード型チケットで、1年間再入場時に持参必須。',
+    cost: '<strong>個別購入（6箇所）:</strong><br/>景福宮 ₩3,000 + 昌徳宮 ₩3,000 + 昌慶宮 ₩3,000 + 徳寿宮 ₩1,000 + 慶熙宮 ₩1,000 + 宗廟 ₩1,000 = <strong>₩12,000</strong><br/><br/><strong>統合観覧券:</strong> <strong>₩10,000</strong> — ₩2,000の節約 + 1年間無制限再入場<br/><br/><strong>結論:</strong> 3箇所以上visiting ならお得。季節ごとの再訪や写真撮影に最適なコストパフォーマンス。',
+    tips: [
+      '最も人気の景福宮から始めて、午後の混雑を他の宮殿に分散',
+      '再入場可能 — 同じ宮殿を時間帯を変えて訪問',
+      '地理的にまとめる：景福宮 → 昌徳宮 → 昌慶宮（徒歩圏内）',
+      '徳寿宮の夜間営業（夜9時まで）も対象 — 昼と夜の2回訪問',
+      '実物カードを保管 — 1年間パスとして使用',
+    ],
     cta: '宮殿を見る →',
   },
   zh: {
@@ -68,65 +128,61 @@ const h: Record<string, any> = {
     h2_3: '购买地点',
     h2_4: '性价比分析',
     h2_5: '使用贴士',
+    price: '<strong>成人:</strong> ₩10,000 (~$7.50)<br/><strong>青少年(7~18岁):</strong> ₩5,000 (~$3.75)<br/><strong>7岁以下:</strong> 免费（无需门票）<br/><strong>65岁以上:</strong> 免费<br/><strong>有效期:</strong> 自购买之日起一年<br/><strong>重复入场:</strong> 有效期内不限次数',
+    included: '<strong>景福宫</strong> — 朝鲜王朝正宫<br/><strong>昌德宫</strong> — UNESCO世界遗产<br/><strong>昌庆宫</strong> — 王妃居所<br/><strong>德寿宫</strong> — 近代与传统的融合<br/><strong>庆熙宫</strong> — 西侧宫殿<br/><strong>宗庙</strong> — 王室祠堂',
+    not_included: '<strong>未含:</strong> 昌德宫秘苑（另加₩5,000）、国立宫中博物馆（免费）、国立民俗博物馆（免费）。',
+    buy: '在任意宫殿入口处购买<strong>「综合门票」</strong>。在售票处出示即可。实体卡式门票，一年内重复入场需随身携带。',
+    cost: '<strong>单独购买（6处）:</strong><br/>景福宫 ₩3,000 + 昌德宫 ₩3,000 + 昌庆宫 ₩3,000 + 德寿宫 ₩1,000 + 庆熙宫 ₩1,000 + 宗庙 ₩1,000 = <strong>₩12,000</strong><br/><br/><strong>综合门票:</strong> <strong>₩10,000</strong> — 节省₩2,000 + 一年内无限次重复入场<br/><br/><strong>结论:</strong> 参观3处以上即划算。适合多次回访或跨季节摄影的游客，性价比极高。',
+    tips: [
+      '从景福宫（最热门）开始，将下午人流分散到其他宫殿',
+      '可重复入场 — 同一宫殿可在不同时间段再次参观',
+      '地理路线串联：景福宫 → 昌德宫 → 昌庆宫（步行可达）',
+      '德寿宫夜间开放（至晚9点）也适用 — 可白天晚上各来一次',
+      '保管好实体卡 — 它是你一年的通行证',
+    ],
     cta: '开始游览宫殿 →',
   },
+}[lang] ?? {
+  h1: 'Seoul Palace Integrated Ticket Guide 2026',
+  intro: '',
+  h2_1: 'Price & Validity',
+  h2_2: "What's Included",
+  h2_3: 'Where to Buy',
+  h2_4: 'Is It Worth It?',
+  h2_5: 'Tips',
+  price: '', included: '', not_included: '', buy: '', cost: '', tips: [], cta: '',
 };
-
-const t = h[lang] || h.en;
 ---
 <GuideLayout title={title} description={description} lang={htmlLang}>
   <style>@import '../../styles/global.css';</style>
   <div class="container">
     <BreadcrumbNav items={[{ name: 'Home', url: '/' }, { name: 'Guide', url: '/guide' }, { name: 'Palace Ticket' }]} lang={lang} />
     <article class="guide-content">
-      <h1>{t.h1}</h1>
+      <h1>{content.h1}</h1>
       <p class="guide-meta">Updated: June 2026 &middot; Korea Heritage Service official data</p>
-      <p class="guide-intro">{t.intro}</p>
+      <p class="guide-intro">{content.intro}</p>
 
-      <h2>{t.h2_1}</h2>
-      <div class="info-box">
-        <p><strong>Adults:</strong> ₩10,000 (~$7.50 USD)<br/>
-        <strong>Youth (7–18):</strong> ₩5,000 (~$3.75 USD)<br/>
-        <strong>Children under 7:</strong> Free (no ticket needed)<br/>
-        <strong>Seniors 65+:</strong> Free (no ticket needed)<br/>
-        <strong>Validity:</strong> One full year from date of purchase<br/>
-        <strong>Re-entry:</strong> Unlimited during validity period</p>
-      </div>
+      <h2>{content.h2_1}</h2>
+      <div class="info-box" set:html={content.price} />
 
-      <h2>{t.h2_2}</h2>
-      <div class="palace-grid">
-        <div class="palace-item"><strong>Gyeongbokgung</strong> — Primary royal palace</div>
-        <div class="palace-item"><strong>Changdeokgung</strong> — UNESCO World Heritage</div>
-        <div class="palace-item"><strong>Changgyeonggung</strong> — Residential palace</div>
-        <div class="palace-item"><strong>Deoksugung</strong> — Modern + traditional</div>
-        <div class="palace-item"><strong>Gyeonghuigung</strong> — Western palace</div>
-        <div class="palace-item"><strong>Jongmyo Shrine</strong> — Royal ancestral shrine</div>
-      </div>
-      <p><strong>Not included:</strong> Changdeokgung Secret Garden (additional ₩5,000), National Palace Museum (free), National Folk Museum (free).</p>
+      <h2>{content.h2_2}</h2>
+      <div class="palace-grid" set:html={content.included} />
+      <p set:html={content.not_included} />
 
-      <h2>{t.h2_3}</h2>
-      <p>Purchase the integrated ticket at <strong>the entrance of any covered palace</strong>. Simply ask for "통합관람권" (tonghap gwallam-gwon) at the ticket counter. The ticket is a physical card — keep it safe for re-entry throughout the year.</p>
+      <h2>{content.h2_3}</h2>
+      <p set:html={content.buy} />
 
-      <h2>{t.h2_4}</h2>
-      <div class="info-box">
-        <p><strong>Individual tickets (all 6 sites):</strong><br/>
-        Gyeongbokgung ₩3,000 + Changdeokgung ₩3,000 + Changgyeonggung ₩3,000 + Deoksugung ₩1,000 + Gyeonghuigung ₩1,000 + Jongmyo ₩1,000 = <strong>₩12,000</strong></p>
-        <p><strong>Integrated ticket:</strong> <strong>₩10,000</strong> — save ₩2,000 + get unlimited re-entry for a year.</p>
-        <p><strong>Verdict:</strong> Worth it if visiting 3+ palaces. Excellent value for repeat visitors and photographers who want multiple visits across seasons.</p>
-      </div>
+      <h2>{content.h2_4}</h2>
+      <div class="info-box" set:html={content.cost} />
 
-      <h2>{t.h2_5}</h2>
+      <h2>{content.h2_5}</h2>
       <div class="info-box tip-box">
         <ul>
-          <li>Start at Gyeongbokgung (most popular) to avoid afternoon crowds at other palaces</li>
-          <li>The ticket is valid for re-entry — visit the same palace at different times of day</li>
-          <li>Combine palaces by geography: Gyeongbokgung → Changdeokgung → Changgyeonggung (all within walking distance)</li>
-          <li>Deoksugung's evening hours (until 9 PM) are included — visit twice: day and night</li>
-          <li>Keep the ticket card — it's your pass for the entire year</li>
+          {content.tips.map(tip => <li>{tip}</li>)}
         </ul>
       </div>
 
-      <div class="cta-box"><a href={`/?lang=${lang}`}>{t.cta}</a></div>
+      <div class="cta-box"><a href={`/?lang=${lang}`}>{content.cta}</a></div>
 
       <FAQSection items={faqByLang} lang={lang} />
     </article>
@@ -140,6 +196,7 @@ const t = h[lang] || h.en;
   .guide-intro{font-size:1.1rem;line-height:1.8;margin-bottom:32px;color:var(--color-text-light,#6B5B4F)}
   .guide-content h2{font-family:'Noto Serif KR',serif;font-size:1.4rem;font-weight:700;margin-top:48px;margin-bottom:16px;padding-bottom:10px;border-bottom:2px solid var(--color-accent,#D4A574)}
   .guide-content p{font-size:1rem;line-height:1.9;margin-bottom:16px}
+  .guide-content ul{margin:12px 0 20px;padding-left:24px}.guide-content li{margin-bottom:8px;line-height:1.7;font-size:0.95rem}
   .info-box{background:var(--color-card,#fff);border:1px solid var(--color-border,#E8DDD4);border-radius:12px;padding:20px;margin:16px 0 24px}
   html.dark .info-box{background:var(--color-card,#1C1916);border-color:var(--color-border,#2D2720)}
   .tip-box{border-left:4px solid var(--color-primary,#C8956C)}

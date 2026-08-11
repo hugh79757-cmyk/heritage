@@ -10,7 +10,12 @@
   },
   "dependencies": {
     "@astrojs/cloudflare": "^12.6.12",
+    "@huggingface/inference": "^4.13.23",
     "astro": "^5.17.1",
     "dotenv-expand": "^13.0.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.62.1",
+    "playwright": "^1.62.1"
   }
 }

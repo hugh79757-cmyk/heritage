@@ -1,0 +1,295 @@
+---
+import GuideLayout from '../../components/GuideLayout.astro';
+import BreadcrumbNav from '../../components/BreadcrumbNav.astro';
+import FAQSection from '../../components/FAQSection.astro';
+import '../../styles/global.css';
+import { getLang } from '../../lib/api';
+
+const lang = getLang(Astro.url);
+const htmlLang = lang === 'kr' ? 'ko' : lang;
+
+const titles: Record<string, string> = {
+  kr: '궁궐 용어 사전 — K-Heritage',
+  en: 'Palace Glossary — K-Heritage',
+  ja: '宮殿用語辞典 — K-Heritage',
+  zh: '宫殿术语词典 — K-Heritage',
+};
+const descriptions: Record<string, string> = {
+  kr: '한국 궁궐 관람에 필요한 핵심 용어 25선 — 건축, 문화유산, 관람 정보',
+  en: '25 essential Korean palace terms — architecture, heritage concepts, and visitor information.',
+  ja: '韓国宮殿観光に必要な主要用語25選 — 建築、文化遺産、観光情報',
+  zh: '韩国宫殿旅游必备术语25条——建筑、文化遗产、游客信息',
+};
+
+const glossaryTerms: {
+  kr: string; en: string; ja: string; zh: string;
+  definition_kr: string; definition_en: string; definition_ja: string; definition_zh: string;
+}[] = [
+  {
+    kr: '궁궐', en: 'Palace', ja: '宮殿', zh: '宫殿',
+    definition_kr: '왕과 왕비가 거주하며 정치를 행하던 공간. 서울 5대 궁궐(경복궁·창덕궁·창경궁·덕수궁·경희궁)이 대표적.',
+    definition_en: 'The residence and seat of power for the king and queen. Seoul\'s Five Grand Palaces (Gyeongbokgung, Changdeokgung, Changgyeonggung, Deoksugung, Gyeonghuigung) are the most notable.',
+    definition_ja: '王と王妃が居住し政治を行った空間。ソウル5大宮殿（景福宮·昌徳宮·昌慶宮·徳寿宮·慶熙宮）が代表的。',
+    definition_zh: '国王和王后居住并行使权力的空间。首尔五大宫殿（景福宫、昌德宫、昌庆宫、德寿宫、庆熙宫）为代表。',
+  },
+  {
+    kr: '전각', en: 'Throne Hall', ja: '正殿', zh: '正殿',
+    definition_kr: '왕이 국사를 처리하던 주요 건물. 경복궁의 근정전, 창덕궁의 인정전 등이 대표적.',
+    definition_en: 'The main hall where the king conducted state affairs. Geunjeongjeon at Gyeongbokgung and Injeongjeon at Changdeokgung are prime examples.',
+    definition_ja: '王が国政を執務した主要建物。景福宮の勤政殿、昌徳宮の仁政殿などが代表的。',
+    definition_zh: '国王处理国事的主要建筑。景福宫的勤政殿、昌德宫的仁政殿等为代表。',
+  },
+  {
+    kr: '행랑', en: 'Servant Quarters', ja: '行廊', zh: '行廊',
+    definition_kr: '궁궐 내 관리·하인들이 근무하던 건물. 일반적으로 전각을 둘러싼 연결된 건물군을 가리킨다.',
+    definition_en: 'Buildings within the palace where officials and servants worked. Usually refers to the connected building complexes surrounding the throne halls.',
+    definition_ja: '宮殿内で官吏・従者が勤務した建物。通常、正殿を取り囲む連結建築群を指す。',
+    definition_zh: '宫殿内官员和仆人工作的建筑。通常指围绕正殿的连体建筑群。',
+  },
+  {
+    kr: '문', en: 'Gate', ja: '門', zh: '门',
+    definition_kr: '궁궐의 출입구 겸 방어 시설. 경복궁 광화문은 정문으로, 가장 화려한 문이다.',
+    definition_en: 'Entrance and defensive structure of a palace. Gwanghwamun at Gyeongbokgung is the main gate, the most ornate of all.',
+    definition_ja: '宮殿の出入り口兼防衛施設。景福宮の光化門は正門で最も華やかな門。',
+    definition_zh: '宫殿的出入口兼防御设施。景福宫光化门是正门，最为华丽。',
+  },
+  {
+    kr: '누각', en: 'Pavilion', ja: '楼閣', zh: '楼阁',
+    definition_kr: '높은 기둥으로 세운 2층 이상의 건축물. 경회루는 연못 위에 세워진 대표적 누각이다.',
+    definition_en: 'A multi-story structure raised on tall pillars. Gyeonghoeru is the iconic pavilion built over a lotus pond at Gyeongbokgung.',
+    definition_ja: '高い柱で支えられた2階建て以上の建築物。慶會樓は蓮池の上に建てられた代表的な楼閣。',
+    definition_zh: '以高柱支撑的两层以上建筑。庆会楼是建于莲池之上的代表性楼阁。',
+  },
+  {
+    kr: '정', en: 'Pavilion (small)', ja: '亭', zh: '亭',
+    definition_kr: '누각보다 작은 정자 형태의 건축물. 향원정은 경복궁 후원의 연못 위 육각정이다.',
+    definition_en: 'A small pavilion-style structure. Hyangwonjeong is the hexagonal pavilion on a pond in the rear garden of Gyeongbokgung.',
+    definition_ja: '楼閣より小さな亭様式の建築物。香遠亭は景福宮後苑の蓮池の上の六角亭。',
+    definition_zh: '比楼阁小的亭子式建筑。香远亭是景福宫后苑莲池上的六角亭。',
+  },
+  {
+    kr: '담', en: 'Wall', ja: '塀', zh: '墙',
+    definition_kr: '궁궐의 경계와 방어를 위한 축조물. 기와를 얹은 전돌담이 대표적이며, 궁궐의 미적 요소이기도 하다.',
+    definition_en: 'A boundary and defensive structure for the palace. Traditional brick walls topped with roof tiles are characteristic and also serve as aesthetic elements.',
+    definition_ja: '宮殿の境界と防衛のための築造物。瓦を乗せた伝統的な塀が代表的で美的要素でもある。',
+    definition_zh: '宫殿的边界和防御构筑物。铺瓦的传统砖墙为代表，同时也是宫殿的美学元素。',
+  },
+  {
+    kr: '경복궁', en: 'Gyeongbokgung', ja: '景福宮', zh: '景福宫',
+    definition_kr: '1395년 건립된 조선왕조의 법궁. 서울 한복판에 위치하며, 한국 궁궐건축의 정수로 꼽힌다.',
+    definition_en: 'Built in 1395, the primary palace of the Joseon dynasty. Located in central Seoul and considered the pinnacle of Korean palace architecture.',
+    definition_ja: '1395年に築かれた朝鮮王朝の第一法宮。ソウル中心部に位置し韓国宮殿建築の真髄。',
+    definition_zh: '建于1395年，朝鲜王朝的主要宫殿。位于首尔市中心，被认为是韩国宫殿建筑的精髓。',
+  },
+  {
+    kr: '창덕궁', en: 'Changdeokgung', ja: '昌徳宮', zh: '昌德宫',
+    definition_kr: '1405년 건립. 유네스코 세계문화유산으로 지정된 궁궐로, 후원(비원)이 특히 유명하다.',
+    definition_en: 'Built in 1405. A UNESCO World Heritage Site, particularly famous for its rear garden (Secret Garden).',
+    definition_ja: '1405年築造。ユネスコ世界文化遺産に登録された宮殿で、後苑（秘苑）が特に有名。',
+    definition_zh: '建于1405年。被列为联合国教科文组织世界文化遗产，以秘苑（后花园）闻名。',
+  },
+  {
+    kr: '창경궁', en: 'Changgyeonggung', ja: '昌慶宮', zh: '昌庆宫',
+    definition_kr: '1483년 건립. 창덕궁과 인접한 궁궐로, 동물원(창경원)이 있었던 곳이다.',
+    definition_en: 'Built in 1483. Adjacent to Changdeokgung, this palace once housed the royal zoo (Changgyeongwon).',
+    definition_ja: '1483年築造。昌徳宮に隣接し、かつて動物園（昌慶苑）があった宮殿。',
+    definition_zh: '建于1483年。与昌德宫相邻，曾设有动物园（昌庆苑）。',
+  },
+  {
+    kr: '덕수궁', en: 'Deoksugung', ja: '徳寿宮', zh: '德寿宫',
+    definition_kr: '1395년 건립. 조선 후기 고종 황제의 거처로, 서양식 건물이 혼재하는 독특한 궁궐이다.',
+    definition_en: 'Originally built in 1395. The residence of Emperor Gojong in the late Joseon period, known for its unique blend of Korean and Western architecture.',
+    definition_ja: '1395年築造。朝鮮後期高宗皇帝の居所で、韓国建築と西洋建築が混在する独特の宮殿。',
+    definition_zh: '建于1395年。朝鲜后期高宗皇帝的居所，以韩式与西洋建筑混合的独特风格著称。',
+  },
+  {
+    kr: '종묘', en: 'Jongmyo', ja: '宗廟', zh: '宗庙',
+    definition_kr: '조선 왕실의 사당. 왕과 왕비의 위패를 모시고 제사를 지내던 곳으로, 유네스코 세계문화유산이다.',
+    definition_en: 'The ancestral shrine of the Joseon royal family. A UNESCO World Heritage Site where royal rites honoring kings and queens were performed.',
+    definition_ja: '朝鮮王室の祖廟。王と王妃の位牌を祀り祭祀を行った場所でユネスコ世界文化遺産。',
+    definition_zh: '朝鲜王室的宗庙。供奉国王和王后排位并举行祭祀的场所，联合国教科文组织世界文化遗产。',
+  },
+  {
+    kr: '비원', en: 'Secret Garden', ja: '秘苑', zh: '秘苑',
+    definition_kr: '궁궐 뒤편에 있는 왕실 전용 정원. 창덕궁 후원이 가장 유명하며, 자연과 건축이 조화를 이룬다.',
+    definition_en: 'The royal garden at the rear of a palace. Changdeokgung\'s rear garden is the most famous, harmonizing nature and architecture.',
+    definition_ja: '宮殿裏にある王室専用庭園。昌徳宮の後苑が最も有名で、自然と建築が調和。',
+    definition_zh: '宫殿后方的王室专用花园。昌德宫后苑最为著名，自然与建筑和谐统一。',
+  },
+  {
+    kr: '단청', en: 'Dancheong', ja: '丹青', zh: '丹青',
+    definition_kr: '궁궐 건물에 칠하는 전통 색칠 장식. 청·적·황·백·흑의 오방색을 사용하여 목재를 보호하고 아름답게 꾸민다.',
+    definition_en: 'Traditional decorative coloring on palace buildings using five cardinal colors (blue, red, yellow, white, black) to protect and beautify the wood.',
+    definition_ja: '宮殿建築に施す伝統的な彩色装飾。五方色（青·赤·黄·白·黒）で木材を保護し美観を高める。',
+    definition_zh: '宫殿建筑上传统的彩色装饰。使用五方色（青、赤、黄、白、黑）保护木材并美化建筑。',
+  },
+  {
+    kr: '한복', en: 'Hanbok', ja: '韓服', zh: '韩服',
+    definition_kr: '한국 전통 의상. 궁궐 관람 시 한복 착용 시 입장료가 무료이며, 궁궐과 잘 어우러진다.',
+    definition_en: 'Traditional Korean clothing. Wearing hanbok grants free admission to the palaces and complements the palace scenery beautifully.',
+    definition_ja: '韓国伝統衣装。韓服着用で宮殿入場料無料。宮殿の景観に非常によく馴染む。',
+    definition_zh: '韩国传统服饰。穿韩服可免费进入宫殿，与宫殿景观十分协调。',
+  },
+  {
+    kr: '통합관람권', en: 'Integrated Ticket', ja: '統合観覧券', zh: '综合门票',
+    definition_kr: '5대 궁궐과 종묘를 1년간 무제한 관람할 수 있는 통합 입장권. ₩10,000.',
+    definition_en: 'An annual pass granting unlimited access to all five grand palaces and Jongmyo Shrine. ₩10,000.',
+    definition_ja: '5大宮殿と宗廟を1年間無制限で観覧できる統合入場券。₩10,000。',
+    definition_zh: '可在一年内无限次参观五大宫殿和宗庙的综合入场券。₩10,000。',
+  },
+  {
+    kr: '야간개장', en: 'Night Tour', ja: '夜間営業', zh: '夜间开放',
+    definition_kr: '봄과 가을에 궁궐을 야간에 개방하는 특별 행사. 야간 조명과 함께 궁궐의 색다른 매력을 경험할 수 있다.',
+    definition_en: 'Special evening openings of the palace in spring and autumn, offering a magical experience with nighttime illumination.',
+    definition_ja: '春と秋に宮殿を夜間開放する特別イベント。夜間照明と共に宮殿の異なる魅力を体験。',
+    definition_zh: '春秋两季宫殿夜间开放的特别活动。可在夜间灯光下体验宫殿的不同魅力。',
+  },
+  {
+    kr: '근정전', en: 'Geunjeongjeon', ja: '勤政殿', zh: '勤政殿',
+    definition_kr: '경복궁의 정전(正殿). 왕이 국사를 처리하고 조회를 열던 궁궐 내 가장 중요한 건물.',
+    definition_en: 'The throne hall of Gyeongbokgung. The most important building where the king held court and conducted state affairs.',
+    definition_ja: '景福宮の正殿。王が国政を執務し朝廷を開いた宮殿内で最も重要な建物。',
+    definition_zh: '景福宫的正殿。国王临朝理政的宫殿内最重要的建筑。',
+  },
+  {
+    kr: '경회루', en: 'Gyeonghoeru', ja: '慶會樓', zh: '庆会楼',
+    definition_kr: '경복궁 내 연못 위에 세워진 누각. 왕실 연회와 국빈 접대를 위한 장소로, 2층 누각이다.',
+    definition_en: 'A two-story pavilion built on a pond within Gyeongbokgung. Used for royal banquets and state receptions.',
+    definition_ja: '景福宮内の蓮池の上に建てられた2階建て楼閣。王室の宴会影响と国賓接待の場所。',
+    definition_zh: '景福宫内莲池上建造的两层楼阁。用于王室宴会和国宾接待。',
+  },
+  {
+    kr: '향원정', en: 'Hyangwonjeong', ja: '香遠亭', zh: '香远亭',
+    definition_kr: '경복궁 후원 연못 중앙에 있는 육각정. "향이 멀리 퍼진다"는 뜻으로, 서울에서 가장 사진이 많이 찍히는 장소 중 하나.',
+    definition_en: 'A hexagonal pavilion on a pond in Gyeongbokgung\'s rear garden. Meaning "fragrance spreads far," it is one of the most photographed spots in Seoul.',
+    definition_ja: '景福宮後苑の蓮池の中央にある六角亭。「香が遠くに漂う」の意味。ソウルで最も撮影される場所の一つ。',
+    definition_zh: '景福宫后苑莲池中央的六角亭。意为"香远溢"，是首尔拍照最多的景点之一。',
+  },
+  {
+    kr: '광화문', en: 'Gwanghwamun', ja: '光化門', zh: '光化门',
+    definition_kr: '경복궁의 정문. 세 개의 문루(門樓)가 있는 조선 궁궐 문 중 가장 크고 화려하다.',
+    definition_en: 'The main gate of Gyeongbokgung. The largest and most ornate of all Joseon palace gates, featuring three archways.',
+    definition_ja: '景福宮の正門。三つの門楼を持つ朝鮮宮殿の門の中で最も大きく華やか。',
+    definition_zh: '景福宫的正门。拥有三座门楼，是朝鲜宫殿门中最大最华丽的。',
+  },
+  {
+    kr: '사정전', en: 'Sajeongjeon', ja: '思政殿', zh: '思政殿',
+    definition_kr: '경복궁의 내전(內殿). 왕이 일상적으로 업무를 보던 건물로, 근정전 뒤쪽에 위치한다.',
+    definition_en: 'The inner hall of Gyeongbokgung where the king handled daily affairs, located behind Geunjeongjeon.',
+    definition_ja: '景福宮の内殿。王が日常的に政務を行った建物で、勤政殿の裏側に位置。',
+    definition_zh: '景福宫的内殿。国王日常处理政务的建筑，位于勤政殿后方。',
+  },
+  {
+    kr: '강녕전', en: 'Gangnyeongjeon', ja: '康寧殿', zh: '康宁殿',
+    definition_kr: '경복궁의 침전(寢殿). 왕이 기거하던 곳으로, 근정전·사정전과 함께 궁궐의 핵심 건물이다.',
+    definition_en: 'The king\'s bedchamber at Gyeongbokgung. A core palace building alongside Geunjeongjeon and Sajeongjeon.',
+    definition_ja: '景福宮の寝殿。王が起居した場所で、勤政殿·思政殿と共に宮殿の核心建築。',
+    definition_zh: '景福宫的寝殿。国王起居之处，与勤政殿、思政殿同为宫殿核心建筑。',
+  },
+  {
+    kr: '교태전', en: 'Gyotaejeon', ja: '交泰殿', zh: '交泰殿',
+    definition_kr: '경복궁의 왕비 침전. 왕비가 기거하던 곳으로, 교태전 앞 연못의 안개景象이 유명하다.',
+    definition_en: 'The queen\'s bedchamber at Gyeongbokgung. Famous for the misty scenery over the pond in front of the hall.',
+    definition_ja: '景福宮の王妃寝殿。王妃が起居した場所。殿前の蓮池の霧景が有名。',
+    definition_zh: '景福宫的王后寝殿。王后起居之处，殿前莲池的雾景闻名。',
+  },
+  {
+    kr: '춘추관', en: 'Chunchugwan', ja: '春秋館', zh: '春秋馆',
+    definition_kr: '경복궁 내 실록 편찬과 기록 관리를 담당하던 건물. 왕의 언행을 기록하는 사관(史官)의 업무 공간.',
+    definition_en: 'The building in Gyeongbokgung responsible for compiling royal records. The workspace of court historians who documented the king\'s words and actions.',
+    definition_ja: '景福宮内で実録編纂と記録管理を担当した建物。王の言動を記録する史官の業務空間。',
+    definition_zh: '景福宫内负责编纂实录和管理记录的建筑。史官记录国王言行的工作空间。',
+  },
+];
+
+const faqByLang: Record<string, { question: string; answer: string }[]> = {
+  kr: [
+    { question: '궁궐 관람 시 가장 중요한 용어는?', answer: '전각(왕의 국사 공간), 누각(연회·정자 건물), 단청(오방색 건물 장식)을 알면 모든 궁궐 설명이 이해됩니다.' },
+    { question: '통합관람권은 어떻게 사용하나요?', answer: '₩10,000으로 5대 궁궐과 종묘를 1년간 무제한 관람할 수 있습니다. 경복궁 매표소에서 구매 가능하며, 재방문 시 요금이 절약됩니다.' },
+    { question: '한복 착용 시 정말 입장료가 무료인가요?', answer: '네, 한복을 착용하면 5대 궁궐 모두 입장료가 무료입니다. 근처 한복 대여점에서 ₩15,000~₩25,000으로 대여 가능합니다.' },
+    { question: '야간개장은 어떻게 이용하나요?', answer: '봄(4~5월)과 가을(9~10월)에 특별 개장합니다. 국가유산청 홈페이지에서 사전 예약 필수이며, 오픈 몇 시간 만에 매진됩니다.' },
+    { question: '궁궐마다 어떤 건물이 가장 유명한가요?', answer: '경복궁: 근정전·경회루, 창덕궁: 인정전·후원(비원), 창경궁: 명정전, 덕수궁: 중화전, 종묘: 정전. 각 궁궐의 핵심 건물을 먼저 방문하세요.' },
+  ],
+  en: [
+    { question: 'What are the most important palace terms?', answer: 'Knowing jeongjeon (throne hall), nugak (pavilion), and dancheong (decorative coloring) helps you understand all palace descriptions.' },
+    { question: 'How do I use the integrated ticket?', answer: '₩10,000 gives unlimited access to all five grand palaces and Jongmyo for one year. Purchase at any palace ticket booth — great value for repeat visits.' },
+    { question: 'Is admission really free when wearing hanbok?', answer: 'Yes! Hanbok wearers get free admission to all five palaces. Rental shops nearby charge ₩15,000–₩25,000.' },
+    { question: 'How do I join the night tour?', answer: 'Special evening openings happen in spring (Apr–May) and autumn (Sep–Oct). Pre-book on heritage.go.kr — tickets sell out within hours.' },
+    { question: 'Which buildings are must-sees at each palace?', answer: 'Gyeongbokgung: Geunjeongjeon & Gyeonghoeru. Changdeokgung: Injeongjeon & Secret Garden. Changgyeonggung: Myeongjeongjeon. Deoksugung: Junghwajeon. Jongmyo: Jeongjeon.' },
+  ],
+  ja: [
+    { question: '宮殿観光で最も重要な用語は？', answer: '正殿（王の政務空間）、楼閣（宴会・亭建築）、丹青（五方色装飾）を知れば、すべての宮殿説明が理解できます。' },
+    { question: '統合観覧券はどう使うの？', answer: '₩10,000で5大宮殿と宗廟を1年間無制限で観覧。各宮殿の窓口で購入可能。再訪問時に大変お得。' },
+    { question: '韓服着用で入場料は本当に無料？', answer: 'はい！韓服着用で5大宮殿すべて入場料無料。近くのレンタル店で₩15,000〜₩25,000でレンタル可能。' },
+    { question: '夜間営業はどうやって参加？', answer: '春（4〜5月）と秋（9〜10月）に特別開催。heritage.go.krで事前予約必須。数時間で完売。' },
+    { question: '各宮殿で見るべき建物は？', answer: '景福宮: 勤政殿・慶會樓。昌徳宮: 仁政殿・後苑。昌慶宮: 明政殿。徳寿宮: 中和殿。宗廟: 正殿。' },
+  ],
+  zh: [
+    { question: '宫殿参观最重要的术语有哪些？', answer: '了解正殿（国王政务空间）、楼阁（宴会亭阁）、丹青（五方色装饰），就能理解所有宫殿介绍。' },
+    { question: '综合门票如何使用？', answer: '₩10,000可在一年内无限次参观五大宫殿和宗庙。在各宫殿售票处购买，多次访问非常划算。' },
+    { question: '穿韩服真的免门票吗？', answer: '是的！穿韩服可免费进入全部五大宫殿。附近租赁店收费₩15,000~₩25,000。' },
+    { question: '夜间开放如何参加？', answer: '春季（4~5月）和秋季（9~10月）特别开放。需在heritage.go.kr提前预约，几小时内售罄。' },
+    { question: '各宫殿必看建筑？', answer: '景福宫：勤政殿·庆会楼。昌德宫：仁政殿·秘苑。昌庆宫：明政殿。德寿宫：中和殿。宗庙：正殿。' },
+  ],
+};
+
+const faqItems = faqByLang[lang] || faqByLang.en;
+---
+<GuideLayout title={titles[lang]} description={descriptions[lang]} lang={htmlLang}>
+  <style>@import '../../styles/global.css';</style>
+
+  <div class="container">
+    <BreadcrumbNav items={[{ name: 'Home', url: '/' }, { name: 'Guide', url: '/guide' }, { name: 'Glossary' }]} lang={lang} />
+
+    <article class="guide-content">
+      <h1>{titles[lang]}</h1>
+      <p class="guide-meta">Updated: June 2026 &middot; Korea Heritage Service official data</p>
+
+      <p class="guide-intro">
+        {lang === 'kr' && '한국 궁궐 관람에 필요한 핵심 용어를 25선으로 정리했습니다. 건축, 문화유산, 관람 정보를 한눈에 확인하세요.'}
+        {lang === 'en' && '25 essential terms for visiting Korean palaces, covering architecture, heritage concepts, and practical visitor information.'}
+        {lang === 'ja' && '韓国宮殿観光に必要な主要用語を25選でまとめました。建築、文化遺産、観光情報を一覧で確認。'}
+        {lang === 'zh' && '整理了参观韩国宫殿所需的25条核心术语，涵盖建筑、文化遗产和游客信息。'}
+      </p>
+
+      <div class="glossary-grid">
+        {glossaryTerms.map(term => (
+          <div class="glossary-card">
+            <h3 class="term-kr">{term.kr}</h3>
+            <p class="term-translations">{term.en} / {term.ja} / {term.zh}</p>
+            {lang === 'kr' && <p class="term-definition">{term.definition_kr}</p>}
+            {lang === 'en' && <p class="term-definition">{term.definition_en}</p>}
+            {lang === 'ja' && <p class="term-definition">{term.definition_ja}</p>}
+            {lang === 'zh' && <p class="term-definition">{term.definition_zh}</p>}
+          </div>
+        ))}
+      </div>
+
+      <div style="margin:2rem 0;text-align:center;">
+        <ins class="adsbygoogle" style="display:block;text-align:center" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5938862195544185" data-ad-slot="4797390169"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+      </div>
+
+      <FAQSection items={faqItems} lang={lang} />
+    </article>
+  </div>
+</GuideLayout>
+
+<style>
+  .guide-content { padding: 80px 0 60px; max-width: 800px; margin: 0 auto; }
+  .guide-content h1 { font-family: 'Noto Serif KR', serif; font-size: clamp(1.8rem, 4vw, 2.6rem); font-weight: 700; margin-bottom: 12px; line-height: 1.3; }
+  .guide-meta { font-size: 0.85rem; color: var(--color-text-muted, #9A8B7F); margin-bottom: 24px; }
+  .guide-intro { font-size: 1.1rem; line-height: 1.8; margin-bottom: 32px; color: var(--color-text-light, #6B5B4F); }
+  .glossary-grid { display: grid; grid-template-columns: 1fr; gap: 16px; margin: 24px 0 40px; }
+  .glossary-card { background: var(--color-card, #fff); border: 1px solid var(--color-border, #E8DDD4); border-radius: 12px; padding: 20px; transition: border-color 0.2s, box-shadow 0.2s; }
+  html.dark .glossary-card { background: var(--color-card, #1C1916); border-color: var(--color-border, #2D2720); }
+  .glossary-card:hover { border-color: var(--color-primary, #C8956C); box-shadow: 0 2px 12px rgba(200,149,108,0.12); }
+  .term-kr { font-family: 'Noto Serif KR', serif; font-size: 1.3rem; font-weight: 700; margin-bottom: 6px; color: var(--color-text, #1A1210); }
+  html.dark .term-kr { color: var(--color-text, #F5F0E8); }
+  .term-translations { font-size: 0.95rem; color: var(--color-primary, #C8956C); margin-bottom: 10px; font-weight: 500; }
+  .term-definition { font-size: 0.88rem; line-height: 1.7; color: var(--color-text-light, #6B5B4F); margin: 0; }
+  html.dark .term-definition { color: var(--color-text-light, #B8A99A); }
+  @media (min-width: 768px) {
+    .glossary-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>

@@ -671,7 +671,7 @@ const landmarkData = JSON.stringify(mapLandmarks);
 
     nearbyList.innerHTML = nearby.map(lm => `
       <a class="nearby-card" href="${lm.link || '#'}?lang=${lang}">
-        ${lm.image ? `<img src="${lm.image}" alt="${pickLang(lm)}" onerror="this.style.background='var(--border, var(--color-border))';this.src='';" loading="lazy"/>` : '<div style="width:100%;height:90px;background:var(--border, var(--color-border))"></div>'}
+        ${lm.image ? `<img class="card-img" src="${lm.image}" alt="${pickLang(lm)}" onerror="this.remove()" loading="lazy"/>` : ''}
         <div class="card-body">
           <div class="card-name">${pickLang(lm)}</div>
           <div class="card-dist">${formatDist(lm.dist)} ${L.away}</div>

@@ -305,7 +305,7 @@ const mapTitle: Record<string, string> = {
   <FAQSection items={faqItems} lang={lang} />
 </GuideLayout>
 
-<script>
+<script define:vars={{ lang }}>
   const locations = [
     { id: 'jamsil', name: { en: 'Jamsil Sports Complex', kr: '서울종합운동장', ja: 'ソウル総合運動場', zh: '首尔综合运动场' }, coords: [127.0780, 37.5196], type: 'scene' },
     { id: 'cheongdam', name: { en: 'Cheongdam Bridge', kr: '청담대교', ja: '清潭橋', zh: '清潭大桥' }, coords: [127.0490, 37.5400], type: 'scene' },
@@ -368,64 +368,57 @@ const mapTitle: Record<string, string> = {
         `;
       }
 
-      locations.forEach(function(loc) {
-        const color = typeColors[loc.type] || '#E8A020';
-        const el = document.createElement('div');
-        el.className = 'map-marker';
-        el.innerHTML = `
-          <div class="marker-pin" style="--marker-color: ${color}">
-            <span class="marker-icon">${loc.type === 'inspiration' ? '🏯' : loc.type === 'motif' ? '🏢' : '📍'}</span>
-          </div>
-          <div class="marker-pulse" style="--marker-color: ${color}"></div>
-        `;
-        const popup = new maplibregl.Popup({ offset: 25, className: 'heritage-popup' }).setHTML(buildPopupHTML(loc));
-        new maplibregl.Marker({ element: el })
-          .setLngLat(loc.coords)
-          .setPopup(popup)
-          .addTo(map);
-      });
-
-      // Route line connecting main 7 scenes in order
-      const routeCoords = [
-        [127.0780, 37.5196], // jamsil
-        [127.0586, 37.5120], // coex
-        [127.0490, 37.5400], // cheongdam
-        [126.9820, 37.5636], // myeongdong
-        [126.9857, 37.5826], // bukchon
-        [127.0070, 37.5800], // naksan
-        [126.9882, 37.5512], // nseoul-tower
-      ];
-
-      map.addSource('kdh-route', {
-        type: 'geojson',
-        data: {
-          type: 'Feature',
-          properties: {},
-          geometry: { type: 'LineString', coordinates: routeCoords }
-        }
-      });
-
-      map.addLayer({
-        id: 'kdh-route-line',
-        type: 'line',
-        source: 'kdh-route',
-        layout: { 'line-join': 'round', 'line-cap': 'round' },
-        paint: {
-          'line-color': '#A8D0E6',
-          'line-width': 2.5,
-          'line-opacity': 0.45,
-          'line-dasharray': [4, 5]
-        }
-      });
-
-      // Store locId on each marker element for navigation
       map.on('load', function() {
-        // After markers added, attach data attributes
-        setTimeout(() => {
-          document.querySelectorAll('.map-marker').forEach((markerEl, i) => {
-            if (locations[i]) markerEl.setAttribute('data-loc-id', locations[i].id);
-          });
-        }, 500);
+        locations.forEach(function(loc) {
+          const color = typeColors[loc.type] || '#E8A020';
+          const el = document.createElement('div');
+          el.className = 'map-marker';
+          el.innerHTML = `
+            <div class="marker-pin" style="--marker-color: ${color}">
+              <span class="marker-icon">${loc.type === 'inspiration' ? '🏯' : loc.type === 'motif' ? '🏢' : '📍'}</span>
+            </div>
+            <div class="marker-pulse" style="--marker-color: ${color}"></div>
+          `;
+          el.setAttribute('data-loc-id', loc.id);
+          const popup = new maplibregl.Popup({ offset: 25, className: 'heritage-popup' }).setHTML(buildPopupHTML(loc));
+          new maplibregl.Marker({ element: el })
+            .setLngLat(loc.coords)
+            .setPopup(popup)
+            .addTo(map);
+        });
+
+        // Route line connecting main 7 scenes in order
+        const routeCoords = [
+          [127.0780, 37.5196], // jamsil
+          [127.0586, 37.5120], // coex
+          [127.0490, 37.5400], // cheongdam
+          [126.9820, 37.5636], // myeongdong
+          [126.9857, 37.5826], // bukchon
+          [127.0070, 37.5800], // naksan
+          [126.9882, 37.5512], // nseoul-tower
+        ];
+
+        map.addSource('kdh-route', {
+          type: 'geojson',
+          data: {
+            type: 'Feature',
+            properties: {},
+            geometry: { type: 'LineString', coordinates: routeCoords }
+          }
+        });
+
+        map.addLayer({
+          id: 'kdh-route-line',
+          type: 'line',
+          source: 'kdh-route',
+          layout: { 'line-join': 'round', 'line-cap': 'round' },
+          paint: {
+            'line-color': '#A8D0E6',
+            'line-width': 2.5,
+            'line-opacity': 0.45,
+            'line-dasharray': [4, 5]
+          }
+        });
       });
     };
     document.head.appendChild(script);

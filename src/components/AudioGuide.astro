@@ -98,14 +98,6 @@ const loadingMsg = loadingMsgs[lang] || loadingMsgs.kr;
         <circle cx="18" cy="16" r="3"/>
       </svg>
       <p class="ag-empty-msg">{noAudioMsg}</p>
-      <button class="ag-tts-btn" type="button" hidden>
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M11 5L6 9H2v6h4l5 4V5z"/>
-          <line x1="19" y1="9" x2="19" y2="15"/>
-          <line x1="22" y1="11" x2="22" y2="13"/>
-        </svg>
-        {ttsLabel}
-      </button>
     </div>
   </div>
 
@@ -135,7 +127,6 @@ const loadingMsg = loadingMsgs[lang] || loadingMsgs.kr;
     const loadingEl = root.querySelector('.ag-loading');
     const playerEl = root.querySelector('.ag-player');
     const emptyEl = root.querySelector('.ag-empty');
-    const ttsBtn = root.querySelector('.ag-tts-btn');
     const playBtn = root.querySelector('.ag-play-btn');
     const iconPlay = root.querySelector('.ag-icon-play');
     const iconPause = root.querySelector('.ag-icon-pause');
@@ -375,14 +366,14 @@ const loadingMsg = loadingMsgs[lang] || loadingMsgs.kr;
         return;
       }
 
-      // Fallback to TTS if explanation text exists
+      // Fallback to browser TTS when the official narration API has no audio URL.
       var text = getLangText(lang);
-      if (text) {
-        console.warn('[AudioGuide] No narration audio for asno=' + asno + ' lang=' + lang + ' — falling back to TTS');
-        ttsBtn.hidden = false;
-        showState('empty');
+      if (text && window.speechSynthesis) {
+        console.warn('[AudioGuide] No narration audio for asno=' + asno + ' lang=' + lang + ' — enabling browser TTS');
+        isTtsMode = true;
+        showState('player');
       } else {
-        ttsBtn.hidden = true;
+        isTtsMode = false;
         showState('empty');
       }
 
@@ -500,10 +491,6 @@ const loadingMsg = loadingMsgs[lang] || loadingMsgs.kr;
         if (!lang || lang === currentLang) return;
         await loadLang(lang);
       });
-    });
-
-    ttsBtn.addEventListener('click', function () {
-      startTTS(currentLang);
     });
 
     // ── Init ──
@@ -738,34 +725,6 @@ const loadingMsg = loadingMsgs[lang] || loadingMsgs.kr;
     font-size: 0.85rem;
     color: var(--color-text-muted);
     text-align: center;
-  }
-
-  .ag-tts-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    margin-top: 12px;
-    padding: 8px 20px;
-    border-radius: 24px;
-    border: 1px solid var(--color-primary);
-    background: transparent;
-    color: var(--color-primary);
-    font-family: 'Pretendard', sans-serif;
-    font-size: 0.85rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all var(--transition);
-    -webkit-tap-highlight-color: transparent;
-  }
-
-  .ag-tts-btn:hover {
-    background: var(--color-primary);
-    color: #fff;
-    box-shadow: var(--shadow-sm);
-  }
-
-  .ag-tts-btn:active {
-    transform: scale(0.97);
   }
 
   /* ── Language Buttons ── */
